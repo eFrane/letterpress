@@ -20,12 +20,12 @@ class ConfigTest extends \Codeception\TestCase\Test
     // tests
     public function testInit()
     {
-        $this->assertInstanceOf('EFrane\Letterpress\Config', Config::init('./config'));
+        $this->assertInstanceOf('EFrane\Letterpress\Config', Config::init());
     }
 
     public function testGet()
     {
-        Config::init('./config');
+        Config::init('../config');
 
         $this->assertEquals(['EnglishQuotes'], Config::get('jolitypo.en_GB'));
     }

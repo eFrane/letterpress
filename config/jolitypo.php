@@ -5,5 +5,4 @@
   'de_DE' => ['GermanQuotes'],
   'fr_FR' => ['FrenchQuotes', 'FrenchNoBreakSpace'],
   'fr_CA' => ['FrenchQuotes']
-  ]
 ];
