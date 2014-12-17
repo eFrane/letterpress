@@ -32,9 +32,10 @@ class Config
     return self::$instance;
   }
 
-  public static function reset()
+  public static function reset($withoutInit = false)
   {
     self::$instance = null;
+    if (!$withoutInit) return self::init();
   }
 
   private function __clone() {}
@@ -47,5 +48,29 @@ class Config
     }
 
     return self::$instance->repository->get($identifier, $default);
+  }
+
+  public static function set($identifier = null, $value = null)
+  {
+    if (self::$instance === null)
+    {
+      throw new \RuntimeException('Config must be initialized before usage.'); 
+    }
+
+    return self::$instance->repository->set($identifier, $value);
+  }
+
+  public static function apply($additionalConfig = [])
+  {
+    foreach ($additionalConfig as $identifier => $value)
+    {
+      if (!is_string($identifier))
+      {
+        throw new \LogicException('Identifier must be string.');
+      } else
+      {
+        Config::set($identifier, $value);
+      }
+    }
   }
 }
