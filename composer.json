@@ -19,6 +19,9 @@
     "require-dev": {
         "codeception/codeception": "~2.0"
     },
+    "suggest": {
+        "nlp-tools/nlp-tools": "For code block fixing and other shenanigans."
+    },
     "autoload": {
         "psr-4": {
             "EFrane\\Letterpress\\": "src/"
