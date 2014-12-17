@@ -32,6 +32,11 @@ class Config
     return self::$instance;
   }
 
+  public static function reset()
+  {
+    self::$instance = null;
+  }
+
   private function __clone() {}
 
   public static function get($identifier = null, $default = null)

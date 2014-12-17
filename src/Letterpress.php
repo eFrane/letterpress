@@ -1,12 +1,17 @@
-<?php namespace EFrane\Letterpress
+<?php namespace EFrane\Letterpress;
 
 class Letterpress
 {
-  protected $config = null;
-
-  public function __construct(Config $config)
+  public function __construct()
   {
-    $this->config = $config;
+    // check for initialized config
+    try
+    {
+      Config::get('letterpress.locale');
+    } catch (\RuntimeException $e)
+    {
+      throw new LetterpressException($e->getMessage());
+    }
   }
 
   public function press($html, $config = [])

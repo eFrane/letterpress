@@ -29,4 +29,14 @@ class ConfigTest extends \Codeception\TestCase\Test
 
         $this->assertEquals(['EnglishQuotes'], Config::get('jolitypo.en_GB'));
     }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Config must be initialized before usage.
+     **/
+    public function testReset()
+    {
+        Config::reset();
+        Config::get('letterpress.locale');
+    }
 }
