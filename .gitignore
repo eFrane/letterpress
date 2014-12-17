@@ -2,5 +2,6 @@ vendor
 composer.phar
 composer.lock
 .DS_Store
+todo*
 
 tests/_output/*

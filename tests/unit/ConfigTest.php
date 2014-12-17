@@ -1,5 +1,7 @@
 <?php
 
+use EFrane\Letterpress\Config;
+
 class ConfigTest extends \Codeception\TestCase\Test
 {
     /**
@@ -18,6 +20,13 @@ class ConfigTest extends \Codeception\TestCase\Test
     // tests
     public function testInit()
     {
-        $this->assertInstanceOf('EFrane\Letterpress\Config', EFrane\Letterpress\Config::init('./config'));
+        $this->assertInstanceOf('EFrane\Letterpress\Config', Config::init('./config'));
+    }
+
+    public function testGet()
+    {
+        Config::init('./config');
+
+        $this->assertEquals(['EnglishQuotes'], Config::get('jolitypo.en_GB'));
     }
 }
