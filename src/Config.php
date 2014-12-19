@@ -15,11 +15,14 @@ class Config
 
   protected function __construct($configPath)
   {
+    if (!file_exists($configPath))
+      throw new \RuntimeException('Path to config does not exist.');
+
     $loader = new FileLoader(new Filesystem, $configPath);
     $this->repository = new Repository($loader, null);
   }
 
-  public static function init($configPath = '../config/')
+  public static function init($configPath = 'config')
   {
     if (self::$instance === null)
       self::$instance = new Config($configPath);
