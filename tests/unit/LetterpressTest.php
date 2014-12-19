@@ -31,7 +31,7 @@ class LetterpressTest extends \Codeception\TestCase\Test
 
     public function testCreate()
     {
-        Config::init('../config');
+        Config::init('config');
         $letterpress = new Letterpress();
     }
 }
