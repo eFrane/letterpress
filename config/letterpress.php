@@ -6,7 +6,7 @@ return [
 
   // use "markdown extra" syntax instead of parsedown's defaults
   // this only works if parsedown-extra was installed
-  'enableMarkdownExtra' => false
+  'enableMarkdownExtra' => false,
 
   'applyBlockquoteFix' => true,
 ];
