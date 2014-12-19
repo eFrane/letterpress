@@ -58,14 +58,10 @@ class Letterpress
 
     $output = "";
     if (!is_null($this->parsedown))
-    {
       $output = $this->parsedown->parse($input);
-    }
 
     if (!is_null($this->fixer))
-    {
       $output = $this->fixer->fix($output);
-    }
 
     return $output;
   }
