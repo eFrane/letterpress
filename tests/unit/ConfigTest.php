@@ -60,6 +60,23 @@ class ConfigTest extends \Codeception\TestCase\Test
         $this->assertEquals('value', Config::get('letterpress.testvalue'));
     }
 
+    public function testHas() {
+        Config::init('../config');
+
+        $this->assertTrue(Config::has('letterpress.locale'));
+        $this->assertFalse(Config::has('letterpress.non-existent-value'));
+    }
+
+    /**
+     * @expectedException \RuntimeException
+     * @expectedExceptionMessage Config must be initialized before usage.
+     **/
+    public function testHasWithoutInit()
+    {
+        Config::reset(true);
+        Config::has('letterpress.locale');
+    }
+
     public function testApply()
     {
         Config::init('../config');

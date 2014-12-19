@@ -5,6 +5,9 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Config\FileLoader;
 use Illuminate\Config\Repository;
 
+/**
+ *  Simple wrapper class for the Illuminate\Config component;
+ **/
 class Config
 {
   protected static $instance = null;
@@ -57,7 +60,19 @@ class Config
       throw new \RuntimeException('Config must be initialized before usage.'); 
     }
 
+    // TODO: implement option change notifications
+
     return self::$instance->repository->set($identifier, $value);
+  }
+
+  public static function has($identifier = null, $value = null)
+  {
+    if (self::$instance === null)
+    {
+      throw new \RuntimeException('Config must be initialized before usage.'); 
+    }
+
+    return self::$instance->repository->has($identifier, $value);
   }
 
   public static function apply($additionalConfig = [])
