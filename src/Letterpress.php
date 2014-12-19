@@ -22,25 +22,33 @@ class Letterpress
     }
 
     // apply additional config
+    $reset = true;
     if (count($config) > 0)
-      Config::apply($config);
-
-    // TODO: only reset these if dependent configuration options changed
-
-    if (Config::get('letterpress.markdown.enabled'))
     {
-      $this->parsedown = Integrations\ParsedownFactory::create();
+      Config::apply($config);
     } else
     {
-      $this->parsedown = null;
+      $reset = false;
     }
 
-    if (Config::get('letterpress.microtypography.enabled'))
+    // TODO: only reset these if dependent configuration options changed
+    if ($reset)
     {
-      $this->fixer = new Integrations\TypoFixerFacade;
-    } else
-    {
-      $this->fixer = null;
+      if (Config::get('letterpress.markdown.enabled'))
+      {
+        $this->parsedown = Integrations\ParsedownFactory::create();
+      } else
+      {
+        $this->parsedown = null;
+      }
+
+      if (Config::get('letterpress.microtypography.enabled'))
+      {
+        $this->fixer = new Integrations\TypoFixerFacade;
+      } else
+      {
+        $this->fixer = null;
+      }
     }
   }
 

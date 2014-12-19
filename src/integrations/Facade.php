@@ -1,4 +1,4 @@
-<?php namespace EFrane\Letterpress\Facades;
+<?php namespace EFrane\Letterpress\Integrations;
 
 interface Facade
 {

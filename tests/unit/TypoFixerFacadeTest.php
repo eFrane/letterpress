@@ -1,6 +1,5 @@
 <?php
 
-
 class TypoFixerFacadeTest extends \Codeception\TestCase\Test
 {
     /**

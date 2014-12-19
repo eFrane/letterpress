@@ -1,4 +1,4 @@
-<?php namespace EFrane\Letterpress\Facades;
+<?php namespace EFrane\Letterpress\Integrations;
 
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\LetterpressException;
@@ -29,7 +29,7 @@ class TypoFixerFacade implements Facade
       $this->fixers = Config::get('jolitypo.defaults');
 
       // locale additions
-      $localeKey = sprintf('jolitypo.%s', $ths->locale);
+      $localeKey = sprintf('jolitypo.%s', $this->locale);
       if (Config::has($localeKey))
       {
         $this->fixers = array_merge($this->fixers, Config::get($localeKey));
@@ -37,7 +37,7 @@ class TypoFixerFacade implements Facade
     }    
 
     // user additions
-    $this->fixers = array_merge($this->fixers, Config::get('letterpress.fixers'));
+    $this->fixers = array_merge($this->fixers, Config::get('letterpress.microtypography.additionalFixers'));
 
     if (count($this->fixers) === 0)
       throw new LetterpressException("Typography fixing requires setting up fixers.");
