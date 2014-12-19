@@ -16,13 +16,19 @@ return [
   'markdown' => [
     'enabled' => true,
 
+    // enable markdown linebreaks (<br />) with 2 spaces at line end
+    'enableLineBreaks' => true,
+
+    // parse inside markup blocks?
+    'enableParserInMarkup' => true,
+
     // use "markdown extra" syntax instead of parsedown's defaults
     // this only works if parsedown-extra was installed  
     'useMarkdownExtra' => false
   ],
 
   'markup' => [
-    'enabeld' => true,
+    'enabled' => true,
 
     'blockQuoteFix' => true
   ],

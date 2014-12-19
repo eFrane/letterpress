@@ -16,6 +16,11 @@ class ParsedownFactory implements Factory
       $class = '\ParsedownExtra';
     }
 
-    return new $class;
+    $instance = new $class;
+    
+    $instance->setBreaksEnabled(Config::get('letterpress.markdown.enableLineBreaks'));
+    $instance->setMarkupEscaped(!Config::get('letterpress.markdown.enableParserInMarkup'));
+
+    return $instance;
   }
 }

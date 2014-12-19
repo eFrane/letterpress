@@ -7,11 +7,6 @@ class Letterpress
 
   public function __construct()
   {
-    $this->setup();
-  }
-
-  protected function setup($config = [])
-  {
     // check for initialized config
     try
     {
@@ -21,35 +16,23 @@ class Letterpress
       throw new LetterpressException($e->getMessage());
     }
 
+    $this->setup();
+  }
+
+  protected function setup($config = [])
+  {
     // apply additional config
-    $reset = true;
     if (count($config) > 0)
-    {
       Config::apply($config);
-    } else
-    {
-      $reset = false;
-    }
 
     // TODO: only reset these if dependent configuration options changed
-    if ($reset)
-    {
-      if (Config::get('letterpress.markdown.enabled'))
-      {
-        $this->parsedown = Integrations\ParsedownFactory::create();
-      } else
-      {
-        $this->parsedown = null;
-      }
+    $this->parsedown = null;
+    if (Config::get('letterpress.markdown.enabled'))
+      $this->parsedown = Integrations\ParsedownFactory::create();
 
-      if (Config::get('letterpress.microtypography.enabled'))
-      {
-        $this->fixer = new Integrations\TypoFixerFacade;
-      } else
-      {
-        $this->fixer = null;
-      }
-    }
+    $this->fixer = null;
+    if (Config::get('letterpress.microtypography.enabled'))
+      $this->fixer = new Integrations\TypoFixerFacade;
   }
 
   public function press($input, $config = [])
@@ -62,6 +45,9 @@ class Letterpress
 
     if (!is_null($this->fixer))
       $output = $this->fixer->fix($output);
+
+    #if (strlen($output) === 0)
+    #  $output = $input;
 
     return $output;
   }

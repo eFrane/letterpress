@@ -15,12 +15,6 @@ class Config
 
   protected function __construct($configPath)
   {
-    // check for relative path
-    if ($configPath[0] !== '/')
-    {
-      $configPath = dirname(__FILE__).DIRECTORY_SEPARATOR.$configPath;
-    }
-
     $loader = new FileLoader(new Filesystem, $configPath);
     $this->repository = new Repository($loader, null);
   }
@@ -28,9 +22,7 @@ class Config
   public static function init($configPath = '../config/')
   {
     if (self::$instance === null)
-    {
       self::$instance = new Config($configPath);
-    }
 
     return self::$instance;
   }
@@ -46,9 +38,7 @@ class Config
   public static function get($identifier = null, $default = null)
   {
     if (self::$instance === null)
-    {
       throw new \RuntimeException("Config must be initialized before usage.");
-    }
 
     return self::$instance->repository->get($identifier, $default);
   }
@@ -56,9 +46,7 @@ class Config
   public static function set($identifier = null, $value = null)
   {
     if (self::$instance === null)
-    {
       throw new \RuntimeException('Config must be initialized before usage.'); 
-    }
 
     // TODO: implement option change notifications
 
@@ -68,9 +56,7 @@ class Config
   public static function has($identifier = null, $value = null)
   {
     if (self::$instance === null)
-    {
       throw new \RuntimeException('Config must be initialized before usage.'); 
-    }
 
     return self::$instance->repository->has($identifier, $value);
   }
@@ -82,10 +68,9 @@ class Config
       if (!is_string($identifier))
       {
         throw new \LogicException('Identifier must be string.');
-      } else
-      {
-        Config::set($identifier, $value);
       }
+
+      Config::set($identifier, $value);
     }
   }
 }
