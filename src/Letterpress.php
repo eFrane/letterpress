@@ -20,6 +20,8 @@ class Letterpress
 
   public function press($html, $config = [])
   {
+    if (count($config) > 0)
+      Config::apply($config);
 
   }
 }
