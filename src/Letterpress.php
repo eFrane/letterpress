@@ -2,6 +2,8 @@
 
 class Letterpress
 {
+  protected $parsedown = null;
+
   public function __construct()
   {
     // check for initialized config
@@ -12,14 +14,11 @@ class Letterpress
     {
       throw new LetterpressException($e->getMessage());
     }
+
+    $this->parsedown = Integrations\ParsedownFactory::create();
   }
 
   public function press($html, $config = [])
-  {
-
-  }
-
-  public function pressMarkdown($markdown, $config = [])
   {
 
   }

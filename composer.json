@@ -20,7 +20,8 @@
         "codeception/codeception": "~2.0"
     },
     "suggest": {
-        "nlp-tools/nlp-tools": "For code block fixing and other shenanigans."
+        "nlp-tools/nlp-tools": "For code block fixing and other shenanigans.",
+        "erusev/parsedown-extra": "Install this to use the markdown extra syntax."
     },
     "autoload": {
         "psr-4": {

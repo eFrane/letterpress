@@ -25,7 +25,7 @@ class LetterpressTest extends \Codeception\TestCase\Test
      **/
     public function testCreateWithoutConfig()
     {
-        Config::reset();
+        Config::reset(true);
         $letterpress = new Letterpress();
     }
 
