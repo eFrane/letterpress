@@ -34,4 +34,23 @@ class LetterpressTest extends \Codeception\TestCase\Test
         Config::init('config');
         $letterpress = new Letterpress();
     }
+
+    public function testPress()
+    {
+        $input = "# Hello World\nParagraph Text.";
+        $expected = "<h1>Hello World</h1>\n<p>Para&shy;graph Text.</p>";
+
+        $letterpress = new Letterpress();
+        $this->assertEquals($expected, $letterpress->press($input));
+    }
+
+    public function testPressWithConfigChange()
+    {
+        $input = "# Hello World\nParagraph Text.";
+        $expected = "<h1>Hello World</h1>\n<p>Paragraph Text.</p>";
+
+        Config::init('config');
+        $letterpress = new Letterpress();
+        $this->assertEquals($expected, $letterpress->press($input, ['letterpress.microtypography.enabled' => false]));   
+    }
 }
