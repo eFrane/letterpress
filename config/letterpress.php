@@ -27,14 +27,25 @@ return [
     'useMarkdownExtra' => false
   ],
 
+  // apply markup *fixes*. please note that disabling this also disables
+  // the media markup replacements.
   'markup' => [
     'enabled' => true,
 
-    'blockQuoteFix' => true
+    // parsedown does a terrible job at block quotes. let's remedy that
+    'blockQuoteFix' => true,
+
+    // adjust the maximum header level (higher level headers will be altered
+    // to the required level)
+    'maximumHeaderLevel' => 1
   ],
 
+  // apply markup and meta information using oEmbed and custom data fetchers
+  // TODO: this should support some kind of caching
   'media' => [
-    'enabled' => true
+    'youtube' => false,
+    'vimeo'   => false,
+    'flickr'  => false
   ],
 
   'microtypography' => [

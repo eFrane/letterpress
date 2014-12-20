@@ -11,6 +11,7 @@ use Illuminate\Config\Repository;
 class Config
 {
   protected static $instance = null;
+
   protected $repository = null;
 
   protected function __construct($configPath)
