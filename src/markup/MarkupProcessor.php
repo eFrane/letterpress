@@ -19,6 +19,7 @@ class MarkupProcessor
   public function __construct()
   {
     $this->prepareEmbedRepository();
+    $this->prepareModifiers();
   }
 
   protected function prepareEmbedRepository()
@@ -45,20 +46,16 @@ class MarkupProcessor
   protected function prepareModifiers()
   {
     if (Config::get('letterpress.markup.blockQuoteFix'))
-    {
       $this->modifiers['blockQuote'] = new BlockQuoteModifier;
-    }
 
     $maxHeaderLevel = Config::get('letterpress.markup.maximumHeaderLevel');
-    if ($maxHeaderLevel > 1)
-    {
-      $this->modifiers['headerLevel'] = new HeaderLevelModifier;
-    }
+    $this->modifiers['headerLevel'] = new HeaderLevelModifier($maxHeaderLevel);
   }
 
   public function process($content)
   {
     $fragment = HTML5::loadHTMLFragment($content);
+
     $fragment = $this->embedRepository->apply($fragment);
 
     if (!is_null($this->modifiers['blockQuote']))

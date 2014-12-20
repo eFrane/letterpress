@@ -4,5 +4,5 @@ use DOMDocumentFragment;
 
 interface Modifier
 {
-  public function modify(DOMDocumentFragment $fragment, $params = []);
+  public function modify(DOMDocumentFragment $fragment);
 }
