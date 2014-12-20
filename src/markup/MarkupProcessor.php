@@ -14,7 +14,7 @@ use EFrane\Letterpress\Embeds\EmbedRepository;
 class MarkupProcessor
 {
   protected $embedRepository = null;
-  protected $modifiers = ['blockQuote' => null, 'headerLevel' => null];
+  protected $modifiers = ['blockQuote' => null, 'headlineLevel' => null];
 
   public function __construct()
   {
@@ -48,8 +48,8 @@ class MarkupProcessor
     if (Config::get('letterpress.markup.blockQuoteFix'))
       $this->modifiers['blockQuote'] = new BlockQuoteModifier;
 
-    $maxHeaderLevel = Config::get('letterpress.markup.maximumHeaderLevel');
-    $this->modifiers['headerLevel'] = new HeaderLevelModifier($maxHeaderLevel);
+    $maxHeadlineLevel = Config::get('letterpress.markup.maxHeadlineLevel');
+    $this->modifiers['headlineLevel'] = new HeadlineLevelModifier($maxHeadlineLevel);
   }
 
   public function process($content)
@@ -61,8 +61,8 @@ class MarkupProcessor
     if (!is_null($this->modifiers['blockQuote']))
       $fragment = $this->modifiers['blockQuote']->modify($fragment);
 
-    if (!is_null($this->modifiers['headerLevel']))
-      $fragment = $this->modifiers['headerLevel']->modify($fragment);
+    if (!is_null($this->modifiers['headlineLevel']))
+      $fragment = $this->modifiers['headlineLevel']->modify($fragment);
 
     return HTML5::saveHTML($fragment);
   }

@@ -35,9 +35,9 @@ return [
     // parsedown does a terrible job at block quotes. let's remedy that
     'blockQuoteFix' => true,
 
-    // adjust the maximum header level (higher level headers will be altered
+    // adjust the maximum headline level (higher level headlines will be altered
     // to the required level)
-    'maximumHeaderLevel' => 1
+    'maxHeadlineLevel' => 1
   ],
 
   // apply markup and meta information using oEmbed and custom data fetchers

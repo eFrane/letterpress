@@ -4,25 +4,25 @@ use DOMNode;
 use DOMDocument;
 use DOMDocumentFragment;
 
-class HeaderLevelModifier implements Modifier
+class HeadlineLevelModifier implements Modifier
 {
-  protected $maximumLevel = 0;
+  protected $maxLevel = 0;
   
   protected $relevantHeadlineTags = [];
   protected $replaceTagName = '';
 
   protected $doc = null;
 
-  public function __construct($maximumLevel)
+  public function __construct($maxLevel)
   {
-    $this->maximumLevel = ($maximumLevel < 1) ? 1 : $this->maximumLevel;
+    $this->maxLevel = ($maxLevel < 1) ? 1 : $this->maxLevel;
     
-    $levels = range(1, $this->maximumLevel);
+    $levels = range(1, $this->maxLevel);
     $this->relevantHeadlineTags = array_map(function ($el) {
       return sprintf('h%d', $el);
     }, $levels);
 
-    $this->replaceTagName = sprintf('h%d', $maximumLevel);
+    $this->replaceTagName = sprintf('h%d', $maxLevel);
   }
 
   public function modify(DOMDocumentFragment $fragment)
