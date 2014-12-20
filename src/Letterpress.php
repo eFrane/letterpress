@@ -1,9 +1,13 @@
 <?php namespace EFrane\Letterpress;
 
+/**
+ *  @author Stefan Graupner <stefan.graupner@gmail.com>
+ **/
 class Letterpress
 {
   protected $parsedown = null;
   protected $fixer = null;
+  protected $markup = null;
 
   public function __construct()
   {
@@ -33,6 +37,10 @@ class Letterpress
     $this->fixer = null;
     if (Config::get('letterpress.microtypography.enabled'))
       $this->fixer = new Integrations\TypoFixerFacade;
+
+    $this->markup = null;
+    if (Config::get('letterpress.markup.enabled'))
+      $this->markup = new Markup\MarkupProcessor;
   }
 
   public function press($input, $config = [])
@@ -40,8 +48,12 @@ class Letterpress
     $this->setup($config);
 
     $output = "";
+
     if (!is_null($this->parsedown))
       $output = $this->parsedown->parse($input);
+
+    if (!is_null($this->markup))
+      $output = $this->markup->process($output);
 
     if (!is_null($this->fixer))
       $output = $this->fixer->fix($output);

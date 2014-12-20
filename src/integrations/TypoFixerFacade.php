@@ -48,7 +48,7 @@ class TypoFixerFacade implements Facade
 
   public function __get($property)
   {
-    if (strrpos($property, 'facade_') === 0)
+    if (strpos($property, 'facade_') === 0)
     {
       return $this->{$property};
     } else
@@ -59,7 +59,7 @@ class TypoFixerFacade implements Facade
 
   public function __set($property, $value)
   {
-    if (strrpos($property, 'facade_') === 0)
+    if (strpos($property, 'facade_') === 0)
     {
       $this->{$property} = $value;
     } else
