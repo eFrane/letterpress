@@ -46,8 +46,8 @@ class Letterpress
     if (!is_null($this->fixer))
       $output = $this->fixer->fix($output);
 
-    #if (strlen($output) === 0)
-    #  $output = $input;
+    if (strlen($output) === 0)
+      $output = $input;
 
     return $output;
   }
