@@ -3,5 +3,5 @@
 interface Embed
 {
   public function test($fragmentHTML);
-  public function apply(DOMDocumentFragment $fragment, $template = '');
+  public function apply(DOMDocumentFragment $fragment);
 }

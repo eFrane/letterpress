@@ -27,14 +27,12 @@ class EmbedRepository
     }
   }
 
-  public function apply(DOMDocumentFragment $fragment, $template = '')
+  public function apply(DOMDocumentFragment $fragment)
   {
     foreach ($this->embeds as $embed)
     {
       if ($embed->test(HTML5::saveHTML($fragment)))
-        $fragment = $embed->apply($fragment, $template);
-    }
-
-    return $fragment;
+        $embed->apply($fragment, $template);
+    };
   }
 }
