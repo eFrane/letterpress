@@ -56,13 +56,13 @@ class MarkupProcessor
   {
     $fragment = HTML5::loadHTMLFragment($content);
 
-    $fragment = $this->embedRepository->apply($fragment);
+    $this->embedRepository->apply($fragment);
 
     if (!is_null($this->modifiers['blockQuote']))
-      $fragment = $this->modifiers['blockQuote']->modify($fragment);
+      $this->modifiers['blockQuote']->modify($fragment);
 
     if (!is_null($this->modifiers['headlineLevel']))
-      $fragment = $this->modifiers['headlineLevel']->modify($fragment);
+      $this->modifiers['headlineLevel']->modify($fragment);
 
     return HTML5::saveHTML($fragment);
   }

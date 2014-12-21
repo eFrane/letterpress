@@ -23,31 +23,23 @@ class HeadlineLevelModifier extends BaseModifier // implements Modifier
     $this->replaceTagName = sprintf('h%d', $maxLevel);
   }
 
-  protected function walk(DOMNode $node)
+  protected function candidateCheck(DOMNode $candidate)
   {
-    foreach ($node->childNodes as $current)
+    return in_array($candidate->nodeName, $this->relevantHeadlineTags);
+  }
+
+  protected function candidateModify(DOMNode $parent, DOMNode $candidate)
+  {
+    $newNode = $this->doc->createElement($this->replaceTagName, $candidate->nodeValue);
+
+    if (!is_null($candidate->nextSibling))
     {
-      if (in_array($current->nodeName, $this->relevantHeadlineTags))
-      {
-        $newNode = $this->doc->createElement($this->replaceTagName, $current->nodeValue);
-
-        if (!is_null($current->nextSibling))
-        {
-          $node->insertBefore($newNode, $current->nextSibling);
-        } else
-        {
-          $node->append($newNode);
-        }
-
-        $node->removeChild($current);
-      }
-
-      if ($current->hasChildNodes())
-        $this->walk($current);
-
-      $previous = $current;
+      $parent->insertBefore($newNode, $candidate->nextSibling);
+    } else
+    {
+      $parent->append($newNode);
     }
 
-    return $node;
+    $parent->removeChild($candidate);
   }
 }
