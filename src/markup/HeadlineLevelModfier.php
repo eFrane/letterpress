@@ -1,10 +1,8 @@
 <?php namespace EFrane\Letterpress\Markup;
 
 use DOMNode;
-use DOMDocument;
-use DOMDocumentFragment;
 
-class HeadlineLevelModifier implements Modifier
+class HeadlineLevelModifier extends BaseModifier // implements Modifier
 {
   protected $maxLevel = 0;
   
@@ -23,14 +21,6 @@ class HeadlineLevelModifier implements Modifier
     }, $levels);
 
     $this->replaceTagName = sprintf('h%d', $maxLevel);
-  }
-
-  public function modify(DOMDocumentFragment $fragment)
-  {
-    $this->doc = $fragment->ownerDocument;
-    $fragment = $this->walk($fragment);
-
-    return $fragment;
   }
 
   protected function walk(DOMNode $node)

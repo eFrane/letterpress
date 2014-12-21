@@ -1,6 +1,6 @@
 <?php namespace EFrane\Letterpress\Markup;
 
-use DOMDocumentFragment;
+use DOMNode;
 
 /**
  * Fix block quotes. More information on that can be found at:
@@ -8,10 +8,10 @@ use DOMDocumentFragment;
  *
  * @author Stefan Graupner <stefan.graupner@gmail.com>
  **/
-class BlockQuoteModifier implements Modifier
+class BlockQuoteModifier extends BaseModifier // implements Modifier
 {
-  public function modify(DOMDocumentFragment $fragment)
+  protected function walk(DOMNode $node)
   {
-    return $fragment;       
+    return $node;
   }
 }
