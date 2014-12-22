@@ -1,8 +1,8 @@
 <?php namespace EFrane\Letterpress;
 
-use Integrations\ParsedownFactory;
-use Integrations\TypoFixerFacade;
-use Markup\MarkupProcessor;
+use EFrane\Letterpress\Integrations\ParsedownFactory;
+use EFrane\Letterpress\Integrations\TypoFixerFacade;
+use EFrane\Letterpress\Markup\MarkupProcessor;
 
 /**
  *  @author Stefan Graupner <stefan.graupner@gmail.com>
