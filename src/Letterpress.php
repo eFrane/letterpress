@@ -1,5 +1,9 @@
 <?php namespace EFrane\Letterpress;
 
+use Integrations\ParsedownFactory;
+use Integrations\TypoFixerFacade;
+use Markup\MarkupProcessor;
+
 /**
  *  @author Stefan Graupner <stefan.graupner@gmail.com>
  **/
@@ -32,15 +36,15 @@ class Letterpress
     // TODO: only reset these if dependent configuration options changed
     $this->parsedown = null;
     if (Config::get('letterpress.markdown.enabled'))
-      $this->parsedown = Integrations\ParsedownFactory::create();
+      $this->parsedown = ParsedownFactory::create();
 
     $this->fixer = null;
     if (Config::get('letterpress.microtypography.enabled'))
-      $this->fixer = new Integrations\TypoFixerFacade;
+      $this->fixer = new TypoFixerFacade;
 
     $this->markup = null;
     if (Config::get('letterpress.markup.enabled'))
-      $this->markup = new Markup\MarkupProcessor;
+      $this->markup = new MarkupProcessor;
   }
 
   public function press($input, $config = [])
