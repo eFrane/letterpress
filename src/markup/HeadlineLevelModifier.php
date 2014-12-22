@@ -41,5 +41,7 @@ class HeadlineLevelModifier extends BaseModifier // implements Modifier
     }
 
     $parent->removeChild($candidate);
+
+    return $parent;
   }
 }

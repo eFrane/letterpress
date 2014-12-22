@@ -63,33 +63,73 @@ class BlockQuoteModifier extends BaseModifier // implements Modifier
 {
   protected function candidateCheck(DOMNode $candidate)
   {
-    return strcmp($candidate->nodeName, 'blockquote') == 0
-        && $candidate->hasChildren()
-        && strcmp($candidate->lastChild->nodeName, 'ul') == 0
+    $isBlockquoteWithChildNodes = strcmp($candidate->nodeName, 'blockquote') == 0
+                               && $candidate->hasChildNodes();
+
+    if ($isBlockquoteWithChildNodes)
+    {
+      foreach ($candidate->childNodes as $child)
+      {
+        if (strcmp($child->nodeName, 'ul') == 0)
+          return true;
+      }
+    }
+
+    return false;
   }
 
   protected function candidateModify(DOMNode $parent, DOMNode $candidate)
   {
     $figure = $this->doc->createElement('figure');
-    $quoteContent = $this->doc->createNodeList();
 
+    $captionContent = null;
     foreach ($candidate->childNodes as $contentNodeCandidate)
     {
       if (strcmp($contentNodeCandidate->nodeName, 'ul') !== 0)
-        $quoteContent->addNode($contentNodeCandidate);
+      {
+        $figure->appendChild($contentNodeCandidate->cloneNode(true));
+      } else
+      {
+        $captionCandidate = $contentNodeCandidate->cloneNode(true);
+        $captionContent = $this->extractCaptionContent($captionCandidate);
+      }
     }
 
-    $figure->append($quoteContent);
+    if (!is_null($captionContent))
+    {
+      $figcaption = $this->doc->createElement('figcaption');
+      $figcaption->appendChild($captionContent);
 
-    $figcaption = $this->doc->createElement('figcaption');
-    $captionContent = $candidate->lastChild->firstChild->childNodes;
-    $figcaption->append($captionContent);
-
-    $figure->append($figcaption);
+      $figure->appendChild($figcaption);
+    }
 
     $parent->insertBefore($figure, $candidate);
     
-    $parent->removeChild($candidate->nextSibling);
     $parent->removeChild($candidate);
+    return $parent;
+  }
+
+  protected function extractCaptionContent(DOMNode $captionCandidate)
+  {
+    $captionContent = $this->doc->createDocumentFragment();
+
+    if (strcmp($captionCandidate->nodeName, 'ul') == 0)
+    {
+      #$captionContent = $captionCandidate->firstChild->cloneNode(true);
+      foreach ($captionCandidate->childNodes as $child)
+      {
+        if (strcmp($child->nodeName, 'li') == 0)
+        {
+          foreach ($child->childNodes as $contentChild)
+          {
+            $captionContent->appendChild($contentChild->cloneNode(true));
+          }
+
+          break;
+        }
+      }
+    }
+
+    return $captionContent;
   }
 }

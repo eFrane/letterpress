@@ -1,16 +1,17 @@
-<?php namespace EFrane\Lettepress\Markup;
+<?php namespace EFrane\Letterpress\Markup;
 
 use DOMDocumentFragment;
 use DOMNode;
 
-abstract class BaseModifier implementes Modifier
+abstract class BaseModifier implements Modifier
 {
   protected $doc = null;
 
   public function modify(DOMDocumentFragment $fragment)
   {
     $this->doc = $fragment->ownerDocument;
-    $this->walk($fragment);
+    $fragment = $this->walk($fragment);
+    return $fragment;
   }
 
   protected function walk(DOMNode $node)
@@ -19,11 +20,13 @@ abstract class BaseModifier implementes Modifier
     {
       // look for blockquote + ul
       if ($this->candidateCheck($current))
-        $this->candidateModify($node, $current);
+        $node = $this->candidateModify($node, $current);
 
-      if ($current->hasChildren())
-        $this->walk($current);
+      if ($current->hasChildNodes())
+        $current = $this->walk($current);
     }
+
+    return $node;
   }
 
   abstract protected function candidateCheck(DOMNode $candidate);
