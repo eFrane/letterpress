@@ -12,26 +12,33 @@ class ParsedownFactoryTest extends \Codeception\TestCase\Test
 
     protected function _before()
     {
-        Config::init('../config');        
     }
 
     protected function _after()
     {
+
     }
 
-    protected function testCreateParsedown()
+    public function testCreateParsedown()
     {
         // make sure we ask for the standard parsedown
+        Config::init('config');
         Config::set('letterpress.enableMarkdownExtra', false);
-
         $this->assertInstanceof('\Parsedown', ParsedownFactory::create());
+    }
+
+    public function testParsedownParse()
+    {
+        $factory = ParsedownFactory::create();
+        $result = $factory->parse('# headline');
+        $this->assertEquals('<h1>headline</h1>', $result);
     }
 
     /**
      * @expectedException EFrane\Letterpress\LetterpressException
      * @expectedExceptionMessage Enabling MarkdownExtra requires ParsedownExtra to be installed.
      **/
-    protected function testCreateParsedownExtraException()
+    public function testCreateParsedownExtraException()
     {
         Config::set('letterpress.enableMarkdownExtra', true);
         ParsedownFactory::create();
