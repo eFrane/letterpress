@@ -15,7 +15,8 @@ class TypoFixerFacade implements Facade
   public function __construct()
   {
     // get locale
-    if (($locale = Config::get('letterpress.locale')))
+    $locale = Config::get('letterpress.locale');
+    if (is_string($locale) && strlen($locale) > 0)
     {
       $this->locale = $locale;
     } else
@@ -50,6 +51,7 @@ class TypoFixerFacade implements Facade
   {
     if (strpos($property, 'facade_') === 0)
     {
+      $property = substr($property, 7);
       return $this->{$property};
     } else
     {
@@ -61,6 +63,7 @@ class TypoFixerFacade implements Facade
   {
     if (strpos($property, 'facade_') === 0)
     {
+      $property = substr($property, 7);
       $this->{$property} = $value;
     } else
     {
