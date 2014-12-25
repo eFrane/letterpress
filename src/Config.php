@@ -52,8 +52,6 @@ class Config
     if (self::$instance === null)
       throw new \RuntimeException('Config must be initialized before usage.'); 
 
-    // TODO: implement option change notifications
-
     return self::$instance->repository->set($identifier, $value);
   }
 

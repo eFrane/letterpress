@@ -32,13 +32,7 @@ class HeadlineLevelModifier extends BaseModifier // implements Modifier
   {
     $newNode = $this->doc->createElement($this->replaceTagName, $candidate->nodeValue);
 
-    if (!is_null($candidate->nextSibling))
-    {
-      $parent->insertBefore($newNode, $candidate->nextSibling);
-    } else
-    {
-      $parent->append($newNode);
-    }
+    $parent->insertBefore($newNode, $candidate);
 
     $parent->removeChild($candidate);
 

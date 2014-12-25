@@ -13,7 +13,7 @@ class Letterpress
   protected $fixer = null;
   protected $markup = null;
 
-  public function __construct()
+  public function __construct($config = [])
   {
     // check for initialized config
     try
@@ -24,7 +24,7 @@ class Letterpress
       throw new LetterpressException($e->getMessage());
     }
 
-    $this->setup();
+    $this->setup($config);
   }
 
   protected function setup($config = [])
@@ -32,19 +32,6 @@ class Letterpress
     // apply additional config
     if (count($config) > 0)
       Config::apply($config);
-
-    // TODO: only reset these if dependent configuration options changed
-    $this->parsedown = null;
-    if (Config::get('letterpress.markdown.enabled'))
-      $this->parsedown = ParsedownFactory::create();
-
-    $this->fixer = null;
-    if (Config::get('letterpress.microtypography.enabled'))
-      $this->fixer = new TypoFixerFacade;
-
-    $this->markup = null;
-    if (Config::get('letterpress.markup.enabled'))
-      $this->markup = new MarkupProcessor;
   }
 
   public function press($input, $config = [])
@@ -52,19 +39,53 @@ class Letterpress
     $this->setup($config);
 
     $output = "";
-
-    if (!is_null($this->parsedown))
-      $output = $this->parsedown->parse($input);
-
-    if (!is_null($this->markup))
-      $output = $this->markup->process($output);
-
-    if (!is_null($this->fixer))
-      $output = $this->fixer->fix($output);
+    
+    $output = $this->markdown($input);
+    $output = $this->markup($output);
+    $output = $this->typofix($output);
 
     if (strlen($output) === 0)
       $output = $input;
 
     return $output;
+  }
+
+  public function markdown($input, $force = false, $config = [])
+  {
+    $this->setup($config);
+
+    $this->parsedown = null;
+    if (Config::get('letterpress.markdown.enabled'))
+      $this->parsedown = ParsedownFactory::create();
+
+    return ($force || !is_null($this->parsedown)) 
+             ? $this->parsedown->parse($input) 
+             : $input;
+  }
+
+  public function markup($input, $force = false, $config = [])
+  {
+    $this->setup($config);
+
+    $this->markup = null;
+    if (Config::get('letterpress.markup.enabled'))
+      $this->markup = new MarkupProcessor;
+
+    return ($force || !is_null($this->markup))
+             ? $this->markup->process($input) 
+             : $input;
+  }
+
+  public function typofix($input, $force = false, $config = [])
+  {
+    $this->setup($config);
+
+    $this->fixer = null;
+    if (Config::get('letterpress.microtypography.enabled'))
+      $this->fixer = new TypoFixerFacade;
+
+    return ($force || !is_null($this->fixer)) 
+             ? $this->fixer->fix($input) 
+             : $input;
   }
 }

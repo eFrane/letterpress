@@ -35,7 +35,7 @@ class ConfigTest extends \Codeception\TestCase\Test
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Config must be initialized before usage.
      **/
-    public function testGetWithoutInit()
+    public function testGetFailWithoutInit()
     {
         Config::reset(true); // make sure, Config is not initialized
         Config::get('letterpress.locale');
@@ -53,7 +53,7 @@ class ConfigTest extends \Codeception\TestCase\Test
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Config must be initialized before usage.
      **/
-    public function testSetWithoutInit()
+    public function testSetFailWithoutInit()
     {
         Config::reset(true);
         Config::set('letterpress.testvalue', 'value');
@@ -72,7 +72,7 @@ class ConfigTest extends \Codeception\TestCase\Test
      * @expectedException \RuntimeException
      * @expectedExceptionMessage Config must be initialized before usage.
      **/
-    public function testHasWithoutInit()
+    public function testHasFailWithoutInit()
     {
         Config::reset(true);
         Config::has('letterpress.locale');
@@ -91,7 +91,7 @@ class ConfigTest extends \Codeception\TestCase\Test
      * @expectedException \LogicException
      * @expectedExceptionMessage Identifier must be string.
      **/
-    public function testApplyWithNonStringKey()
+    public function testApplyFailWithNonStringKey()
     {
         Config::init($this->configPath);
 
