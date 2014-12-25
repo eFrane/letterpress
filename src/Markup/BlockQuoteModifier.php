@@ -115,7 +115,6 @@ class BlockQuoteModifier extends BaseModifier // implements Modifier
 
     if (strcmp($captionCandidate->nodeName, 'ul') == 0)
     {
-      #$captionContent = $captionCandidate->firstChild->cloneNode(true);
       foreach ($captionCandidate->childNodes as $child)
       {
         if (strcmp($child->nodeName, 'li') == 0)
