@@ -35,7 +35,11 @@ class TypoFixerFacade implements Facade
       {
         $this->fixers = array_merge($this->fixers, Config::get($localeKey));
       }
-    }    
+    }
+
+    // hyphenation
+    if (Config::get('letterpress.microtypography.enableHyphenation'))
+      $this->fixers[] = 'Hyphen';
 
     // user additions
     $this->fixers = array_merge($this->fixers, Config::get('letterpress.microtypography.additionalFixers'));

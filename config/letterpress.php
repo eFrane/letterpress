@@ -37,7 +37,10 @@ return [
 
     // adjust the maximum headline level (higher level headlines will be altered
     // to the required level)
-    'maxHeadlineLevel' => 1
+    'maxHeadlineLevel' => 1,
+
+    // wrap the given content in a div with the appropriate language attribute
+    'addLanguageInfo' => true
   ],
 
   // apply markup and meta information using oEmbed and custom data fetchers
@@ -50,6 +53,8 @@ return [
 
   'microtypography' => [
     'enabled' => true,
+    'enableHyphenation' => true,
+
     'useDefaults' => true,
 
     // you only need to add your additional fixers here, most of

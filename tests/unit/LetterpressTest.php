@@ -38,7 +38,7 @@ class LetterpressTest extends \Codeception\TestCase\Test
     public function testPress()
     {
         $input = "# Hello World\nParagraph Text.";
-        $expected = "<h1>Hello World</h1>\n<p>Para&shy;graph Text.</p>";
+        $expected = "<div lang=\"en\"><h1>Hello World</h1>\n<p>Para&shy;graph Text.</p></div>";
 
         $letterpress = new Letterpress;
         $this->assertEquals($expected, $letterpress->press($input));
@@ -47,7 +47,7 @@ class LetterpressTest extends \Codeception\TestCase\Test
     public function testPressWithConfigChange()
     {
         $input = "# Hello World\nParagraph Text.";
-        $expected = "<h1>Hello World</h1>\n<p>Paragraph Text.</p>";
+        $expected = "<div lang=\"en\"><h1>Hello World</h1>\n<p>Paragraph Text.</p></div>";
 
         $letterpress = new Letterpress;
         $output = $letterpress->press($input, ['letterpress.microtypography.enabled' => false]);
@@ -67,7 +67,7 @@ class LetterpressTest extends \Codeception\TestCase\Test
     public function testMarkupOnly()
     {
         $input    = "<h1>Hello World</h1>";
-        $expected = "<h2>Hello World</h2>";
+        $expected = "<div lang=\"en\"><h2>Hello World</h2></div>";
 
         Config::set('letterpress.markup.maxHeadlineLevel', 2);
         $letterpress = new Letterpress;

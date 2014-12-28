@@ -59,7 +59,7 @@ use DOMNode;
  *
  * @author Stefan Graupner <stefan.graupner@gmail.com>
  **/
-class BlockQuoteModifier extends BaseModifier // implements Modifier
+class BlockQuoteModifier extends RecursiveModifier // implements Modifier
 {
   protected function candidateCheck(DOMNode $candidate)
   {

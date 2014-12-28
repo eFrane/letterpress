@@ -62,6 +62,7 @@ class TypoFixerFacadeTest extends \Codeception\TestCase\Test
         Config::set('letterpress.locale', 'en_GB'); // reset locale
         Config::set('letterpress.microtypography.useDefaults', false); // disable default fixers
         Config::set('letterpress.microtypography.additionalFixers', []); // reset additional fixers
+        Config::set('letterpress.microtypography.enableHyphenation', false); // disable hyphenation
 
         $fixer = new TypoFixerFacade;
     }

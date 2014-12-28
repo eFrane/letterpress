@@ -14,7 +14,7 @@ use EFrane\Letterpress\Embeds\EmbedRepository;
 class MarkupProcessor
 {
   protected $embedRepository = null;
-  protected $modifiers = ['blockQuote' => null, 'headlineLevel' => null];
+  protected $modifiers = [];
 
   public function __construct()
   {
@@ -45,11 +45,17 @@ class MarkupProcessor
 
   protected function prepareModifiers()
   {
+    $this->modifiers = [];
+
     if (Config::get('letterpress.markup.blockQuoteFix'))
       $this->modifiers['blockQuote'] = new BlockQuoteModifier;
 
     $maxHeadlineLevel = Config::get('letterpress.markup.maxHeadlineLevel');
-    $this->modifiers['headlineLevel'] = new HeadlineLevelModifier($maxHeadlineLevel);
+    if ($maxHeadlineLevel > 1)
+      $this->modifiers['headlineLevel'] = new HeadlineLevelModifier($maxHeadlineLevel);
+
+    if (Config::get('letterpress.markup.addLanguageInfo'))
+      $this->modifiers['languageCode'] = new LanguageCodeModifier;
   }
 
   public function process($content)
@@ -58,11 +64,17 @@ class MarkupProcessor
 
 #    $this->embedRepository->apply($fragment);
 
-    if (!is_null($this->modifiers['blockQuote']))
-      $fragment = $this->modifiers['blockQuote']->modify($fragment);
-
-    if (!is_null($this->modifiers['headlineLevel']))
-      $fragment = $this->modifiers['headlineLevel']->modify($fragment);
+    foreach ($this->modifiers as $modifier)
+    {
+      $modifiedFragment = $modifier->modify($fragment);
+      if (!is_null($modifiedFragment))
+      {
+        $fragment = $modifiedFragment;
+      } else
+      {
+        var_dump($modifier); exit;
+      }
+    }
 
     return HTML5::saveHTML($fragment);
   }

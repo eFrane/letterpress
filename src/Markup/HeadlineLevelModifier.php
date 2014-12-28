@@ -2,7 +2,7 @@
 
 use DOMNode;
 
-class HeadlineLevelModifier extends BaseModifier // implements Modifier
+class HeadlineLevelModifier extends RecursiveModifier // implements Modifier
 {
   protected $maxLevel = 0;
   

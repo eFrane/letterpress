@@ -1,5 +1,5 @@
 <?php return [
-  'defaults' => ['Ellipsis', 'Dimension', 'Dash', 'CurlyQuote', 'Hyphen', 'Trademark'],
+  'defaults' => ['Ellipsis', 'Dimension', 'Dash', 'CurlyQuote', 'Trademark'],
   
   // jolitypo defaults
   'en_US' => ['EnglishQuotes'],
