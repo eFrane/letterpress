@@ -40,17 +40,6 @@ class LanguageCodeModifier extends BaseModifier // implements Modifier
    **/
   protected function wrapFragment(DOMDocumentFragment $fragment, DOMNode $wrapNode)
   {
-    /*foreach ($node->childNodes as $child)
-    {
-      $wrapNode->appendChild($child->cloneNode(true));
-      $node->removeChild($child);
-    }
-
-    $node->
-
-    $node->appendChild($wrapNode);
-    */
-
     $newFragment = $this->doc->createDocumentFragment();
     $wrapNode->appendChild($fragment->cloneNode(true));
     $newFragment->appendChild($wrapNode);
