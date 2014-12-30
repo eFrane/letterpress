@@ -2,6 +2,9 @@
 
 interface Embed
 {
-  public function test($fragmentHTML);
-  public function apply(DOMDocumentFragment $fragment);
+  /**
+   * @param Embed\Adapters\AdapterInterface
+   * @return String 
+   **/
+  public function apply(Embed\Adapters\AdapterInterface $adapter);
 }

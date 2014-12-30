@@ -120,9 +120,7 @@ class BlockQuoteModifier extends RecursiveModifier // implements Modifier
         if (strcmp($child->nodeName, 'li') == 0)
         {
           foreach ($child->childNodes as $contentChild)
-          {
             $captionContent->appendChild($contentChild->cloneNode(true));
-          }
 
           break;
         }
