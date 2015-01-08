@@ -12,11 +12,6 @@ class VideoEmbed extends BaseEmbed
   {
     $code = $adapter->getCode();
 
-    if (strlen($code) === 0)
-    {
-      throw new LetterpressException("Failed to acquire basic embed code.");
-    }
-
     if (Config::get('letterpress.markup.enableResponsiveIFrames'))
     {
       return $this->responsiveIFrame($code);
@@ -40,8 +35,18 @@ class VideoEmbed extends BaseEmbed
     $fragment->firstChild->appendChild($img);
 
     $frame = $fragment->ownerDocument->importNode(HTML5::loadHTMLFragment($frame), true);
+
+    $this->renameAttribute($frame->firstChild, 'width', 'data-width');
+    $this->renameAttribute($frame->firstChild, 'height', 'data-height');
+
     $fragment->firstChild->appendChild($frame);
 
     return $fragment;
+  }
+
+  protected function renameAttribute($node, $attributeName, $newName)
+  {
+    $node->setAttribute($newName, $node->getAttribute($attributeName));
+    $node->removeAttribute($attributeName);
   }
 }

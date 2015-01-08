@@ -94,8 +94,16 @@ class EmbedRepository
         if (parse_url($url, PHP_URL_SCHEME) === null)
           $url = sprintf('https://%s', $url);
 
-        $adapter = OEmbedAdapter::create($url);
-        if (!is_bool($adapter))
+        $adapter = null;
+        try
+        {
+          $adapter = OEmbedAdapter::create($url);
+        } catch(\Exception $e)
+        {
+          $adapter = false;
+        }
+
+        if (!is_bool($adapter) && strlen($adapter->getCode()) > 0)
         {
           $returnedFragment = $embed->apply($adapter);
           $returnedFragment = $this->doc->importNode($returnedFragment, true);
@@ -116,12 +124,23 @@ class EmbedRepository
           if (trim(strlen($element->nodeValue)) == strlen($match))
           {
             // case 1
-            $element->parentNode->replaceChild($returnedFragment, $element);
+            if (!is_null($element->parentNode->parentNode))
+            {
+              $element->parentNode->parentNode->insertBefore($returnedFragment, $element->parentNode);
+              $element->parentNode->parentNode->removeChild($element->parentNode);
+            } else
+            {
+              $this->doc->insertBefore($element->parentNode);
+              $this->doc->removeChild($element->parentNode);
+            }
           } else
           {
             // case 2
-            $element->nodeValue = str_replace($match, '', $element->nodeValue);
             $this->doc->insertBefore($returnedFragment, $element);
+
+            $element->nodeValue = str_replace($match, '', $element->nodeValue);            
+            if (strcmp($element->nodeValue, '') === 0)
+              $this->doc->removeNode($element);
           }
         }
       }
