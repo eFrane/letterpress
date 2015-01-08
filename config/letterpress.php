@@ -40,21 +40,21 @@ return [
     'maxHeadlineLevel' => 1,
 
     // wrap the given content in a div with the appropriate language attribute
-    'addLanguageInfo' => true,
-
-    // when this is enabled, iframes from embedded media will be wrapped
-    // in a way that allows for responsive resizing while maintaining a 16/9
-    // aspect ratio
-    'enableResponsiveIFrames' => true,
+    // this is not recommended in favor of setting a base language on the <html> tag
+    'addLanguageInfo' => false,
   ],
 
   // apply markup and meta information using oEmbed and custom data fetchers
   // TODO: this should support some kind of caching
   'media' => [
-    'YouTube' => true,
-    'Twitter' => true,
-    'Vimeo'   => true,
-    'Flickr'  => true
+    'enabled' => true,
+
+    // when this is enabled, iframes from embedded media will be wrapped
+    // in a way that allows for responsive resizing while maintaining a 16/9
+    // aspect ratio
+    'enableResponsiveIFrames' => true,
+
+    'services' => ['YouTube', 'Twitter', 'Vimeo', 'Flickr']
   ],
 
   'microtypography' => [

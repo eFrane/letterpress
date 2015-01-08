@@ -20,28 +20,31 @@ class MarkupProcessor
 
   public function __construct()
   {
-    $this->prepareEmbedRepository();
     $this->prepareModifiers();
-
-    libxml_use_internal_errors(true);
+    $this->prepareEmbedRepository();
   }
 
   protected function prepareEmbedRepository()
   {
-    // transform the enabled media services into their embed class names
-    $enabledExternalServices = Config::get('letterpress.media');
-    $embedClasses = [];
-
-    foreach ($enabledExternalServices as $service => $enabled)
+    if (Config::get('letterpress.media.enabled'))
     {
-      if (is_bool($enabled) && $enabled)
-        $embedClasses[] = sprintf('EFrane\Letterpress\Embeds\%s', $service);
+      // transform the enabled media services into their embed class names
+      $enabledExternalServices = Config::get('letterpress.media.services');
+      $embedClasses = [];
 
-      if (is_string($enabled) && class_exists($enabled))
-        $embedClasses[] = $enabled;
+      foreach ($enabledExternalServices as $service)
+      {
+        $className = (strpos('\\', $service) < 0)
+          ? sprintf('EFrane\Letterpress\Embeds\%s', $service);
+          : $service;
+
+        if (class_exists($className))
+          $embedClasses[] = $className;
+      }
+
+      $this->embedRepository = new EmbedRepository($embedClasses);
     }
 
-    $this->embedRepository = new EmbedRepository($embedClasses);
   }
 
   protected function prepareModifiers()
@@ -65,7 +68,8 @@ class MarkupProcessor
   {
     $fragment = HTML5::loadHTMLFragment($content);
 
-    $this->embedRepository->apply($fragment);
+    if (!is_null($this->embedRepository))
+      $this->embedRepository->apply($fragment);
 
     foreach ($this->modifiers as $modifier)
     {
