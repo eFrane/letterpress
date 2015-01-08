@@ -57,6 +57,8 @@ class MarkupProcessor
 
     if (Config::get('letterpress.markup.addLanguageInfo'))
       $this->modifiers['languageCode'] = new LanguageCodeModifier;
+
+    $this->modifiers[] = new RemoveEmptyNodesModifier;
   }
 
   public function process($content)
