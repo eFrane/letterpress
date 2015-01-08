@@ -4,12 +4,19 @@ use HTML5;
 use Embed\Adapters\AdapterInterface;
 
 use EFrane\Letterpress\Config;
+use EFrane\Letterpress\LetterpressException;
 
 class VideoEmbed extends BaseEmbed
 {
   public function apply(AdapterInterface $adapter)
   {
     $code = $adapter->getCode();
+
+    if (strlen($code) === 0)
+    {
+      throw new LetterpressException("Failed to acquire basic embed code.");
+    }
+
     if (Config::get('letterpress.markup.enableResponsiveIFrames'))
     {
       return $this->responsiveIFrame($code);
