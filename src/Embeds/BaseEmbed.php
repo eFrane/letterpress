@@ -4,28 +4,34 @@ abstract class BaseEmbed implements Embed
 {
   protected $bbcode = false;
 
-  protected $urlRegex = '//';
+  protected $urlRegex = '';
+
+  protected $matches = [];
+
+  protected function prepareURLRegex()
+  {
+    return sprintf('(?P<url>%s)', $this->urlRegex);
+  }
 
   public function getURLRegex()
   {
-    if (!is_string($this->urlRegex) || $this->urlRegex[0] !== '/')
-      throw new EmbedException("Invalid regular expression.");
-
-    return $this->urlRegex;
+    return sprintf('/^%s$/i', $this->prepareURLRegex());
   }
 
-  public function getBBCode()
+  public function getBBCodeRegex()
   {
-    if ($this->bbcode)
-    {
-      $tagName  = strtolower(basename(get_called_class()));
+    $tagName = explode('\\', get_called_class());
+    $tagName = strtolower($tagName[count($tagName) - 1]);
 
-      $urlRegex = explode('/', $this->getURLRegex());
-      $tagRegex = sprintf("/\[%s\]%s\[\/%s\]/%s", $tagName, $urlRegex[1], $tagName, $urlRegex);
+    $urlRegex = $this->prepareURLRegex();
 
-      return $tagRegex;
-    }
+    $tagRegex = sprintf("/^\[%s.*?\]%s\[\/%s\]$/i", $tagName, $urlRegex, $tagName);
 
-    return "";
+    return $tagRegex;
+  }
+
+  public function isBBCodeEnabled()
+  {
+    return $this->bbcode;
   }
 }

@@ -3,6 +3,8 @@
 use \HTML5;
 
 use EFrane\Letterpress\Config;
+use EFrane\Letterpress\LetterpressException;
+
 use EFrane\Letterpress\Embeds\EmbedRepository;
 
 /**
@@ -20,6 +22,8 @@ class MarkupProcessor
   {
     $this->prepareEmbedRepository();
     $this->prepareModifiers();
+
+    libxml_use_internal_errors(true);
   }
 
   protected function prepareEmbedRepository()
@@ -31,10 +35,7 @@ class MarkupProcessor
     foreach ($enabledExternalServices as $service => $enabled)
     {
       if (is_bool($enabled) && $enabled)
-      {
-        $name = ucfirst(strtolower($service));  
-        $embedClasses[] = sprintf('EFrane\Letterpress\Embeds\%sEmbed', $name);
-      }
+        $embedClasses[] = sprintf('EFrane\Letterpress\Embeds\%s', $service);
 
       if (is_string($enabled) && class_exists($enabled))
         $embedClasses[] = $enabled;
@@ -62,7 +63,7 @@ class MarkupProcessor
   {
     $fragment = HTML5::loadHTMLFragment($content);
 
-#    $this->embedRepository->apply($fragment);
+    $this->embedRepository->apply($fragment);
 
     foreach ($this->modifiers as $modifier)
     {
@@ -72,7 +73,7 @@ class MarkupProcessor
         $fragment = $modifiedFragment;
       } else
       {
-        var_dump($modifier); exit;
+        throw new LetterpressException("Failed to apply modifier ".get_class($modifier));
       }
     }
 

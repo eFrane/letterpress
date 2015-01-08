@@ -1,10 +1,12 @@
 <?php namespace EFrane\Letterpress\Embeds;
 
+use Embed\Adapters\AdapterInterface;
+
 interface Embed
 {
   /**
    * @param Embed\Adapters\AdapterInterface
-   * @return String 
+   * @return DOMDocumentFragment
    **/
-  public function apply(Embed\Adapters\AdapterInterface $adapter);
+  public function apply(AdapterInterface $adapter);
 }

@@ -55,12 +55,29 @@ class Letterpress
     $this->setup($config);
 
     $this->parsedown = null;
-    if (Config::get('letterpress.markdown.enabled'))
+    if (Config::get('letterpress.markdown.enabled') || $force)
       $this->parsedown = ParsedownFactory::create();
 
-    return ($force || !is_null($this->parsedown)) 
-             ? $this->parsedown->parse($input) 
-             : $input;
+    // extract bbcodes
+    $bbcodes = [];
+
+    preg_match_all('/(?P<bbcode>\[.+?\].+\[\/.+?\])/', $input, $matches);
+    foreach ($matches['bbcode'] as $code)
+    {
+      $escaped = sha1($code);
+      $input = str_replace($code, $escaped, $input);
+
+      $bbcodes[$escaped] = $code;
+    }
+
+    $output = ($force || !is_null($this->parsedown))
+      ? $this->parsedown->parse($input) 
+      : $input;
+
+    // unescape bbcodes
+    $output = str_replace(array_keys($bbcodes), array_values($bbcodes), $output);
+
+    return $output;
   }
 
   public function markup($input, $force = false, $config = [])
@@ -68,7 +85,7 @@ class Letterpress
     $this->setup($config);
 
     $this->markup = null;
-    if (Config::get('letterpress.markup.enabled'))
+    if (Config::get('letterpress.markup.enabled') || $force)
       $this->markup = new MarkupProcessor;
 
     return ($force || !is_null($this->markup))
@@ -81,7 +98,7 @@ class Letterpress
     $this->setup($config);
 
     $this->fixer = null;
-    if (Config::get('letterpress.microtypography.enabled'))
+    if (Config::get('letterpress.microtypography.enabled') || $force)
       $this->fixer = new TypoFixerFacade;
 
     return ($force || !is_null($this->fixer)) 

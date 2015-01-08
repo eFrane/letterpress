@@ -1,36 +1,28 @@
 <?php namespace EFrane\Letterpress\Embeds;
 
 use HTML5;
+use Embed\Adapters\AdapterInterface;
 
-/**
- * http://stackoverflow.com/questions/11122249/scale-iframe-css-width-100-like-an-image
- *
- * <div class="wrapper">
-    <div class="h_iframe">
-        <!-- a transparent image is preferable -->
-        <img class="ratio" src="http://placehold.it/16x9"/>
-        <iframe src="http://www.youtube.com/embed/WsFWhL4Y84Y" frameborder="0" allowfullscreen></iframe>
-    </div>
-    <p>Please scale the "result" window to notice the effect.</p>
-</div>
- **/
+use EFrane\Letterpress\Config;
+
 class VideoEmbed extends BaseEmbed
 {
-  public function apply(Embed\Adapters\AdapterInterface $adapter)
+  public function apply(AdapterInterface $adapter)
   {
     $code = $adapter->getCode();
-    if (Config::get('letterpress.media.enableResponsiveIFrames'))
+    if (Config::get('letterpress.markup.enableResponsiveIFrames'))
     {
       return $this->responsiveIFrame($code);
     } else
     {
-      return $code;
+      return HTML5::loadHTMLFragment($code);
     }
   }
   
   protected function responsiveIFrame($frame)
   {
-    $fragment =  HTML5::loadHTMLFragment('<div class="r-iframe"/>');
+    // http://stackoverflow.com/questions/11122249/scale-iframe-css-width-100-like-an-image
+    $fragment =  HTML5::loadHTMLFragment('<div class="iframe img-responsive"/>');
 
     $img = $fragment->ownerDocument->createElement('img');
     $img->setAttribute('class', 'ratio');
@@ -38,9 +30,11 @@ class VideoEmbed extends BaseEmbed
     $img->setAttribute('width', 16);
     $img->setAttribute('height', 9);
 
-    $fragment->appendChild($img);
-    $fragment->appendChild(HTML5::loadHTMLFragment($frame));
+    $fragment->firstChild->appendChild($img);
 
-    return HTML5::saveHTML($fragment);
+    $frame = $fragment->ownerDocument->importNode(HTML5::loadHTMLFragment($frame), true);
+    $fragment->firstChild->appendChild($frame);
+
+    return $fragment;
   }
 }

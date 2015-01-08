@@ -14,5 +14,5 @@ class YouTube extends VideoEmbed
 {
   protected $bbcode = true;
 
-  protected $urlRegex = '/^(http\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+$/';
+  protected $urlRegex = '(http(s)?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+';
 }

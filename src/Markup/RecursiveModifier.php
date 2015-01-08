@@ -16,7 +16,6 @@ abstract class RecursiveModifier extends BaseModifier
   {
     foreach ($node->childNodes as $current)
     {
-      // look for blockquote + ul
       if ($this->candidateCheck($current))
         $node = $this->candidateModify($node, $current);
 
