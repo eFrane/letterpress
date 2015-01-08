@@ -1,6 +1,6 @@
 {
     "name": "efrane/letterpress",
-    "description": "A configurable output formatting wrapper for PHP",
+    "description": "A configurable output formatting wrapper for PHP.",
     "authors": [
         {
             "name":  "Stefan Graupner",
@@ -24,7 +24,7 @@
         "raulfraile/ladybug": "*"
     },
     "suggest": {
-        "nlp-tools/nlp-tools": "For code block fixing and other shenanigans.",
+        "nlp-tools/nlp-tools": "For code block fixing and other shenanigans. (NYI)",
         "erusev/parsedown-extra": "Install this to use the markdown extra syntax."
     },
     "autoload": {
