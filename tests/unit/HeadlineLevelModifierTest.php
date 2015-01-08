@@ -36,5 +36,5 @@ class HeadlineLevelModifierTest extends \Codeception\TestCase\Test
         $output = $this->lp->press($input, ['letterpress.markup.maxHeadlineLevel' => 3]);
         $this->assertEquals($expected, $output);
     }
-
+    
 }

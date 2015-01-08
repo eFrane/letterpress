@@ -72,5 +72,6 @@ class RemoveEmptyNodesModifier extends RecursiveModifier
   protected function candidateModify(DOMNode $parent, DOMNode $candidate)
   {
     $parent->removeChild($candidate);
+    return $parent;
   }
 }
