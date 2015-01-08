@@ -35,7 +35,7 @@ class MarkupProcessor
       foreach ($enabledExternalServices as $service)
       {
         $className = (strpos('\\', $service) < 0)
-          ? sprintf('EFrane\Letterpress\Embeds\%s', $service);
+          ? sprintf('EFrane\Letterpress\Embeds\%s', $service)
           : $service;
 
         if (class_exists($className))
