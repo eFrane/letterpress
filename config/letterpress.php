@@ -52,8 +52,9 @@ return [
   // TODO: this should support some kind of caching
   'media' => [
     'YouTube' => true,
-    'Vimeo'   => false,
-    'Flickr'  => false
+    'Twitter' => true,
+    'Vimeo'   => true,
+    'Flickr'  => true
   ],
 
   'microtypography' => [

@@ -8,6 +8,12 @@ abstract class BaseEmbed implements Embed
 
   protected $matches = [];
 
+  public function apply(AdapterInterface $adapter)
+  {
+    $code = $adapter->getCode();
+    return HTML5::loadHTMLFragment($code);
+  }
+
   protected function prepareURLRegex()
   {
     return sprintf('(?P<url>%s)', $this->urlRegex);
