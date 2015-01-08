@@ -74,20 +74,18 @@ class EmbedRepository
     {
       $urls = [];
 
-      $regex = $embed->getURLRegex();
-      preg_match($regex, $element->nodeValue, $matches);
-
-      if (isset($matches['url']) && strlen($matches['url']) > 0) 
-        $urls[$matches[0]] = $matches['url'];
-
+      $regex = '';
       if ($embed->isBBCodeEnabled())
       {
-        $regex = $embed->getBBCodeRegex();
-        preg_match($regex, $element->nodeValue, $matches);
-
-        if (isset($matches['url']) && strlen($matches['url']) > 0) 
-          $urls[$matches[0]] = $matches['url'];
+        $regex = $embed->getBBCodeRegex();        
+      } else
+      {
+        $regex = $embed->getURLRegex();
       }
+
+      preg_match($regex, $element->nodeValue, $matches);
+      if (isset($matches['url']) && strlen($matches['url']) > 0) 
+          $urls[$matches[0]] = $matches['url'];
 
       foreach ($urls as $match => $url)
       {
