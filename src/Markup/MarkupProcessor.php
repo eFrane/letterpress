@@ -34,7 +34,7 @@ class MarkupProcessor
 
       foreach ($enabledExternalServices as $service)
       {
-        $className = (strpos('\\', $service) < 0)
+        $className = (!strstr($service, '\\'))
           ? sprintf('EFrane\Letterpress\Embeds\%s', $service)
           : $service;
 
@@ -69,7 +69,7 @@ class MarkupProcessor
     $fragment = HTML5::loadHTMLFragment($content);
 
     if (!is_null($this->embedRepository))
-      $this->embedRepository->apply($fragment);
+      $fragment = $this->embedRepository->apply($fragment);
 
     foreach ($this->modifiers as $modifier)
     {

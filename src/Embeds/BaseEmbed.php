@@ -1,5 +1,7 @@
 <?php namespace EFrane\Letterpress\Embeds;
 
+use Embed\Adapters\AdapterInterface;
+
 abstract class BaseEmbed implements Embed
 {
   protected $bbcode = false;
