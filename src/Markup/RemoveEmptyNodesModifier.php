@@ -54,6 +54,7 @@ class RemoveEmptyNodesModifier extends RecursiveModifier
     if ($simpleCheck) return true;
 
     // FIXME: this does not work as expected
+    /*
     $complexCheck = false;
     if ($candidate->hasChildNodes() 
     && in_array($candidate->tagName, $this->textContainerTagNames))
@@ -67,6 +68,9 @@ class RemoveEmptyNodesModifier extends RecursiveModifier
     }
 
     if ($complexCheck) return true;
+    */
+
+    return false;
   }
 
   protected function candidateModify(DOMNode $parent, DOMNode $candidate)

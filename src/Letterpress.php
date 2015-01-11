@@ -9,10 +9,6 @@ use EFrane\Letterpress\Markup\MarkupProcessor;
  **/
 class Letterpress
 {
-  protected $parsedown = null;
-  protected $fixer = null;
-  protected $markup = null;
-
   public function __construct($config = [])
   {
     // check for initialized config
@@ -47,16 +43,14 @@ class Letterpress
     if (strlen($output) === 0)
       $output = $input;
 
+    Config::reset();
+
     return $output;
   }
 
   public function markdown($input, $force = false, $config = [])
   {
     $this->setup($config);
-
-    $this->parsedown = null;
-    if (Config::get('letterpress.markdown.enabled') || $force)
-      $this->parsedown = ParsedownFactory::create();
 
     // extract bbcodes
     $bbcodes = [];
@@ -70,9 +64,12 @@ class Letterpress
       $bbcodes[$escaped] = $code;
     }
 
-    $output = ($force || !is_null($this->parsedown))
-      ? $this->parsedown->parse($input) 
-      : $input;
+    $output = $input;
+    if (Config::get('letterpress.markdown.enabled') || $force)
+    {
+      $parsedown = ParsedownFactory::create();
+      $output = $parsedown->parse($input);
+    }
 
     // unescape bbcodes
     $output = str_replace(array_keys($bbcodes), array_values($bbcodes), $output);
@@ -84,25 +81,27 @@ class Letterpress
   {
     $this->setup($config);
 
-    $this->markup = null;
+    $output = $input;
     if (Config::get('letterpress.markup.enabled') || $force)
-      $this->markup = new MarkupProcessor;
+    {
+      $markup = new MarkupProcessor;
+      $output = $markup->process($input);
+    }
 
-    return ($force || !is_null($this->markup))
-             ? $this->markup->process($input) 
-             : $input;
+    return $output;
   }
 
   public function typofix($input, $force = false, $config = [])
   {
     $this->setup($config);
 
-    $this->fixer = null;
+    $output = $input;
     if (Config::get('letterpress.microtypography.enabled') || $force)
-      $this->fixer = new TypoFixerFacade;
+    {
+      $fixer = new TypoFixerFacade;
+      $output = $fixer->facade_fixer->fix($input);
+    }
 
-    return ($force || !is_null($this->fixer)) 
-             ? $this->fixer->fix($input) 
-             : $input;
+    return $output;
   }
 }

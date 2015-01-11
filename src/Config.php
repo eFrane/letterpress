@@ -10,6 +10,7 @@ use Illuminate\Config\Repository;
  **/
 class Config
 {
+  protected static $originalConfigPath = '';
   protected static $instance = null;
 
   protected $repository = null;
@@ -23,12 +24,17 @@ class Config
     $this->repository = new Repository($loader, null);
   }
 
-  public static function init($configPath = 'config')
+  public static function init($configPath = '')
   {
-    if (self::$instance === null)
-      self::$instance = new Config($configPath);
+    if (strlen(static::$originalConfigPath) == 0)
+      static::$originalConfigPath = $configPath;
 
-    return self::$instance;
+    if (strcmp($configPath, static::$originalConfigPath) === 0
+    ||  strlen($configPath) == 0)
+      $configPath = static::$originalConfigPath;
+
+    static::$instance = new Config($configPath);
+    return static::$instance;
   }
 
   public static function reset($withoutInit = false)

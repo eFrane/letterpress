@@ -9,7 +9,7 @@ class ParsedownFactory implements Factory
   {
     $class = '\Parsedown';
 
-    if (Config::get('letterpress.enableMarkdownExtra'))
+    if (Config::get('letterpress.markdown.useMarkdownExtra'))
     {
       if (!class_exists('\ParsedownExtra'))
         throw new LetterpressException("Enabling MarkdownExtra requires ParsedownExtra to be installed.");

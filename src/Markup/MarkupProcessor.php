@@ -52,14 +52,14 @@ class MarkupProcessor
     $this->modifiers = [];
 
     if (Config::get('letterpress.markup.blockQuoteFix'))
-      $this->modifiers['blockQuote'] = new BlockQuoteModifier;
+      $this->modifiers[] = new BlockQuoteModifier;
 
     $maxHeadlineLevel = Config::get('letterpress.markup.maxHeadlineLevel');
     if ($maxHeadlineLevel > 1)
-      $this->modifiers['headlineLevel'] = new HeadlineLevelModifier($maxHeadlineLevel);
+      $this->modifiers[] = new HeadlineLevelModifier($maxHeadlineLevel);
 
     if (Config::get('letterpress.markup.addLanguageInfo'))
-      $this->modifiers['languageCode'] = new LanguageCodeModifier;
+      $this->modifiers[] = new LanguageCodeModifier;
 
     $this->modifiers[] = new RemoveEmptyNodesModifier;
   }

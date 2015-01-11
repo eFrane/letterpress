@@ -14,6 +14,7 @@ class RemoveEmptyNodesModifierTest extends \Codeception\TestCase\Test
     protected function _before()
     {
         Config::init('config');
+
         $this->lp = new Letterpress;
     }
 
@@ -22,17 +23,21 @@ class RemoveEmptyNodesModifierTest extends \Codeception\TestCase\Test
     }
 
     // tests
-    public function testElementRemove()
+    public function testElementRemoveMarkupOnly()
     {
         $input = "<br><br><p></p>";
         $expectedMarkupOnly = "<br><br>";
-        $expectedAll = "<p><br><br></p>";
-
+    
         $output  = $this->lp->markup($input);
-        $output2 = $this->lp->press($input);
-
-        $this->assertEquals($output, $expectedMarkupOnly);
-        $this->assertEquals($output2, $expectedAll);
+        $this->assertEquals($output, $expectedMarkupOnly);        
     }
 
+    public function testElementRemoveAllSteps()
+    {
+        $input = "<br><br><p></p>";
+        $expectedAll = "<p><br><br></p>";
+        
+        $output = $this->lp->press($input);
+        $this->assertEquals($output, $expectedAll);
+    }
 }
