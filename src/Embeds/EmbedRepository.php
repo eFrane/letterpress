@@ -74,6 +74,8 @@ class EmbedRepository
     {
       $urls = [];
 
+      $embed->setDocument($element->ownerDocument);
+
       $regex = '';
       if ($embed->isBBCodeEnabled())
       {

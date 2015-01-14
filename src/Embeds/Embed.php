@@ -1,5 +1,6 @@
 <?php namespace EFrane\Letterpress\Embeds;
 
+use DOMDocument;
 use Embed\Adapters\AdapterInterface;
 
 interface Embed
@@ -9,4 +10,6 @@ interface Embed
    * @return DOMDocumentFragment
    **/
   public function apply(AdapterInterface $adapter);
+
+  public function setDocument(DOMDocument $document);
 }

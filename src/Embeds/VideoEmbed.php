@@ -8,45 +8,76 @@ use EFrane\Letterpress\LetterpressException;
 
 class VideoEmbed extends BaseEmbed
 {
+  use \EFrane\Letterpress\Markup\DOMManipulation;
+
   public function apply(AdapterInterface $adapter)
   {
     $code = $adapter->getCode();
 
-    if (Config::get('letterpress.markup.enableResponsiveIFrames'))
+    if (Config::get('letterpress.media.enableResponsiveIFrames'))
     {
       return $this->responsiveIFrame($code);
     } else
     {
-      return HTML5::loadHTMLFragment($code);
+      return $this->importCode($this->doc, $code);
     }
   }
   
   protected function responsiveIFrame($frame)
   {
     // http://stackoverflow.com/questions/11122249/scale-iframe-css-width-100-like-an-image
-    $fragment =  HTML5::loadHTMLFragment('<div class="iframe img-responsive"/>');
+    $fragment = $this->importCode('<div class="iframe img-responsive"/>');
+    $rootNode = $fragment->firstChild;
 
-    $img = $fragment->ownerDocument->createElement('img');
-    $img->setAttribute('class', 'ratio');
-    $img->setAttribute('src', '//placehold.it/16x9&text=+');
-    $img->setAttribute('width', 16);
-    $img->setAttribute('height', 9);
+    $img = $this->createTag($this->doc, 'img', null, [
+      'class'  => 'ratio', 
+      'src'    => '//placehold.it/16x9&text=+',
+      'width'  => 16,
+      'height' => 9
+    ]);
 
-    $fragment->firstChild->appendChild($img);
+    $rootNode = $rootNode->appendChild($img);
 
-    $frame = $fragment->ownerDocument->importNode(HTML5::loadHTMLFragment($frame), true);
+    $frame = $this->importCode($this->doc, $frame);
 
     $this->renameAttribute($frame->firstChild, 'width', 'data-width');
     $this->renameAttribute($frame->firstChild, 'height', 'data-height');
 
-    $fragment->firstChild->appendChild($frame);
+    $rootNode = $rootNode->appendChild($frame);
 
     return $fragment;
   }
 
-  protected function renameAttribute($node, $attributeName, $newName)
+  protected function textOnly(AdapterInterface $adapater)
   {
-    $node->setAttribute($newName, $node->getAttribute($attributeName));
-    $node->removeAttribute($attributeName);
+    $fragment = $this->importCode('<div />');
+    $rootNode = $fragment->firstChild;
+
+    $title = $this->createTag($this->doc, 'h1', $adapter->getTitle());
+    $rootNode = $rootNode->appendChild($title);
+    
+    if (Config::get('letterpress.media.videoEmbedMode') == 'text')
+    {
+      $description = $this->createTag($this->doc, 'div', $adapter->getDescription())
+      $rootNode = $rootNode->appendChild($description);
+    }
+
+    return $fragment;
+  }
+
+  protected function image(AdapterInterface $adapter)
+  {
+    $imageFragment = $this->importCode('<img />');
+    $rootNode = $imageFragment->firstChild;
+
+    $this->setAttributes($rootNode, [
+      'src' => $adapter->getImage(),
+      'width' => $adapter->getImageWidth(),
+      'height' => $adapter->getImageHeight()
+    ]);
+
+    $textFragment = $this->textOnly($adapter);
+
+    return $this->concatenateFragments($this->doc, [$imageFragment, $textFragment]);
   }
 }

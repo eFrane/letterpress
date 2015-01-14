@@ -10,6 +10,8 @@ abstract class BaseEmbed implements Embed
 
   protected $matches = [];
 
+  protected $doc;
+
   public function apply(AdapterInterface $adapter)
   {
     $code = $adapter->getCode();
@@ -23,7 +25,7 @@ abstract class BaseEmbed implements Embed
 
   public function getURLRegex()
   {
-    return sprintf('/^%s$/i', $this->prepareURLRegex());
+    return sprintf('/%s/i', $this->prepareURLRegex());
   }
 
   public function getBBCodeRegex()
@@ -41,5 +43,10 @@ abstract class BaseEmbed implements Embed
   public function isBBCodeEnabled()
   {
     return $this->bbcode;
+  }
+
+  public function setDocument(DOMDocument $document)
+  {
+    $this->doc = $document;
   }
 }
