@@ -1,7 +1,9 @@
 <?php namespace EFrane\Letterpress\Markup;
 
 use HTML5;
+
 use DOMDocument;
+use DOMElement;
 
 trait DOMManipulation
 {

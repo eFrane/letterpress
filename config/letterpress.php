@@ -54,9 +54,9 @@ return [
     // aspect ratio
     'enableResponsiveIFrames' => true,
 
-    // can be one of basic, responsive, text or image
-    // TODO: write documentation => text is title + description, image is image + title
-    'videoEmbedMode' => 'basic'
+    // can be one of link, frame, text or image
+    // TODO: write documentation => text is title + description + link, image is image + title (with link)
+    'videoEmbedMode' => 'frame',
 
     'services' => ['YouTube', 'Twitter', 'Vimeo', 'Flickr']
   ],

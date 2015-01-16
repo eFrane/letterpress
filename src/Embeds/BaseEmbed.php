@@ -1,9 +1,13 @@
 <?php namespace EFrane\Letterpress\Embeds;
 
+use DOMDocument;
+
 use Embed\Adapters\AdapterInterface;
 
 abstract class BaseEmbed implements Embed
 {
+  use \EFrane\Letterpress\Markup\DOMManipulation;
+
   protected $bbcode = false;
 
   protected $urlRegex = '';
@@ -14,8 +18,7 @@ abstract class BaseEmbed implements Embed
 
   public function apply(AdapterInterface $adapter)
   {
-    $code = $adapter->getCode();
-    return HTML5::loadHTMLFragment($code);
+    return $this->importCode($adapter->getCode());
   }
 
   protected function prepareURLRegex()
@@ -35,7 +38,7 @@ abstract class BaseEmbed implements Embed
 
     $urlRegex = $this->prepareURLRegex();
 
-    $tagRegex = sprintf("/^\[%s.*?\]%s\[\/%s\]$/i", $tagName, $urlRegex, $tagName);
+    $tagRegex = sprintf("/\[%s.*?\]%s\[\/%s\]/i", $tagName, $urlRegex, $tagName);
 
     return $tagRegex;
   }

@@ -33,7 +33,7 @@ class EmbedRepository
   }
 
   /**
-   * Embeds are very special modifications in the sense that they only *attack*
+   * Embeds are very special modifications in the sense that they only apply to
    * text nodes. Thus, the apply process of embeds can be greatly simplified
    * from the one of ordinary modifiers as to expecting a regular expression to
    * match for the node instead of testing of DOMNode attributes and relationships.
@@ -59,7 +59,7 @@ class EmbedRepository
     foreach ($node->childNodes as $current)
     {
       if (is_a($current, 'DOMText') && !$current->hasChildNodes())
-        $current = $this->doEmbeds($current);
+        $current = $this->findEmbeds($current);
 
       if ($current->hasChildNodes())
         $current = $this->walk($current);
@@ -68,7 +68,7 @@ class EmbedRepository
     return $node;
   }
 
-  protected function doEmbeds(DOMText $element)
+  protected function findEmbeds(DOMText $element)
   {
     foreach ($this->embeds as $embed)
     {
@@ -76,14 +76,9 @@ class EmbedRepository
 
       $embed->setDocument($element->ownerDocument);
 
-      $regex = '';
-      if ($embed->isBBCodeEnabled())
-      {
-        $regex = $embed->getBBCodeRegex();        
-      } else
-      {
-        $regex = $embed->getURLRegex();
-      }
+      $regex = ($embed->isBBCodeEnabled())
+        ? $regex = $embed->getBBCodeRegex()
+        : $regex = $embed->getURLRegex();
 
       preg_match($regex, $element->nodeValue, $matches);
       if (isset($matches['url']) && strlen($matches['url']) > 0) 
@@ -91,61 +86,39 @@ class EmbedRepository
 
       foreach ($urls as $match => $url)
       {
-        if (parse_url($url, PHP_URL_SCHEME) === null)
-          $url = sprintf('https://%s', $url);
-
-        $adapter = null;
-        try
-        {
-          $adapter = OEmbedAdapter::create($url);
-        } catch(\Exception $e)
-        {
-          $adapter = false;
-        }
-
-        if (!is_bool($adapter) && strlen($adapter->getCode()) > 0)
-        {
-          $returnedFragment = $embed->apply($adapter);
-          $returnedFragment = $this->doc->importNode($returnedFragment, true);
-
-          /**
-           * Once the replacement code is acquired, one of two possibilities apply:
-           *
-           * 1. the passed text node only contained the link reference
-           *
-           * In this case, the text node will be replaced with the returned
-           * DOMDocument fragment from apply().
-           *
-           * 2. the passed text node contains *more* than the link reference
-           *
-           * In this case, the acquired fragment will be inserted before the 
-           * text node. The bbcode or link in the text node will be removed.
-           **/
-          if (trim(strlen($element->nodeValue)) == strlen($match))
-          {
-            // case 1
-            if (!is_null($element->parentNode->parentNode))
-            {
-              $element->parentNode->parentNode->insertBefore($returnedFragment, $element->parentNode);
-              $element->parentNode->parentNode->removeChild($element->parentNode);
-            } else
-            {
-              $this->doc->insertBefore($element->parentNode);
-              $this->doc->removeChild($element->parentNode);
-            }
-          } else
-          {
-            // case 2
-            $this->doc->insertBefore($returnedFragment, $element);
-
-            $element->nodeValue = str_replace($match, '', $element->nodeValue);            
-            if (strcmp($element->nodeValue, '') === 0)
-              $this->doc->removeNode($element);
-          }
-        }
+        $fragment = $this->getEmbedFragment($embed, $url);
+        $element  = $this->applyMatchedURL($element, $fragment, $match);
       }
     }
 
     return $element;
+  }
+  
+  protected function getEmbedFragment(Embed $embed, $url)
+  {
+    /**
+     * add URL scheme if necessary
+     *
+     * this defaults to HTTPS and it's totally okay if things fail because
+     * the requested service does not support https
+     **/
+    if (parse_url($url, PHP_URL_SCHEME) === null)
+      $url = sprintf('https://%s', $url);
+
+    $adapter = null;
+    try
+    {
+      $adapter = OEmbedAdapter::create($url);
+    } catch(\Exception $e)
+    {
+      $adapter = false;
+    }
+
+    return $embed->apply($adapter);
+  }
+
+  protected function applyMatchedURL(DOMText $element, DOMDocumentFragment $fragment, $match)
+  {
+    return $element->parentNode->replaceChild($fragment, $element);
   }
 }

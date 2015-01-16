@@ -8,25 +8,32 @@ use EFrane\Letterpress\LetterpressException;
 
 class VideoEmbed extends BaseEmbed
 {
-  use \EFrane\Letterpress\Markup\DOMManipulation;
+  protected $adapter = null;
 
   public function apply(AdapterInterface $adapter)
   {
-    $code = $adapter->getCode();
+    $this->adapter = $adapter;
 
-    if (Config::get('letterpress.media.enableResponsiveIFrames'))
+    switch (Config::get('letterpress.media.videoEmbedMode'))
     {
-      return $this->responsiveIFrame($code);
-    } else
-    {
-      return $this->importCode($this->doc, $code);
+      case 'frame': return $this->embedFrame(); break;
+      case 'link':  return $this->embedLink();  break;
+      case 'text':  return $this->embedText();  break;
+      case 'image': return $this->embedImage(); break;
     }
+
+    return null;
   }
-  
-  protected function responsiveIFrame($frame)
+
+  protected function embedFrame()
   {
+    $frame = $this->importCode($this->doc, $this->adapter->getCode());
+
+    if (!Config::get('letterpress.media.enableResponsiveIFrames'))
+      return $frame;
+
     // http://stackoverflow.com/questions/11122249/scale-iframe-css-width-100-like-an-image
-    $fragment = $this->importCode('<div class="iframe img-responsive"/>');
+    $fragment = $this->importCode($this->doc, '<div class="iframe img-responsive"/>');
     $rootNode = $fragment->firstChild;
 
     $img = $this->createTag($this->doc, 'img', null, [
@@ -38,8 +45,6 @@ class VideoEmbed extends BaseEmbed
 
     $rootNode = $rootNode->appendChild($img);
 
-    $frame = $this->importCode($this->doc, $frame);
-
     $this->renameAttribute($frame->firstChild, 'width', 'data-width');
     $this->renameAttribute($frame->firstChild, 'height', 'data-height');
 
@@ -48,36 +53,39 @@ class VideoEmbed extends BaseEmbed
     return $fragment;
   }
 
-  protected function textOnly(AdapterInterface $adapater)
+  protected function embedLink()
+  {
+    // TODO
+  }
+
+  protected function embedText()
   {
     $fragment = $this->importCode('<div />');
     $rootNode = $fragment->firstChild;
 
-    $title = $this->createTag($this->doc, 'h1', $adapter->getTitle());
+    $title = $this->createTag($this->doc, 'h1', $this->adapter->getTitle());
     $rootNode = $rootNode->appendChild($title);
     
     if (Config::get('letterpress.media.videoEmbedMode') == 'text')
     {
-      $description = $this->createTag($this->doc, 'div', $adapter->getDescription())
+      $description = $this->createTag($this->doc, 'div', $this->adapter->getDescription());
       $rootNode = $rootNode->appendChild($description);
     }
 
     return $fragment;
   }
 
-  protected function image(AdapterInterface $adapter)
+  protected function embedImage()
   {
     $imageFragment = $this->importCode('<img />');
     $rootNode = $imageFragment->firstChild;
 
     $this->setAttributes($rootNode, [
-      'src' => $adapter->getImage(),
-      'width' => $adapter->getImageWidth(),
-      'height' => $adapter->getImageHeight()
+      'src' => $this->adapter->getImage(),
+      'width' => $this->adapter->getImageWidth(),
+      'height' => $this->adapter->getImageHeight()
     ]);
 
-    $textFragment = $this->textOnly($adapter);
-
-    return $this->concatenateFragments($this->doc, [$imageFragment, $textFragment]);
+    return $this->concatenateFragments($this->doc, [$imageFragment, $this->embedText()]);
   }
 }

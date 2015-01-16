@@ -14,6 +14,7 @@ class YouTubeEmbedTest extends \Codeception\TestCase\Test
     protected function _before() 
     {
         Config::init('config');
+
         $this->lp = new Letterpress;
     }
 
@@ -22,13 +23,13 @@ class YouTubeEmbedTest extends \Codeception\TestCase\Test
     public function testBasicEmbed()
     {
         $input = "[youtube]https://www.youtube.com/watch?v=UF8uR6Z6KLc[/youtube]";
-        $expected = "<iframe width=\"459\" height=\"344\" "
+        $expected = "<p><iframe width=\"459\" height=\"344\" "
                   . "src=\"http://www.youtube.com/embed/UF8uR6Z6KLc?feature=oembed\" "
-                  . "frameborder=\"0\" allowfullscreen></iframe>";
+                  . "frameborder=\"0\" allowfullscreen></iframe></p>";
 
         $output = $this->lp->press($input, ['letterpress.media.enableResponsiveIFrames' => false]);
 
-        $this->assertEquals($output, $expected);
+        $this->assertEquals($expected, $output);
     }
 
     public function testResponsiveEmbed()
@@ -50,6 +51,6 @@ class YouTubeEmbedTest extends \Codeception\TestCase\Test
         $expected = "";
 
         $output = $this->lp->press($input);
-        $this->assertEquals($output, $expected);
+        $this->assertEquals($expected, $output);
     }
 }
