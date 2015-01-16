@@ -89,7 +89,11 @@ class EmbedRepository
       foreach ($urls as $match => $url)
       {
         $fragment = $this->getEmbedFragment($embed, $url);
-        $element  = $this->applyMatchedURL($element, $fragment, $match);
+
+        $applied = $this->applyMatchedURL($element, $fragment, $match);
+
+        if ($applied)
+          $element = $applied;
       }
     }
 
@@ -113,7 +117,13 @@ class EmbedRepository
       $adapter = OEmbedAdapter::create($url);
     } catch(\Exception $e)
     {
-      $adapter = false;
+      if (Config::get('letterpress.embed.silentfail'))
+      {
+        return false;
+      } else
+      {
+        throw new LetterpressException($e);
+      }
     }
 
     return $embed->apply($adapter);

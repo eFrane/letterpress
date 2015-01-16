@@ -55,10 +55,15 @@ return [
     'enableResponsiveIFrames' => true,
 
     // can be one of link, frame, text or image
-    // TODO: write documentation => text is title + description + link, image is image + title (with link)
+    // text is title + description + link, image is image + title (with link)
     'videoEmbedMode' => 'frame',
 
-    'services' => ['YouTube', 'Twitter', 'Vimeo', 'Flickr']
+    'services' => ['YouTube', 'Twitter', 'Vimeo', 'Flickr'],
+
+    // if silent fail is enabled, the embedder will just return the original input
+    // when something goes wrong along the way, otherwise, a LetterpressException
+    // will be thrown
+    'silentfail' => true
   ],
 
   'microtypography' => [
