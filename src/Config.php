@@ -58,7 +58,9 @@ class Config
     if (self::$instance === null)
       throw new \RuntimeException('Config must be initialized before usage.'); 
 
-    return self::$instance->repository->set($identifier, $value);
+    $oldValue = self::$instance->repository->get($identifier);
+    self::$instance->repository->set($identifier, $value);
+    return $oldValue;
   }
 
   public static function has($identifier = null, $value = null)
@@ -71,14 +73,15 @@ class Config
 
   public static function apply($additionalConfig = [])
   {
+    $oldValues = [];
     foreach ($additionalConfig as $identifier => $value)
     {
       if (!is_string($identifier))
-      {
         throw new \LogicException('Identifier must be string.');
-      }
 
-      Config::set($identifier, $value);
+      $oldValues[$identifier] = Config::set($identifier, $value);
     }
+
+    return $oldValues;
   }
 }

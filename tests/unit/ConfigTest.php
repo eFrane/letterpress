@@ -21,7 +21,7 @@ class ConfigTest extends \Codeception\TestCase\Test
     // tests
     public function testInit()
     {
-        $this->assertInstanceOf('EFrane\Letterpress\Config', Config::init());
+        $this->assertInstanceOf('EFrane\Letterpress\Config', Config::init('config'));
     }
 
     public function testGet()
@@ -47,6 +47,18 @@ class ConfigTest extends \Codeception\TestCase\Test
         Config::set('letterpress.testvalue', 'value');
 
         $this->assertEquals('value', Config::get('letterpress.testvalue'));
+    }
+
+    public function testSetReturnsOldValue()
+    {
+        $firstValue = 'value';
+        $newValue   = 'newValue';
+
+        Config::set('letterpress.testValue', $firstValue);
+        $oldValue = Config::set('letterpress.testValue', $newValue);
+
+        $this->assertEquals($firstValue, $oldValue);
+        $this->assertEquals($newValue, Config::get('letterpress.testValue'));
     }
 
     /**
