@@ -1,7 +1,9 @@
 <?php namespace EFrane\Letterpress\Embeds;
 
 use DOMDocumentFragment;
+
 use DOMNode;
+use DOMElement;
 use DOMText;
 
 use \HTML5;
@@ -93,7 +95,7 @@ class EmbedRepository
 
     return $element;
   }
-  
+
   protected function getEmbedFragment(Embed $embed, $url)
   {
     /**
@@ -119,6 +121,30 @@ class EmbedRepository
 
   protected function applyMatchedURL(DOMText $element, DOMDocumentFragment $fragment, $match)
   {
-    return $element->parentNode->replaceChild($fragment, $element);
+    // find the enclosing element
+    $enclosing = $element;
+
+    do 
+    {
+      $enclosing = $enclosing->parentNode;
+    } while (!($enclosing instanceof DOMElement));
+
+    // manipulate text node accordingly
+    if (strcmp($element->nodeValue, $match) == 0)
+    {
+      if ($enclosing->parentNode)
+      {
+        $enclosing = $enclosing->parentNode->replaceChild($fragment, $enclosing);
+      } else
+      {
+        $enclosing = $enclosing->replaceChild($fragment, $element);
+      }
+    } else
+    {
+      $element->nodeValue = str_replace($match, '', $element->nodeValue);
+      $enclosing = $enclosing->appendChild($fragment);
+    }
+
+    return $enclosing;
   }
 }
