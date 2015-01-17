@@ -55,12 +55,18 @@ class VideoEmbed extends BaseEmbed
 
   protected function embedLink()
   {
-    // TODO
+    $link = $this->importCode($this->doc, '<a />');
+    $url = $this->adapter->getUrl();
+
+    $link->firstChild->nodeValue = $url;
+    $link->firstChild->setAttribute('href', $url);
+
+    return $link;
   }
 
   protected function embedText()
   {
-    $fragment = $this->importCode('<div />');
+    $fragment = $this->importCode($this->doc, '<div />');
     $rootNode = $fragment->firstChild;
 
     $title = $this->createTag($this->doc, 'h1', $this->adapter->getTitle());
@@ -68,23 +74,28 @@ class VideoEmbed extends BaseEmbed
     
     if (Config::get('letterpress.media.videoEmbedMode') == 'text')
     {
-      $description = $this->createTag($this->doc, 'div', $this->adapter->getDescription());
+      $description = $this->createTag($this->doc, 'p', $this->adapter->getDescription());
       $rootNode = $rootNode->appendChild($description);
     }
+
+    $rootNode = $rootNode->appendChild($this->embedLink());
 
     return $fragment;
   }
 
+  // TODO: this seems to be not working for unexplainable reasons
   protected function embedImage()
   {
-    $imageFragment = $this->importCode('<img />');
+    $imageFragment = $this->importCode($this->doc, '<img />');
     $rootNode = $imageFragment->firstChild;
 
     $this->setAttributes($rootNode, [
-      'src' => $this->adapter->getImage(),
-      'width' => $this->adapter->getImageWidth(),
-      'height' => $this->adapter->getImageHeight()
+      'src' => $this->adapter->image,
+      'width' => $this->adapter->imageWidth,
+      'height' => $this->adapter->imageHeight
     ]);
+
+    ldd(HTML5::saveHTML($imageFragment));
 
     return $this->concatenateFragments($this->doc, [$imageFragment, $this->embedText()]);
   }

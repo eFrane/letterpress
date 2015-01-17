@@ -20,7 +20,7 @@ trait DOMManipulation
     foreach ($fragments as $fragment)
     {
       $imported = $document->importNode($fragment);
-      $returnedFragment->appendNode($imported);
+      $returnedFragment->appendChild($imported);
     }
 
     return $returnedFragment;
