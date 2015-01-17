@@ -9,6 +9,9 @@ use DOMText;
 use \HTML5;
 use Embed\Embed as OEmbedAdapter;
 
+use EFrane\Letterpress\Config;
+use EFrane\Letterpress\LetterpressException
+
 class EmbedRepository
 {
   protected $embeds = [];
@@ -112,21 +115,28 @@ class EmbedRepository
       $url = sprintf('https://%s', $url);
 
     $adapter = null;
+    $previousException = null;
     try
     {
       $adapter = OEmbedAdapter::create($url);
     } catch(\Exception $e)
     {
-      if (Config::get('letterpress.embed.silentfail'))
-      {
-        return false;
-      } else
-      {
-        throw new LetterpressException($e);
-      }
+      $previousException = $e;
     }
 
-    return $embed->apply($adapter);
+    if ($adapter)
+    {
+      return $embed->apply($adapter);  
+    }
+
+    // from here on, we failed
+    if (Config::get('letterpress.embed.silentfail'))
+    {
+      return false;
+    } else
+    {
+      throw new LetterpressException($previousException);
+    }
   }
 
   protected function applyMatchedURL(DOMText $element, DOMDocumentFragment $fragment, $match)
