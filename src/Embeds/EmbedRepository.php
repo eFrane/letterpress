@@ -10,7 +10,7 @@ use \HTML5;
 use Embed\Embed as OEmbedAdapter;
 
 use EFrane\Letterpress\Config;
-use EFrane\Letterpress\LetterpressException
+use EFrane\Letterpress\LetterpressException;
 
 class EmbedRepository
 {

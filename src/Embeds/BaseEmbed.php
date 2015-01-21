@@ -18,7 +18,7 @@ abstract class BaseEmbed implements Embed
 
   public function apply(AdapterInterface $adapter)
   {
-    return $this->importCode($adapter->getCode());
+    return $this->importCode($this->doc, $adapter->getCode());
   }
 
   protected function prepareURLRegex()
