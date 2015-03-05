@@ -2,5 +2,6 @@
 
 interface Factory
 {
-  public static function create();
+  public static fu
+nction create();
 }

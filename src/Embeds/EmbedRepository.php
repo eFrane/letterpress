@@ -135,7 +135,10 @@ class EmbedRepository
       return false;
     } else
     {
-      throw new LetterpressException($previousException);
+      $message = "Embed Adapter acquisition failed.";
+      if (!is_null($previousException))
+        $message = $previousException->getMessage();
+      throw new LetterpressException($message);
     }
   }
 
