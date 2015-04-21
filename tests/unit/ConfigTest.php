@@ -8,7 +8,6 @@ class ConfigTest extends \Codeception\TestCase\Test
      * @var \UnitTester
      */
     protected $tester;
-    protected $configPath = 'config';
 
     protected function _before()
     {
@@ -21,12 +20,12 @@ class ConfigTest extends \Codeception\TestCase\Test
     // tests
     public function testInit()
     {
-        $this->assertInstanceOf('EFrane\Letterpress\Config', Config::init('config'));
+        $this->assertInstanceOf('EFrane\Letterpress\Config', Config::init());
     }
 
     public function testGet()
     {
-        Config::init($this->configPath);
+        Config::init();
 
         $this->assertEquals('en_GB', Config::get('letterpress.locale'));
     }
@@ -43,7 +42,7 @@ class ConfigTest extends \Codeception\TestCase\Test
 
     public function testSet()
     {
-        Config::init($this->configPath);
+        Config::init();
         Config::set('letterpress.testvalue', 'value');
 
         $this->assertEquals('value', Config::get('letterpress.testvalue'));
@@ -74,7 +73,7 @@ class ConfigTest extends \Codeception\TestCase\Test
     }
 
     public function testHas() {
-        Config::init($this->configPath);
+        Config::init();
 
         $this->assertTrue(Config::has('letterpress.locale'));
         $this->assertFalse(Config::has('letterpress.non-existent-value'));
@@ -92,7 +91,7 @@ class ConfigTest extends \Codeception\TestCase\Test
 
     public function testApply()
     {
-        Config::init($this->configPath);
+        Config::init();
         Config::apply(['foo' => 'bar', 'fizz.baz' => 'foobar']);
 
         $this->assertEquals('bar', Config::get('foo'));
@@ -105,7 +104,7 @@ class ConfigTest extends \Codeception\TestCase\Test
      **/
     public function testApplyFailWithNonStringKey()
     {
-        Config::init($this->configPath);
+        Config::init();
 
         Config::apply(['testvalue']);
     }

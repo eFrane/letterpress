@@ -15,7 +15,7 @@ class VimeoEmbedTest extends \Codeception\TestCase\Test
 
     protected function _before() 
     {
-        Config::init('config');
+        Config::init();
 
         $this->lp = new Letterpress;
     }
@@ -24,7 +24,7 @@ class VimeoEmbedTest extends \Codeception\TestCase\Test
 
     public function testFrameBasicEmbed()
     {
-        $expected = '<iframe src="//player.vimeo.com/video/112233728" width="1280" height="720" '
+        $expected = '<iframe src="https://player.vimeo.com/video/112233728" width="1280" height="720" '
                   . 'frameborder="0" title="Wetness" webkitallowfullscreen mozallowfullscreen '
                   . 'allowfullscreen></iframe>';
 
@@ -36,7 +36,7 @@ class VimeoEmbedTest extends \Codeception\TestCase\Test
     public function testFrameResponsiveEmbed()
     {
         $expected = '<div class="iframe img-responsive"><img class="ratio" src="//placehold.it/16x9&amp;text=+"'
-                  . ' width="16" height="9"><iframe src="//player.vimeo.com/video/112233728" frameborder="0" '
+                  . ' width="16" height="9"><iframe src="https://player.vimeo.com/video/112233728" frameborder="0" '
                   . 'title="Wetness" webkitallowfullscreen mozallowfullscreen allowfullscreen data-width="1280" '
                   . 'data-height="720"></iframe></div>';
         
@@ -51,7 +51,7 @@ class VimeoEmbedTest extends \Codeception\TestCase\Test
         $expected = "<p>This is a dummy para&shy;graph text. And you should totally look "
                   . "at this video.  So cool, right?</p>"
                   . '<div class="iframe img-responsive"><img class="ratio" src="//placehold.it/16x9&amp;text=+"'
-                  . ' width="16" height="9"><iframe src="//player.vimeo.com/video/112233728" frameborder="0" '
+                  . ' width="16" height="9"><iframe src="https://player.vimeo.com/video/112233728" frameborder="0" '
                   . 'title="Wetness" webkitallowfullscreen mozallowfullscreen allowfullscreen data-width="1280" '
                   . 'data-height="720"></iframe></div>';
 
@@ -67,7 +67,7 @@ class VimeoEmbedTest extends \Codeception\TestCase\Test
                 . 'puddles. Unfor&shy;tu&shy;nately this lush, raw sound is often lost in most videos, over&shy;taken '
                 . 'by the music. Curtis Robin&shy;son takes advant&shy;age of winter condi&shy;tions and makes some '
                 . "noise with his Stumpjumper FSR EVO.\n\nwww.special&shy;ized.com/stumpjumper-fsr\nwww.iamspe"
-                . '&shy;cial&shy;ized.com<a href="http://vimeo.com/112233728">http://vimeo.com/112233728</a></p></div>';
+                . '&shy;cial&shy;ized.com<a href="https://vimeo.com/112233728">http://vimeo.com/112233728</a></p></div>';
 
       $output = $this->lp->press($this->commonInput, ['letterpress.media.videoEmbedMode' => 'text']);
       $this->assertEquals($expected, $output);
@@ -75,7 +75,7 @@ class VimeoEmbedTest extends \Codeception\TestCase\Test
 
     public function testLinkEmbed()
     {
-      $expected = '<a href="http://vimeo.com/112233728">http://vimeo.com/112233728</a>';
+      $expected = '<a href="https://vimeo.com/112233728">http://vimeo.com/112233728</a>';
 
       $output = $this->lp->press($this->commonInput, ['letterpress.media.videoEmbedMode' => 'link']);
       $this->assertEquals($expected, $output); 

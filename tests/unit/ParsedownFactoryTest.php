@@ -12,6 +12,7 @@ class ParsedownFactoryTest extends \Codeception\TestCase\Test
 
     protected function _before()
     {
+      Config::init();
     }
 
     protected function _after()
@@ -22,7 +23,6 @@ class ParsedownFactoryTest extends \Codeception\TestCase\Test
     public function testCreateParsedown()
     {
         // make sure we ask for the standard parsedown
-        Config::init('config');
         Config::set('letterpress.markdown.useMarkdownExtra', false);
         $this->assertInstanceof('\Parsedown', ParsedownFactory::create());
     }

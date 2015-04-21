@@ -25,7 +25,7 @@ class TypoFixerFacadeTest extends \Codeception\TestCase\Test
     
     public function testCreate()
     {
-        Config::init('config');
+        Config::init();
         $fixer = new TypoFixerFacade;
 
         $this->assertInstanceOf('EFrane\Letterpress\Integrations\TypoFixerFacade', $fixer);

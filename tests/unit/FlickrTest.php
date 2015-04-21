@@ -14,7 +14,7 @@ class Flickr extends \Codeception\TestCase\Test
 
     protected function _before() 
     {
-        Config::init('config');
+        Config::init();
 
         $this->lp = new Letterpress;
     }

@@ -1,8 +1,6 @@
 <?php namespace EFrane\Letterpress;
 
-use Illuminate\Filesystem\Filesystem;
-
-use Illuminate\Config\FileLoader;
+use Symfony\Component\Finder\Finder;
 use Illuminate\Config\Repository;
 
 /**
@@ -13,27 +11,34 @@ class Config
   protected static $originalConfigPath = '';
   protected static $instance = null;
 
+  /**
+   * @var Illuminate\Config\Repository|null
+   *
+   */
   protected $repository = null;
 
-  protected function __construct($configPath)
+  protected function __construct(array $config)
   {
-    if (!file_exists($configPath))
-      throw new \RuntimeException('Path to config does not exist.');
-
-    $loader = new FileLoader(new Filesystem, $configPath);
-    $this->repository = new Repository($loader, null);
+    $this->repository = new Repository($config);
   }
 
-  public static function init($configPath = '')
+  private static function loadDefaultConfig()
   {
-    if (strlen(static::$originalConfigPath) == 0)
-      static::$originalConfigPath = $configPath;
+    $data = [];
 
-    if (strcmp($configPath, static::$originalConfigPath) === 0
-    ||  strlen($configPath) == 0)
-      $configPath = static::$originalConfigPath;
+    $files = Finder::create()->files()->name('*.php')->in('config')->depth(0);
+    foreach ($files as $key => $path)
+      $data[basename($key, '.php')] = require $path;
 
-    static::$instance = new Config($configPath);
+    return $data;
+  }
+
+  public static function init(array $config = [])
+  {
+    if (count($config) == 0)
+      $config = static::loadDefaultConfig();
+
+    static::$instance = new Config($config);
     return static::$instance;
   }
 
