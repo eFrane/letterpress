@@ -11,10 +11,9 @@ class LaravelServiceProvider extends ServiceProvider
 
   public function boot()
   {
-    $this->package('efrane/letterpress');
     $this->publishes([
-      __DIR__.'config/jolitypo.php' => config_path('jolitypo.php'),
-      __DIR__.'config/letterpress.php' => config_path('letterpress.php')
+      __DIR__.'/../../config/jolitypo.php' => config_path('jolitypo.php'),
+      __DIR__.'/../../config/letterpress.php' => config_path('letterpress.php')
     ]);
   }
 
@@ -25,7 +24,7 @@ class LaravelServiceProvider extends ServiceProvider
 
     LetterpressConfig::init($config);
 
-    $this->app->share('letterpress', new Letterpress);
+    $this->app['letterpress'] = $this->app->share(function () { return new Letterpress; });
   }
 
   public function provides()
