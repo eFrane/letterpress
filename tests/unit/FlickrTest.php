@@ -32,8 +32,8 @@ class Flickr extends \Codeception\TestCase\Test
 
     public function testMultiple()
     {
-        $input = str_repeat($this->baseInput, 2);
-        $expected = '';
+        $input = str_repeat($this->baseInput."\n", 2);
+        $expected = '<a data-flickr-embed="true" href="https://www.flickr.com/photos/b-erta/3823625739/" title="Untitled by B erta, on Flickr"></a><script async src="//widgets.flickr.com/embedr/embedr.js" charset="utf-8"></script>';
 
         $output = $this->lp->press($input);
 

@@ -67,7 +67,7 @@ class VimeoEmbedTest extends \Codeception\TestCase\Test
                 . 'puddles. Unfor&shy;tu&shy;nately this lush, raw sound is often lost in most videos, over&shy;taken '
                 . 'by the music. Curtis Robin&shy;son takes advant&shy;age of winter condi&shy;tions and makes some '
                 . "noise with his Stumpjumper FSR EVO.\n\nwww.special&shy;ized.com/stumpjumper-fsr\nwww.iamspe"
-                . '&shy;cial&shy;ized.com<a href="https://vimeo.com/112233728">http://vimeo.com/112233728</a></p></div>';
+                . '&shy;cial&shy;ized.com<a href="https://vimeo.com/112233728">https://vimeo.com/112233728</a></p></div>';
 
       $output = $this->lp->press($this->commonInput, ['letterpress.media.videoEmbedMode' => 'text']);
       $this->assertEquals($expected, $output);
@@ -75,7 +75,7 @@ class VimeoEmbedTest extends \Codeception\TestCase\Test
 
     public function testLinkEmbed()
     {
-      $expected = '<a href="https://vimeo.com/112233728">http://vimeo.com/112233728</a>';
+      $expected = '<a href="https://vimeo.com/112233728">https://vimeo.com/112233728</a>';
 
       $output = $this->lp->press($this->commonInput, ['letterpress.media.videoEmbedMode' => 'link']);
       $this->assertEquals($expected, $output); 
