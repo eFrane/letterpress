@@ -4,7 +4,6 @@ use EFrane\Letterpress\Letterpress;
 use EFrane\Letterpress\Config as LetterpressConfig;
 
 use Illuminate\Support\ServiceProvider;
-use \Illuminate\Foundation\AliasLoader;
 
 class LaravelServiceProvider extends ServiceProvider
 {
@@ -13,24 +12,20 @@ class LaravelServiceProvider extends ServiceProvider
   public function boot()
   {
     $this->package('efrane/letterpress');
+    $this->publishes([
+      __DIR__.'config/jolitypo.php' => config_path('jolitypo.php'),
+      __DIR__.'config/letterpress.php' => config_path('letterpress.php')
+    ]);
   }
 
   public function register()
   {
-    LetterpressConfig::init(app_path().'/config/packages/efrane/letterpress');
+    $config['letterpress'] = config('letterpress');
+    $config['jolitypo']    = config('jolitypo');
 
-    $this->app['letterpress'] = $this->app->share(function ($app) {
-      $letterpress = new Letterpress;
-      return $letterpress;
-    });
+    LetterpressConfig::init($config);
 
-    $this->app->bind('LetterpressConfig', 'EFrane\\Letterpress\\Config');
-
-    $this->app->booting(function()
-    {
-      $loader = AliasLoader::getInstance();
-      $loader->alias('Letterpress', 'EFrane\\Letterpress\\Providers\\LaravelFacade');
-    });
+    $this->app->share('letterpress', new Letterpress);
   }
 
   public function provides()
