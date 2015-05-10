@@ -1,4 +1,4 @@
-<?php namespace EFrane\Letterpress\Embeds;
+<?php namespace EFrane\Letterpress\Embed;
 
 use EFrane\Letterpress\LetterpressException;
 

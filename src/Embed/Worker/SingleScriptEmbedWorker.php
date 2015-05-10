@@ -1,9 +1,10 @@
-<?php namespace EFrane\Letterpress\Embeds;
+<?php namespace EFrane\Letterpress\Embed\Worker;
 
 use \DOMDocumentFragment;
+use EFrane\Letterpress\Embed\Embed;
 use Embed\Adapters\AdapterInterface;
 
-abstract class SingleScriptEmbed extends BaseEmbed
+abstract class SingleScriptEmbedWorker extends BaseEmbedWorker
 {  
   protected static $instances = 0;
 
@@ -19,11 +20,12 @@ abstract class SingleScriptEmbed extends BaseEmbed
     if (static::$instances > 1)
       $code = $this->removeScriptTag($code);
 
-    return $code;
+    return new Embed($adapter->getUrl(), $code);
   }
 
   protected function removeScriptTag(DOMDocumentFragment $code)
   {
+    // TODO: implement removal of additional script tags
     return $code;
   }
 }

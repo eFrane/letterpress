@@ -1,10 +1,10 @@
-<?php namespace EFrane\Letterpress\Embeds;
+<?php namespace EFrane\Letterpress\Embed\Worker;
 
 use DOMDocument;
 
 use Embed\Adapters\AdapterInterface;
 
-abstract class BaseEmbed implements Embed
+abstract class BaseEmbedWorker implements EmbedWorker
 {
   use \EFrane\Letterpress\Markup\DOMManipulation;
 

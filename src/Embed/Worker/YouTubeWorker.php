@@ -1,6 +1,4 @@
-<?php namespace EFrane\Letterpress\Embeds;
-
-use EFrane\Letterpress\Config;
+<?php namespace EFrane\Letterpress\Embed\Worker;
 
 /**
  * Handle YouTube embeds.
@@ -10,7 +8,7 @@ use EFrane\Letterpress\Config;
  *
  * @author Stefan Graupner <stefan.graupner@gmail.com>
  **/
-class YouTube extends VideoEmbed
+class YouTubeWorker extends VideoEmbedWorker
 {
   protected $bbcode = true;
 

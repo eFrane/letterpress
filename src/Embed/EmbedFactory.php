@@ -1,4 +1,4 @@
-<?php namespace EFrane\Letterpress\Embeds;
+<?php namespace EFrane\Letterpress\Embed;
 
 use DOMDocumentFragment;
 
@@ -12,13 +12,23 @@ use Embed\Embed as OEmbedAdapter;
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\LetterpressException;
 
-class EmbedRepository
+use EFrane\Letterpress\Embed\Worker\EmbedWorker;
+
+/**
+ * @package Embeds
+ */
+class EmbedFactory 
 {
+  /**
+   * @var array EFrane\Letterpress\Embeds\Embed
+   **/
   protected $embeds = [];
+  protected $repository = null;
   protected $doc = null;
 
   public function __construct(array $embeds = [])
   {
+    // setup workers
     foreach ($embeds as $embedCandidate)
     {
       if (class_exists($embedCandidate))
@@ -43,17 +53,18 @@ class EmbedRepository
    * from the one of ordinary modifiers as to expecting a regular expression to
    * match for the node instead of testing of DOMNode attributes and relationships.
    *
-   * Upon apply'ing repository walks through the supplied document fragment
+   * Upon `apply`-ing the repository walks through the supplied document fragment
    * and checks the enabled embed's tests for each text node longer than 2 characters.
    * This reduces the risk of checking text nodes created from line breaks or multiple
    * spaces in a row.
    *
    * @param DOMDocumentFragment the fragment
-   * @return DOMDocumentFragment the fixed fragment
+   * @return DOMDocumentFragment the enhanced fragment
    **/
-  public function apply(DOMDocumentFragment $fragment)
+  public function run(DOMDocumentFragment $fragment, EmbedRepository $repository)
   {
     $this->doc = $fragment->ownerDocument;
+    $this->repository = $repository;
 
     $fragment = $this->walk($fragment);
     return $fragment;
@@ -86,24 +97,32 @@ class EmbedRepository
         : $regex = $embed->getURLRegex();
 
       preg_match($regex, $element->nodeValue, $matches);
-      if (isset($matches['url']) && strlen($matches['url']) > 0) 
-          $urls[$matches[0]] = $matches['url'];
+      if (isset($matches['url']) && strlen($matches['url']) > 0)
+        $urls[$matches[0]] = $matches['url'];
 
       foreach ($urls as $match => $url)
       {
-        $fragment = $this->getEmbedFragment($embed, $url);
-
-        $applied = $this->applyMatchedURL($element, $fragment, $match);
-
-        if ($applied)
-          $element = $applied;
+        try
+        {
+          $fragment = $this->getEmbedFragment($embed, $url);
+          $element = $this->applyMatchedURL($element, $fragment, $match);
+        } catch (LetterpressException $e)
+        {
+          if (Config::get('letterpress.media.silentfail'))
+          {
+            return $element;
+          } else
+          {
+            throw $e;
+          }
+        }
       }
     }
 
     return $element;
   }
 
-  protected function getEmbedFragment(Embed $embed, $url)
+  protected function getEmbedFragment(EmbedWorker $embed, $url)
   {
     /**
      * add URL scheme if necessary
@@ -114,31 +133,16 @@ class EmbedRepository
     if (parse_url($url, PHP_URL_SCHEME) === null)
       $url = sprintf('https://%s', $url);
 
-    $adapter = null;
-    $previousException = null;
     try
     {
       $adapter = OEmbedAdapter::create($url);
+      $applied = $embed->apply($adapter);
+
+      return $this->repository->add($applied);
     } catch(\Exception $e)
     {
-      $previousException = $e;
-    }
-
-    if ($adapter)
-    {
-      return $embed->apply($adapter);  
-    }
-
-    // from here on, we failed
-    if (Config::get('letterpress.embed.silentfail'))
-    {
-      return false;
-    } else
-    {
-      $message = "Embed Adapter acquisition failed.";
-      if (!is_null($previousException))
-        $message = $previousException->getMessage();
-      throw new LetterpressException($message);
+      $message = "Embed Adapter acquisition failed:\n\n";
+      throw new LetterpressException($message.$e->getMessage());
     }
   }
 
@@ -147,7 +151,7 @@ class EmbedRepository
     // find the enclosing element
     $enclosing = $element;
 
-    do 
+    do
     {
       $enclosing = $enclosing->parentNode;
     } while (!($enclosing instanceof DOMElement));

@@ -7,12 +7,10 @@ use Illuminate\Support\ServiceProvider;
 
 class LaravelServiceProvider extends ServiceProvider
 {
-  protected $defer = true;
-
   public function boot()
   {
     $this->publishes([
-      __DIR__.'/../../config/jolitypo.php' => config_path('jolitypo.php'),
+      __DIR__.'/../../config/jolitypo.php'    => config_path('jolitypo.php'),
       __DIR__.'/../../config/letterpress.php' => config_path('letterpress.php')
     ]);
   }
@@ -25,10 +23,5 @@ class LaravelServiceProvider extends ServiceProvider
     LetterpressConfig::init($config);
 
     $this->app['letterpress'] = $this->app->share(function () { return new Letterpress; });
-  }
-
-  public function provides()
-  {
-    return ['letterpress'];
   }
 }

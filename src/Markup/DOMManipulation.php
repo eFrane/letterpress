@@ -7,7 +7,7 @@ use DOMElement;
 
 trait DOMManipulation
 {
-  protected function renameAttribute($node, $attributeName, $newName)
+  protected function renameAttribute(DOMElement $node, $attributeName, $newName)
   {
     $node->setAttribute($newName, $node->getAttribute($attributeName));
     $node->removeAttribute($attributeName);

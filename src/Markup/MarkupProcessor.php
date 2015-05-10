@@ -5,7 +5,8 @@ use \HTML5;
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\LetterpressException;
 
-use EFrane\Letterpress\Embeds\EmbedRepository;
+use EFrane\Letterpress\Embed\EmbedRepository;
+use EFrane\Letterpress\Embed\EmbedFactory;
 
 /**
  * Post-process the generated and typo-fixed markup for additional
@@ -16,12 +17,22 @@ use EFrane\Letterpress\Embeds\EmbedRepository;
 class MarkupProcessor
 {
   protected $embedRepository = null;
+  protected $embedFactory = null;
+
   protected $modifiers = [];
 
   public function __construct()
   {
     $this->prepareModifiers();
     $this->prepareEmbedRepository();
+  }
+
+  /**
+   * @return EFrane\Letterpress\Embeds\EmbedRepository
+   */
+  public function getEmbedRepository()
+  {
+    return $this->embedRepository;
   }
 
   protected function prepareEmbedRepository()
@@ -38,11 +49,12 @@ class MarkupProcessor
           ? sprintf('EFrane\Letterpress\Embeds\%s', $service)
           : $service;
 
-        if (class_exists($className))
+        if (class_exists($className) && is_a($className, 'EFrane\Letterpress\Embeds\EmbedWorker'))
           $embedClasses[] = $className;
       }
 
-      $this->embedRepository = new EmbedRepository($embedClasses);
+      $this->embedRepository = new EmbedRepository();
+      $this->embedFactory    = new EmbedFactory($embedClasses);
     }
 
   }
@@ -68,8 +80,8 @@ class MarkupProcessor
   {
     $fragment = HTML5::loadHTMLFragment($content);
 
-    if (!is_null($this->embedRepository))
-      $fragment = $this->embedRepository->apply($fragment);
+    if (!is_null($this->embedFactory))
+      $fragment = $this->embedFactory->run($fragment, $this->embedRepository);
 
     foreach ($this->modifiers as $modifier)
     {

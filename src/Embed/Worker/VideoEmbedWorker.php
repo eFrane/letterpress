@@ -1,12 +1,12 @@
-<?php namespace EFrane\Letterpress\Embeds;
+<?php namespace EFrane\Letterpress\Embed\Worker;
 
+use EFrane\Letterpress\Embed\DurationHavingEmbed;
 use HTML5;
 use Embed\Adapters\AdapterInterface;
 
 use EFrane\Letterpress\Config;
-use EFrane\Letterpress\LetterpressException;
 
-class VideoEmbed extends BaseEmbed
+class VideoEmbedWorker extends BaseEmbedWorker
 {
   protected $adapter = null;
 
@@ -14,15 +14,16 @@ class VideoEmbed extends BaseEmbed
   {
     $this->adapter = $adapter;
 
+    $code = null;
     switch (Config::get('letterpress.media.videoEmbedMode'))
     {
-      case 'frame': return $this->embedFrame(); break;
-      case 'link':  return $this->embedLink();  break;
-      case 'text':  return $this->embedText();  break;
-      case 'image': return $this->embedImage(); break;
+      case 'frame': $code = $this->embedFrame(); break;
+      case 'link':  $code = $this->embedLink();  break;
+      case 'text':  $code = $this->embedText();  break;
+      case 'image': $code = $this->embedImage(); break;
     }
 
-    return null;
+    return new DurationHavingEmbed($adapter->getUrl(), $code, 0);
   }
 
   protected function embedFrame()

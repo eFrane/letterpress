@@ -9,6 +9,21 @@ use EFrane\Letterpress\Markup\MarkupProcessor;
  **/
 class Letterpress
 {
+  /**
+   * @var EFrane\Letterpress\Embeds\EmbedRepository
+   *
+   */
+  protected $lastEmbedRepository = null;
+
+  /**
+   * Setup a new Letterpress instance
+   *
+   * Please note that there will only be one configuration object used by all
+   * letterpress instances. It is however always possible to override specific
+   * or all config options on calls to `press()` &c.
+   *
+   * @param array $config
+   */
   public function __construct($config = [])
   {
     // check for initialized config
@@ -23,6 +38,23 @@ class Letterpress
     $this->setup($config);
   }
 
+
+  /**
+   * This will return the last embed repository.
+   *
+   * The embed repository is overridden whenever the markup
+   * processor runs with enabled embed processing.
+   *
+   * @return EFrane\Letterpress\Embeds\EmbedRepository
+   **/
+  public function getEmbedRepository()
+  {
+    return $this->lastEmbedRepository;
+  }
+
+  /**
+   * @param array $config
+   **/
   protected function setup($config = [])
   {
     // apply additional config
@@ -30,6 +62,11 @@ class Letterpress
       Config::apply($config);
   }
 
+  /**
+   * @param $input
+   * @param array $config
+   * @return mixed|string
+   **/
   public function press($input, $config = [])
   {
     $this->setup($config);
@@ -43,11 +80,17 @@ class Letterpress
     if (strlen($output) === 0)
       $output = $input;
 
-    Config::reset();
+    //Config::reset();
 
     return $output;
   }
 
+  /**
+   * @param $input
+   * @param bool $force
+   * @param array $config
+   * @return mixed
+   **/
   public function markdown($input, $force = false, $config = [])
   {
     $this->setup($config);
@@ -77,6 +120,12 @@ class Letterpress
     return $output;
   }
 
+  /**
+   * @param $input
+   * @param bool $force
+   * @param array $config
+   * @return mixed
+   **/
   public function markup($input, $force = false, $config = [])
   {
     $this->setup($config);
@@ -86,11 +135,19 @@ class Letterpress
     {
       $markup = new MarkupProcessor;
       $output = $markup->process($input);
+
+      $this->lastEmbedRepository = $markup->getEmbedRepository();
     }
 
     return $output;
   }
 
+  /**
+   * @param $input
+   * @param bool $force
+   * @param array $config
+   * @return mixed
+   **/
   public function typofix($input, $force = false, $config = [])
   {
     $this->setup($config);

@@ -1,4 +1,4 @@
-<?php namespace EFrane\Letterpress\Embeds;
+<?php namespace EFrane\Letterpress\Embed\Worker;
 
 use DOMDocumentFragment;
 
@@ -12,7 +12,7 @@ use Embed\Adapters\AdapterInterface;
  * They do however recommend an obvious solution: delete that script tag on all
  * but one embed. Which is what the SingleScriptEmbed class does.
  **/
-class Twitter extends SingleScriptEmbed
+class TwitterWorker extends SingleScriptEmbedWorker
 {
   protected $bbcode = true;
   protected $urlRegex = 'https?:\/\/(www\.)?twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)';
