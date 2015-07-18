@@ -63,7 +63,7 @@ return [
     // if silent fail is enabled, the embedder will just return the original input
     // when something goes wrong along the way, otherwise, a LetterpressException
     // will be thrown
-    'silentfail' => true
+    'silentfail' => false
   ],
 
   'microtypography' => [

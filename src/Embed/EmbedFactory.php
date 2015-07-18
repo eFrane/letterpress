@@ -6,6 +6,7 @@ use DOMNode;
 use DOMElement;
 use DOMText;
 
+use EFrane\Letterpress\Embed\Worker\BaseEmbedWorker;
 use \HTML5;
 use Embed\Embed as OEmbedAdapter;
 
@@ -86,33 +87,19 @@ class EmbedFactory
 
   protected function findEmbeds(DOMText $element)
   {
-    foreach ($this->embeds as $embed)
-    {
-      $urls = [];
-
+    foreach ($this->embeds as $embed) {
       $embed->setDocument($element->ownerDocument);
 
-      $regex = ($embed->isBBCodeEnabled())
-        ? $regex = $embed->getBBCodeRegex()
-        : $regex = $embed->getURLRegex();
+      $urls = $this->getEmbedUrls($element, $embed);
 
-      preg_match($regex, $element->nodeValue, $matches);
-      if (isset($matches['url']) && strlen($matches['url']) > 0)
-        $urls[$matches[0]] = $matches['url'];
-
-      foreach ($urls as $match => $url)
-      {
-        try
-        {
+      foreach ($urls as $match => $url) {
+        try {
           $fragment = $this->getEmbedFragment($embed, $url);
           $element = $this->applyMatchedURL($element, $fragment, $match);
-        } catch (LetterpressException $e)
-        {
-          if (Config::get('letterpress.media.silentfail'))
-          {
+        } catch (LetterpressException $e) {
+          if (Config::get('letterpress.media.silentfail')) {
             return $element;
-          } else
-          {
+          } else {
             throw $e;
           }
         }
@@ -173,5 +160,35 @@ class EmbedFactory
     }
 
     return $enclosing;
+  }
+
+  /**
+   * @param DOMText $element
+   * @param $embed
+   * @param $matches
+   * @param $urls
+   **/
+  protected function getEmbedUrls(DOMText $element, BaseEmbedWorker $embed)
+  {
+    $urls = [];
+
+    // get urls from all enabled modes (url, bbcode tag, xml tag)
+    $subject = $element->nodeValue;
+
+    array_merge($urls, $this->getUrlsFromRegex($embed->getURLRegex(), $subject));
+    array_merge($urls, $this->getUrlsFromRegex($embed->getBBCodeRegex(), $subject));
+    array_merge($urls, $this->getUrlsFromRegex($embed->getXMLCodeRegex(), $subject));
+
+    return $urls;
+  }
+
+  protected function getUrlsFromRegex($regex, $subject)
+  {
+    $matches = null;
+
+    // TODO: this technically should be preg_match_all
+    preg_match($regex, $subject, $matches);
+    if (isset($matches['url']) && strlen($matches['url']) > 0)
+      return [$matches[0], $matches['url']];
   }
 }

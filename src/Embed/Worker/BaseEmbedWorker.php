@@ -33,14 +33,12 @@ abstract class BaseEmbedWorker implements EmbedWorker
 
   public function getBBCodeRegex()
   {
-    $tagName = explode('\\', get_called_class());
-    $tagName = strtolower($tagName[count($tagName) - 1]);
+    return $this->getCodeRegex('[', ']');
+  }
 
-    $urlRegex = $this->prepareURLRegex();
-
-    $tagRegex = sprintf("/\[%s.*?\]%s\[\/%s\]/i", $tagName, $urlRegex, $tagName);
-
-    return $tagRegex;
+  public function getXMLCodeRegex()
+  {
+    return $this->getCodeRegex('<', '>');
   }
 
   public function isBBCodeEnabled()
@@ -51,5 +49,30 @@ abstract class BaseEmbedWorker implements EmbedWorker
   public function setDocument(DOMDocument $document)
   {
     $this->doc = $document;
+  }
+
+  /**
+   * @return string
+   **/
+  protected function getTagName()
+  {
+    $tagName = explode('\\', get_called_class());
+    $tagName = strtolower($tagName[count($tagName) - 1]);
+
+    return $tagName;
+  }
+
+  /**
+   * @return string
+   **/
+  protected function getCodeRegex($openingDelimiter = '<', $closingDelimiter = '>')
+  {
+    $tagName = $this->getTagName();
+    $urlRegex = $this->prepareURLRegex();
+
+    $openingDelimiter = preg_quote($openingDelimiter, '/');
+    $closingDelimiter = preg_quote($closingDelimiter, '/');
+
+    return $openingDelimiter.$tagName.$closingDelimiter.$urlRegex.$openingDelimiter."/".$tagName.$closingDelimiter;
   }
 }
