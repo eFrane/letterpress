@@ -77,8 +77,8 @@ class Letterpress
     $output = $this->markup($output);
     $output = $this->typofix($output);
 
-    if (strlen($output) === 0)
-      $output = $input;
+//    if (strlen($output) === 0)
+//      $output = $input;
 
     //Config::reset();
 
