@@ -39,7 +39,8 @@ class MarkupProcessor
         if (Config::get('letterpress.markup.addLanguageInfo'))
             $this->modifiers[] = new LanguageCodeModifier;
 
-        $this->modifiers[] = new RemoveEmptyNodesModifier;
+        // FIXME: The empty nodes remover removes whitelisted nodes
+        // $this->modifiers[] = new RemoveEmptyNodesModifier;
     }
 
     protected function prepareEmbedRepository()
