@@ -1,8 +1,6 @@
-<?php namespace EFrane\Letterpress\Embed\Worker;
+<?php
 
-use DOMDocumentFragment;
-
-use Embed\Adapters\AdapterInterface;
+namespace EFrane\Letterpress\Embed\Worker;
 
 /**
  * Twitter sends the complete embed code including their magic widget
@@ -14,6 +12,6 @@ use Embed\Adapters\AdapterInterface;
  **/
 class TwitterWorker extends SingleScriptEmbedWorker
 {
-  protected $bbcode = true;
-  protected $urlRegex = 'https?:\/\/(www\.)?twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)';
+    protected $bbcode = true;
+    protected $urlRegex = 'https?:\/\/(www\.)?twitter\.com\/(?:#!\/)?(\w+)\/status(es)?\/(\d+)';
 }

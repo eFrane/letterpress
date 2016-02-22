@@ -1,14 +1,15 @@
-<?php namespace EFrane\Letterpress\Markup;
+<?php
+
+namespace EFrane\Letterpress\Markup;
 
 use DOMDocumentFragment;
-use DOMNode;
 
 abstract class BaseModifier implements Modifier
 {
-  protected $doc = null;
+    protected $doc = null;
 
-  public function modify(DOMDocumentFragment $fragment)
-  {
-    $this->doc = $fragment->ownerDocument;
-  }
+    public function modify(DOMDocumentFragment $fragment)
+    {
+        $this->doc = $fragment->ownerDocument;
+    }
 }

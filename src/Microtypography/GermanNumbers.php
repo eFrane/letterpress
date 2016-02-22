@@ -1,53 +1,53 @@
-<?php namespace EFrane\Letterpress\Microtypography;
+<?php
 
-use JoliTypo\StateBag;
+namespace EFrane\Letterpress\Microtypography;
+
 use JoliTypo\FixerInterface;
 use JoliTypo\LocaleAwareFixerInterface;
+use JoliTypo\StateBag;
 
 /**
  * Format numbers according to the formal German number formatting
  * style, e.g. insert a dot for every block of thousands (1.234.567)
- * and use the comma as separator for decimals (1.234,567)
+ * and use the comma as separator for decimals (1.234,567).
  **/
 class GermanNumbers implements FixerInterface, LocaleAwareFixerInterface
 {
-  protected $locale;
+    protected $locale;
 
-  public function __construct($locale)
-  {
-    $this->locale = $locale;
-  }
-  
-  public function setLocale($locale)
-  {
-    $this->locale = $locale;
-  }
-
-  public function fix($content, StateBag $state_bag = null)
-  {
-    if (preg_match('/[0-9,.]+/', $content))
+    public function __construct($locale)
     {
-      return $this->numberFormat($content);
+        $this->locale = $locale;
     }
 
-    return $content;
-  }
+    public function setLocale($locale)
+    {
+        $this->locale = $locale;
+    }
 
-  protected function numberFormat($number)
-  {
-    // check for decimal point / comma
+    public function fix($content, StateBag $state_bag = null)
+    {
+        if (preg_match('/[0-9,.]+/', $content)) {
+            return $this->numberFormat($content);
+        }
+
+        return $content;
+    }
+
+    protected function numberFormat($number)
+    {
+        // check for decimal point / comma
     $dotPosition = strlen($number) - 1;
-    if (preg_match('/(,|\.)/', strrev($number), $matches) == 1)
-      $dotPosition = strrpos($matches[1], $number);
+        if (preg_match('/(,|\.)/', strrev($number), $matches) == 1) {
+            $dotPosition = strrpos($matches[1], $number);
+        }
 
-    return $dotPosition;
+        return $dotPosition;
 
-    $formattedNumber = substr($number, $dotPosition, strlen($number) - 1);
-    for ($i = $dotPosition; $i >= 0; $i--)
-    {
-      
+        $formattedNumber = substr($number, $dotPosition, strlen($number) - 1);
+        for ($i = $dotPosition; $i >= 0; $i--) {
+        }
+
+        return $formattedNumber;
     }
-
-    return $formattedNumber;
-  }
 }

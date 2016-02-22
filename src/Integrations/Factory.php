@@ -1,6 +1,8 @@
-<?php namespace EFrane\Letterpress\Integrations;
+<?php
+
+namespace EFrane\Letterpress\Integrations;
 
 interface Factory
 {
-  public static function create();
+    public static function create();
 }

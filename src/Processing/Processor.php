@@ -1,4 +1,6 @@
-<?php namespace EFrane\Letterpress\Processing;
+<?php
+
+namespace EFrane\Letterpress\Processing;
 
 interface Processor
 {

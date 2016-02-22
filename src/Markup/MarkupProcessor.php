@@ -1,4 +1,6 @@
-<?php namespace EFrane\Letterpress\Markup;
+<?php
+
+namespace EFrane\Letterpress\Markup;
 
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\Embed\EmbedFactory;
@@ -29,15 +31,18 @@ class MarkupProcessor
     {
         $this->modifiers = [];
 
-        if (Config::get('letterpress.markup.blockQuoteFix'))
-            $this->modifiers[] = new BlockQuoteModifier;
+        if (Config::get('letterpress.markup.blockQuoteFix')) {
+            $this->modifiers[] = new BlockQuoteModifier();
+        }
 
         $maxHeadlineLevel = Config::get('letterpress.markup.maxHeadlineLevel');
-        if ($maxHeadlineLevel > 1)
+        if ($maxHeadlineLevel > 1) {
             $this->modifiers[] = new HeadlineLevelModifier($maxHeadlineLevel);
+        }
 
-        if (Config::get('letterpress.markup.addLanguageInfo'))
-            $this->modifiers[] = new LanguageCodeModifier;
+        if (Config::get('letterpress.markup.addLanguageInfo')) {
+            $this->modifiers[] = new LanguageCodeModifier();
+        }
 
         // FIXME: The empty nodes remover removes whitelisted nodes
         // $this->modifiers[] = new RemoveEmptyNodesModifier;
@@ -55,14 +60,14 @@ class MarkupProcessor
                     ? sprintf('EFrane\Letterpress\Embeds\%s', $service)
                     : $service;
 
-                if (class_exists($className) && is_a($className, 'EFrane\Letterpress\Embeds\EmbedWorker'))
+                if (class_exists($className) && is_a($className, 'EFrane\Letterpress\Embeds\EmbedWorker')) {
                     $embedClasses[] = $className;
+                }
             }
 
             $this->embedRepository = new EmbedRepository();
             $this->embedFactory = new EmbedFactory($embedClasses);
         }
-
     }
 
     /**
@@ -79,15 +84,16 @@ class MarkupProcessor
 
         $fragment = $html5->loadHTMLFragment($content);
 
-        if (!is_null($this->embedFactory))
+        if (!is_null($this->embedFactory)) {
             $fragment = $this->embedFactory->run($fragment, $this->embedRepository);
+        }
 
         foreach ($this->modifiers as $modifier) {
             $modifiedFragment = $modifier->modify($fragment);
             if (!is_null($modifiedFragment)) {
                 $fragment = $modifiedFragment;
             } else {
-                throw new LetterpressException("Failed to apply modifier " . get_class($modifier));
+                throw new LetterpressException('Failed to apply modifier '.get_class($modifier));
             }
         }
 

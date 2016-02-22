@@ -29,7 +29,7 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
         Config::init();
 
         new Letterpress([
-            'configoption' => 'optionvalue'
+            'configoption' => 'optionvalue',
         ]);
 
         $this->assertEquals('optionvalue', Config::get('configoption'));

@@ -1,4 +1,6 @@
-<?php namespace EFrane\Letterpress\Embed\Worker;
+<?php
+
+namespace EFrane\Letterpress\Embed\Worker;
 
 /**
  * Handle YouTube embeds.
@@ -10,7 +12,7 @@
  **/
 class YouTubeWorker extends VideoEmbedWorker
 {
-  protected $bbcode = true;
+    protected $bbcode = true;
 
-  protected $urlRegex = '(http(s)?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+';
+    protected $urlRegex = '(http(s)?\:\/\/)?(www\.)?(youtube\.com|youtu\.?be)\/.+';
 }
