@@ -25,5 +25,8 @@ class LaravelServiceProvider extends ServiceProvider
         $this->app['letterpress'] = $this->app->share(function () {
             return new Letterpress;
         });
+
+        $this->mergeConfigFrom(__DIR__ . '/../../config/jolitypo.php', 'jolitypo');
+        $this->mergeConfigFrom(__DIR__ . '/../../config/letterpress.php', 'letterpress');
     }
 }
