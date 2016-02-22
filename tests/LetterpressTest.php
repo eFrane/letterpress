@@ -27,11 +27,14 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
     public function testCreateWithConfigOverride()
     {
         Config::init();
+        $this->assertEquals('en_GB', Config::get('letterpress.locale'));
 
         new Letterpress([
-            'configoption' => 'optionvalue',
+            'configoption'       => 'optionvalue',
+            'letterpress.locale' => 'de_DE',
         ]);
 
         $this->assertEquals('optionvalue', Config::get('configoption'));
+        $this->assertEquals('de_DE', Config::get('letterpress.locale'));
     }
 }
