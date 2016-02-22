@@ -1,7 +1,9 @@
-<?php namespace EFrane\Letterpress\Processing;
+<?php
+
+namespace EFrane\Letterpress\Processing;
 
 /**
- * Escaper - Save text patterns from processing by hiding them
+ * Escaper - Save text patterns from processing by hiding them.
  *
  * Due to the nature of multi-formatted input texts,
  * it is sometimes necessary to avoid parts of the input
@@ -24,8 +26,6 @@
  * NOTE: This is, by design, not thread safe. Meaning that the module
  *       expects `$processed` to be some modified version of
  *       `$escaped_content`, otherwise it will not work.
- *
- * @package EFrane\Letterpress\Processing
  */
 class Escaper
 {
@@ -43,8 +43,7 @@ class Escaper
     public function escape($content)
     {
         preg_match_all($this->pattern, $content, $matches);
-        foreach ($matches[$this->matchIdentifier] as $match)
-        {
+        foreach ($matches[$this->matchIdentifier] as $match) {
             $escaped = sha1($match);
             $content = str_replace($match, $escaped, $content);
 

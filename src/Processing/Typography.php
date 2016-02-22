@@ -1,4 +1,6 @@
-<?php namespace EFrane\Letterpress\Processing;
+<?php
+
+namespace EFrane\Letterpress\Processing;
 
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\Integrations\TypoFixerFacade;

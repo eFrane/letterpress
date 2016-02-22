@@ -1,31 +1,36 @@
-<?php namespace EFrane\Letterpress\Markup;
+<?php
+
+namespace EFrane\Letterpress\Markup;
 
 use DOMDocumentFragment;
 use DOMNode;
 
 abstract class RecursiveModifier extends BaseModifier
 {
-  public function modify(DOMDocumentFragment $fragment)
-  {
-    $this->doc = $fragment->ownerDocument;
-    $fragment = $this->walk($fragment);
-    return $fragment;
-  }
-
-  protected function walk(DOMNode $node)
-  {
-    foreach ($node->childNodes as $current)
+    public function modify(DOMDocumentFragment $fragment)
     {
-      if ($this->candidateCheck($current))
-        $node = $this->candidateModify($node, $current);
+        $this->doc = $fragment->ownerDocument;
+        $fragment = $this->walk($fragment);
 
-      if ($current->hasChildNodes())
-        $current = $this->walk($current);
+        return $fragment;
     }
 
-    return $node;
-  }
+    protected function walk(DOMNode $node)
+    {
+        foreach ($node->childNodes as $current) {
+            if ($this->candidateCheck($current)) {
+                $node = $this->candidateModify($node, $current);
+            }
 
-  abstract protected function candidateCheck(DOMNode $candidate);
-  abstract protected function candidateModify(DOMNode $parent, DOMNode $candidate);
+            if ($current->hasChildNodes()) {
+                $current = $this->walk($current);
+            }
+        }
+
+        return $node;
+    }
+
+    abstract protected function candidateCheck(DOMNode $candidate);
+
+    abstract protected function candidateModify(DOMNode $parent, DOMNode $candidate);
 }

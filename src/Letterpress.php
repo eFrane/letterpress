@@ -1,4 +1,6 @@
-<?php namespace EFrane\Letterpress;
+<?php
+
+namespace EFrane\Letterpress;
 
 use EFrane\Letterpress\Processing\Markdown;
 use EFrane\Letterpress\Processing\Markup;
@@ -10,7 +12,7 @@ use EFrane\Letterpress\Processing\Typography;
 class Letterpress
 {
     /**
-     * Setup a new Letterpress instance
+     * Setup a new Letterpress instance.
      *
      * Please note that there will only be one configuration object used by all
      * letterpress instances. It is however always possible to override specific
@@ -36,8 +38,9 @@ class Letterpress
     protected function setup($config = [])
     {
         // apply additional config
-        if (count($config) > 0)
+        if (count($config) > 0) {
             Config::apply($config);
+        }
     }
 
     /**
@@ -56,6 +59,7 @@ class Letterpress
     /**
      * @param $input
      * @param array $config
+     *
      * @return mixed|string
      **/
     public function press($input, $config = [])
@@ -71,8 +75,9 @@ class Letterpress
 
     /**
      * @param $input
-     * @param bool $force
+     * @param bool  $force
      * @param array $config
+     *
      * @return mixed
      **/
     public function markdown($input, $force = false, $config = [])
@@ -84,8 +89,9 @@ class Letterpress
 
     /**
      * @param $input
-     * @param bool $force
+     * @param bool  $force
      * @param array $config
+     *
      * @return mixed
      **/
     public function markup($input, $force = false, $config = [])
@@ -97,8 +103,9 @@ class Letterpress
 
     /**
      * @param $input
-     * @param bool $force
+     * @param bool  $force
      * @param array $config
+     *
      * @return mixed
      **/
     public function typofix($input, $force = false, $config = [])

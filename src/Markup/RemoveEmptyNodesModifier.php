@@ -1,25 +1,27 @@
-<?php namespace EFrane\Letterpress\Markup;
+<?php
+
+namespace EFrane\Letterpress\Markup;
 
 use DOMNode;
 
 class RemoveEmptyNodesModifier extends RecursiveModifier
 {
-  protected $allowedEmptyTagNames = [
-    'area', 
-    'base', 
-    'br', 
-    'col', 
-    'embed', 
-    'hr', 
-    'img', 
-    'input', 
-    'keygen', 
-    'link', 
-    'meta', 
-    'param', 
-    'source', 
-    'track', 
-    'wbr'
+    protected $allowedEmptyTagNames = [
+    'area',
+    'base',
+    'br',
+    'col',
+    'embed',
+    'hr',
+    'img',
+    'input',
+    'keygen',
+    'link',
+    'meta',
+    'param',
+    'source',
+    'track',
+    'wbr',
   ];
 
   /*
@@ -32,7 +34,7 @@ class RemoveEmptyNodesModifier extends RecursiveModifier
   ];
 
   /**
-   * There's basically two ways of telling that a node is empty:
+   * There's basically two ways of telling that a node is empty:.
    * 
    * 1. In the simple case, the node is empty if it isn't defined as a void
    *    element in the spec (http://www.w3.org/TR/html5/syntax.html#void-elements)
@@ -45,13 +47,17 @@ class RemoveEmptyNodesModifier extends RecursiveModifier
    **/
   protected function candidateCheck(DOMNode $candidate)
   {
-    if ($candidate->nodeType !== XML_ELEMENT_NODE) return false;
+      if ($candidate->nodeType !== XML_ELEMENT_NODE) {
+          return false;
+      }
 
-    $simpleCheck = !$candidate->hasChildNodes()
+      $simpleCheck = !$candidate->hasChildNodes()
                 && (!in_array($candidate->tagName, $this->allowedEmptyTagNames)
                 ||  $candidate->hasAttributes());
 
-    if ($simpleCheck) return true;
+      if ($simpleCheck) {
+          return true;
+      }
 
     // FIXME: this does not work as expected
     /*
@@ -73,9 +79,10 @@ class RemoveEmptyNodesModifier extends RecursiveModifier
     return false;
   }
 
-  protected function candidateModify(DOMNode $parent, DOMNode $candidate)
-  {
-    $parent->removeChild($candidate);
-    return $parent;
-  }
+    protected function candidateModify(DOMNode $parent, DOMNode $candidate)
+    {
+        $parent->removeChild($candidate);
+
+        return $parent;
+    }
 }

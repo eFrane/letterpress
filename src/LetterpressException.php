@@ -1,3 +1,7 @@
-<?php namespace EFrane\Letterpress;
+<?php
 
-class LetterpressException extends \RuntimeException {}
+namespace EFrane\Letterpress;
+
+class LetterpressException extends \RuntimeException
+{
+}

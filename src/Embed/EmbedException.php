@@ -1,5 +1,9 @@
-<?php namespace EFrane\Letterpress\Embed;
+<?php
+
+namespace EFrane\Letterpress\Embed;
 
 use EFrane\Letterpress\LetterpressException;
 
-class EmbedException extends LetterpressException {}
+class EmbedException extends LetterpressException
+{
+}

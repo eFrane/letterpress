@@ -1,10 +1,12 @@
-<?php namespace EFrane\Letterpress;
+<?php
+
+namespace EFrane\Letterpress;
 
 use Illuminate\Config\Repository;
 use Symfony\Component\Finder\Finder;
 
 /**
- *  Simple wrapper class for the Illuminate\Config component;
+ *  Simple wrapper class for the Illuminate\Config component;.
  **/
 class Config
 {
@@ -31,15 +33,18 @@ class Config
     public static function reset($withoutInit = false)
     {
         self::$instance = null;
-        if (!$withoutInit) return self::init();
+        if (!$withoutInit) {
+            return self::init();
+        }
     }
 
     public static function init(array $config = [])
     {
-        if (count($config) == 0)
+        if (count($config) == 0) {
             $config = static::loadDefaultConfig();
+        }
 
-        static::$instance = new Config($config);
+        static::$instance = new self($config);
 
         return static::$instance;
     }
@@ -49,8 +54,9 @@ class Config
         $data = [];
 
         $files = Finder::create()->files()->name('*.php')->in($configPath)->depth(0);
-        foreach ($files as $key => $path)
+        foreach ($files as $key => $path) {
             $data[basename($key, '.php')] = require $path;
+        }
 
         return $data;
     }
@@ -73,10 +79,11 @@ class Config
     {
         $oldValues = [];
         foreach ($additionalConfig as $identifier => $value) {
-            if (!is_string($identifier))
+            if (!is_string($identifier)) {
                 throw new \LogicException('Identifier must be string.');
+            }
 
-            $oldValues[$identifier] = Config::set($identifier, $value);
+            $oldValues[$identifier] = self::set($identifier, $value);
         }
 
         return $oldValues;
@@ -84,7 +91,8 @@ class Config
 
     /**
      * @param string $identifier
-     * @param mixed $value new config value for identifier
+     * @param mixed  $value      new config value for identifier
+     *
      * @return mixed old config value for identifier
      */
     public static function set($identifier = null, $value = null)
@@ -99,11 +107,13 @@ class Config
 
     protected static function checkInitialized()
     {
-        if (self::$instance === null)
+        if (self::$instance === null) {
             throw new \RuntimeException('Config must be initialized before usage.');
+        }
     }
 
-    public static function instance() {
+    public static function instance()
+    {
         return static::$instance;
     }
 

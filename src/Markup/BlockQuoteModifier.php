@@ -1,10 +1,12 @@
-<?php namespace EFrane\Letterpress\Markup;
+<?php
+
+namespace EFrane\Letterpress\Markup;
 
 use DOMNode;
 
 /**
  * Fix block quotes. More information on that can be found at:
- * http://alistapart.com/blog/post/more-thoughts-about-blockquotes-than-are-strictly-required
+ * http://alistapart.com/blog/post/more-thoughts-about-blockquotes-than-are-strictly-required.
  *
  * In Markdown, blockquotes are usually written like:
  *
@@ -61,72 +63,66 @@ use DOMNode;
  **/
 class BlockQuoteModifier extends RecursiveModifier // implements Modifier
 {
-  protected function candidateCheck(DOMNode $candidate)
-  {
-    $isBlockquoteWithChildNodes = strcmp($candidate->nodeName, 'blockquote') == 0
+    protected function candidateCheck(DOMNode $candidate)
+    {
+        $isBlockquoteWithChildNodes = strcmp($candidate->nodeName, 'blockquote') == 0
                                && $candidate->hasChildNodes();
 
-    if ($isBlockquoteWithChildNodes)
-    {
-      foreach ($candidate->childNodes as $child)
-      {
-        if (strcmp($child->nodeName, 'ul') == 0)
-          return true;
-      }
-    }
-
-    return false;
-  }
-
-  protected function candidateModify(DOMNode $parent, DOMNode $candidate)
-  {
-    $figure = $this->doc->createElement('figure');
-
-    $captionContent = null;
-    foreach ($candidate->childNodes as $contentNodeCandidate)
-    {
-      if (strcmp($contentNodeCandidate->nodeName, 'ul') !== 0)
-      {
-        $figure->appendChild($contentNodeCandidate->cloneNode(true));
-      } else
-      {
-        $captionCandidate = $contentNodeCandidate->cloneNode(true);
-        $captionContent = $this->extractCaptionContent($captionCandidate);
-      }
-    }
-
-    if (!is_null($captionContent))
-    {
-      $figcaption = $this->doc->createElement('figcaption');
-      $figcaption->appendChild($captionContent);
-
-      $figure->appendChild($figcaption);
-    }
-
-    $parent->insertBefore($figure, $candidate);
-    
-    $parent->removeChild($candidate);
-    return $parent;
-  }
-
-  protected function extractCaptionContent(DOMNode $captionCandidate)
-  {
-    $captionContent = $this->doc->createDocumentFragment();
-
-    if (strcmp($captionCandidate->nodeName, 'ul') == 0)
-    {
-      foreach ($captionCandidate->childNodes as $child)
-      {
-        if (strcmp($child->nodeName, 'li') == 0)
-        {
-          foreach ($child->childNodes as $contentChild)
-            $captionContent->appendChild($contentChild->cloneNode(true));
-
-          break;
+        if ($isBlockquoteWithChildNodes) {
+            foreach ($candidate->childNodes as $child) {
+                if (strcmp($child->nodeName, 'ul') == 0) {
+                    return true;
+                }
+            }
         }
-      }
+
+        return false;
     }
 
-    return $captionContent;
-  }
+    protected function candidateModify(DOMNode $parent, DOMNode $candidate)
+    {
+        $figure = $this->doc->createElement('figure');
+
+        $captionContent = null;
+        foreach ($candidate->childNodes as $contentNodeCandidate) {
+            if (strcmp($contentNodeCandidate->nodeName, 'ul') !== 0) {
+                $figure->appendChild($contentNodeCandidate->cloneNode(true));
+            } else {
+                $captionCandidate = $contentNodeCandidate->cloneNode(true);
+                $captionContent = $this->extractCaptionContent($captionCandidate);
+            }
+        }
+
+        if (!is_null($captionContent)) {
+            $figcaption = $this->doc->createElement('figcaption');
+            $figcaption->appendChild($captionContent);
+
+            $figure->appendChild($figcaption);
+        }
+
+        $parent->insertBefore($figure, $candidate);
+
+        $parent->removeChild($candidate);
+
+        return $parent;
+    }
+
+    protected function extractCaptionContent(DOMNode $captionCandidate)
+    {
+        $captionContent = $this->doc->createDocumentFragment();
+
+        if (strcmp($captionCandidate->nodeName, 'ul') == 0) {
+            foreach ($captionCandidate->childNodes as $child) {
+                if (strcmp($child->nodeName, 'li') == 0) {
+                    foreach ($child->childNodes as $contentChild) {
+                        $captionContent->appendChild($contentChild->cloneNode(true));
+                    }
+
+                    break;
+                }
+            }
+        }
+
+        return $captionContent;
+    }
 }
