@@ -49,8 +49,8 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
 
         $letterpress = new Letterpress();
 
-        $markdown = "# Hello World";
-        $html = "<h1>Hello World</h1>";
+        $markdown = '# Hello World';
+        $html = '<h1>Hello World</h1>';
 
         $this->assertEquals($html, $letterpress->markdown($markdown));
     }
@@ -61,8 +61,8 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
 
         $letterpress = new Letterpress();
 
-        $html = "This is an example text with a very long word at the end: supercalifragilisticexpialigocious.";
-        $expected = "This is an example text with a very long word at the end: super&shy;cal&shy;i&shy;fra&shy;gil&shy;istic&shy;ex&shy;pi&shy;ali&shy;go&shy;cious.";
+        $html = 'This is an example text with a very long word at the end: supercalifragilisticexpialigocious.';
+        $expected = 'This is an example text with a very long word at the end: super&shy;cal&shy;i&shy;fra&shy;gil&shy;istic&shy;ex&shy;pi&shy;ali&shy;go&shy;cious.';
 
         $this->assertEquals($expected, $letterpress->typofix($html));
     }

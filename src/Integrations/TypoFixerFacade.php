@@ -52,6 +52,7 @@ class TypoFixerFacade implements Facade
 
     /**
      * @param $locale
+     *
      * @return bool
      **/
     protected function validateLocale($locale)
