@@ -100,7 +100,7 @@ class Config
 
     /**
      * @param string $identifier
-     * @param mixed $value new config value for identifier
+     * @param mixed  $value      new config value for identifier
      *
      * @return mixed old config value for identifier
      */
@@ -123,7 +123,7 @@ class Config
     {
         $configPath = 'config';
 
-        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $configPath;
+        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.$configPath;
     }
 
     private function __clone()
