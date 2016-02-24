@@ -20,7 +20,7 @@ class Letterpress
      *
      * @param array $config
      */
-    public function __construct($config = [])
+    public function __construct(array $config = [])
     {
         // check for initialized config
         try {
@@ -35,7 +35,7 @@ class Letterpress
     /**
      * @param array $config
      **/
-    protected function setup($config = [])
+    protected function setup(array $config = [])
     {
         // apply additional config
         if (count($config) > 0) {

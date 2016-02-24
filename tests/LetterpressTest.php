@@ -5,6 +5,13 @@ use EFrane\Letterpress\Letterpress;
 
 class LetterpressTest extends PHPUnit_Framework_TestCase
 {
+    public function tearDown()
+    {
+        parent::tearDown();
+
+        Config::reset(true);
+    }
+
     /**
      * @expectedException EFrane\Letterpress\LetterpressException
      * @expectedExceptionMessage Config must be initialized before usage.
@@ -20,8 +27,6 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(Config::class, Config::instance());
         $this->assertInstanceOf(Letterpress::class, new Letterpress());
-
-        Config::reset(true);
     }
 
     public function testCreateWithConfigOverride()
@@ -36,5 +41,29 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('optionvalue', Config::get('configoption'));
         $this->assertEquals('de_DE', Config::get('letterpress.locale'));
+    }
+
+    public function testMarkdown()
+    {
+        Config::init();
+
+        $letterpress = new Letterpress();
+
+        $markdown = "# Hello World";
+        $html = "<h1>Hello World</h1>";
+
+        $this->assertEquals($html, $letterpress->markdown($markdown));
+    }
+
+    public function testMicrotypography()
+    {
+        Config::init();
+
+        $letterpress = new Letterpress();
+
+        $html = "This is an example text with a very long word at the end: supercalifragilisticexpialigocious.";
+        $expected = "This is an example text with a very long word at the end: super&shy;cal&shy;i&shy;fra&shy;gil&shy;istic&shy;ex&shy;pi&shy;ali&shy;go&shy;cious.";
+
+        $this->assertEquals($expected, $letterpress->typofix($html));
     }
 }

@@ -41,7 +41,9 @@ class Config
     public static function init(array $config = [])
     {
         if (count($config) == 0) {
-            $config = static::loadDefaultConfig();
+            $configPath = static::getDefaultConfigPath();
+
+            $config = static::loadDefaultConfig($configPath);
         }
 
         static::$instance = new self($config);
@@ -49,7 +51,7 @@ class Config
         return static::$instance;
     }
 
-    public static function loadDefaultConfig($configPath = 'config')
+    public static function loadDefaultConfig($configPath)
     {
         $data = [];
 
@@ -66,6 +68,13 @@ class Config
         self::checkInitialized();
 
         return self::$instance->repository->get($identifier, $default);
+    }
+
+    protected static function checkInitialized()
+    {
+        if (self::$instance === null) {
+            throw new LetterpressException('Config must be initialized before usage.');
+        }
     }
 
     public static function has($identifier = null, $value = null)
@@ -91,7 +100,7 @@ class Config
 
     /**
      * @param string $identifier
-     * @param mixed  $value      new config value for identifier
+     * @param mixed $value new config value for identifier
      *
      * @return mixed old config value for identifier
      */
@@ -105,16 +114,16 @@ class Config
         return $oldValue;
     }
 
-    protected static function checkInitialized()
-    {
-        if (self::$instance === null) {
-            throw new \RuntimeException('Config must be initialized before usage.');
-        }
-    }
-
     public static function instance()
     {
         return static::$instance;
+    }
+
+    public static function getDefaultConfigPath()
+    {
+        $configPath = 'config';
+
+        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $configPath;
     }
 
     private function __clone()

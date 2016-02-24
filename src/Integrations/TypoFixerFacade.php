@@ -16,31 +16,31 @@ class TypoFixerFacade implements Facade
     public function __construct()
     {
         // get locale
-    $locale = Config::get('letterpress.locale');
-        if (is_string($locale) && strlen($locale) > 0) {
+        $locale = Config::get('letterpress.locale');
+        if ($this->validateLocale($locale)) {
             $this->locale = $locale;
         } else {
             throw new LetterpressException('Typography fixing requires a locale.');
         }
 
-    // defaults
-    if (Config::get('letterpress.microtypography.useDefaults')) {
-        $this->fixers = Config::get('jolitypo.defaults');
+        // defaults
+        if (Config::get('letterpress.microtypography.useDefaults')) {
+            $this->fixers = Config::get('jolitypo.defaults');
 
-      // locale additions
-      $localeKey = sprintf('jolitypo.%s', $this->locale);
-        if (Config::has($localeKey)) {
-            $this->fixers = array_merge($this->fixers, Config::get($localeKey));
+            // locale additions
+            $localeKey = sprintf('jolitypo.%s', $this->locale);
+            if (Config::has($localeKey)) {
+                $this->fixers = array_merge($this->fixers, Config::get($localeKey));
+            }
         }
-    }
 
-    // hyphenation
-    if (Config::get('letterpress.microtypography.enableHyphenation')) {
-        $this->fixers[] = 'Hyphen';
-    }
+        // hyphenation
+        if (Config::get('letterpress.microtypography.enableHyphenation')) {
+            $this->fixers[] = 'Hyphen';
+        }
 
-    // user additions
-    $this->fixers = array_merge($this->fixers, Config::get('letterpress.microtypography.additionalFixers'));
+        // user additions
+        $this->fixers = array_merge($this->fixers, Config::get('letterpress.microtypography.additionalFixers'));
 
         if (count($this->fixers) === 0) {
             throw new LetterpressException('Typography fixing requires setting up fixers.');
@@ -48,6 +48,15 @@ class TypoFixerFacade implements Facade
 
         $this->fixer = new Fixer($this->fixers);
         $this->fixer->setLocale($this->locale);
+    }
+
+    /**
+     * @param $locale
+     * @return bool
+     **/
+    protected function validateLocale($locale)
+    {
+        return is_string($locale) && preg_match('/[a-z]{2}_[A-Z]{2}/', $locale);
     }
 
     public function __get($property)
