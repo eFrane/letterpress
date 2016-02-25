@@ -113,13 +113,13 @@ class TypoFixerFacadeTest extends PHPUnit_Framework_TestCase
         return [
             [
                 'This will not change.',
-                'This will not change.'
+                'This will not change.',
             ],
 
             [
                 'Environmental crisis.',
-                'Envir&shy;on&shy;mental crisis.'
-            ]
+                'Envir&shy;on&shy;mental crisis.',
+            ],
         ];
     }
 }

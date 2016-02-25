@@ -69,7 +69,9 @@ class TypoFixerFacade implements Facade
             $property = substr($property, 7);
 
             return $this->{$property};
-        } else throw new \InvalidArgumentException(Fixer::class . '->' . $property . ' can not be accessed.');
+        } else {
+            throw new \InvalidArgumentException(Fixer::class.'->'.$property.' can not be accessed.');
+        }
     }
 
     public function __set($property, $value)
@@ -77,7 +79,9 @@ class TypoFixerFacade implements Facade
         if (strpos($property, 'facade_') === 0) {
             $property = substr($property, 7);
             $this->{$property} = $value;
-        } else throw new \InvalidArgumentException(Fixer::class . '->' . $property . ' can not be modified.');
+        } else {
+            throw new \InvalidArgumentException(Fixer::class.'->'.$property.' can not be modified.');
+        }
     }
 
     public function __call($method, $args)
