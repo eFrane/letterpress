@@ -79,6 +79,26 @@ class TypoFixerFacadeTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessageRegExp /.+ can not be accessed/
+     */
+    public function testGetFixerProperty()
+    {
+        $fixer = new TypoFixerFacade();
+        $fixer->property;
+    }
+
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessageRegExp /.+ can not be modified/
+     */
+    public function testSetFixerProperty()
+    {
+        $fixer = new TypoFixerFacade();
+        $fixer->property = 'value';
+    }
+
+    /**
      * @dataProvider fixProvider
      */
     public function testFix($actual, $expected)
