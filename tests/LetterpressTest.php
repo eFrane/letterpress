@@ -66,4 +66,16 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals($expected, $letterpress->typofix($html));
     }
+
+//    public function testMarkup()
+//    {
+//        Config::init();
+//
+//        $letterpress = new Letterpress(['markup.maxHeadlineLevel' => 3]);
+//
+//        $html = "<h1>This will be an h3 tag</h1>";
+//        $expected = "<h3>This will be an h3 tag</h3>";
+//
+//        $this->assertEquals($expected, $letterpress->markup($html));
+//    }
 }

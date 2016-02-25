@@ -55,9 +55,9 @@ class TypoFixerFacade implements Facade
      *
      * @return bool
      **/
-    protected function validateLocale($locale)
+    public function validateLocale($locale)
     {
-        return is_string($locale) && preg_match('/[a-z]{2}_[A-Z]{2}/', $locale);
+        return is_string($locale) && preg_match('/[a-z]{2,}_[A-Z]{2,}/', $locale);
     }
 
     public function __get($property)
