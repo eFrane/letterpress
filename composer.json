@@ -19,7 +19,7 @@
         "symfony/finder"     : "2.7.*",
         "masterminds/html5"  : "^2.1",
         "jolicode/JoliTypo"  : "0.1.*",
-        "erusev/parsedown"   : "1.1.*",
+        "erusev/parsedown"   : "1.6.*",
         "embed/embed"        : "1.8.*"
     },
 

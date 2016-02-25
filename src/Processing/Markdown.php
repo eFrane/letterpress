@@ -23,7 +23,7 @@ class Markdown
                 static::$parsedown = ParsedownFactory::create();
             }
 
-            $output = static::$parsedown->parse($output);
+            $output = static::$parsedown->text($output);
             $output = $escaper->replace($output);
         }
 
