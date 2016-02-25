@@ -57,7 +57,7 @@ class ParsedownFactoryTest extends PHPUnit_Framework_TestCase
             [true, 'No breaks.', '<p>No breaks.</p>'],
             [false, 'No breaks.', '<p>No breaks.</p>'],
             [true, "One break  \nNew line", "<p>One break<br />\nNew line</p>"],
-            [false, "Should not break after  ", "<p>Should not break after  </p>"],
+            [false, 'Should not break after  ', '<p>Should not break after  </p>'],
         ];
     }
 }
