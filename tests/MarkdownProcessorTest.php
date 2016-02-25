@@ -60,7 +60,7 @@ class MarkdownProcessorTest extends \PHPUnit_Framework_TestCase
         return [
             ['[tag]Content[/tag]', '<p>[tag]Content[/tag]</p>'],
             ['[tag with="attribute"]Content[/tag]', '<p>[tag with="attribute"]Content[/tag]</p>'],
-            ['`processed` [tag]*ignored*[/tag]', '<p><code>processed</code> [tag]*ignored*[/tag]</p>']
+            ['`processed` [tag]*ignored*[/tag]', '<p><code>processed</code> [tag]*ignored*[/tag]</p>'],
         ];
     }
 }
