@@ -17,12 +17,25 @@ use Masterminds\HTML5;
 class MarkupProcessor
 {
     protected $embedRepository = null;
+
+    /**
+     * @var EmbedFactory
+     */
     protected $embedFactory = null;
 
+    /**
+     * @var \Masterminds\HTML5
+     */
+    protected $html5 = null;
+
+    /**
+     * @var BaseModifier[]
+     */
     protected $modifiers = [];
 
     public function __construct()
     {
+        $this->html5 = new HTML5();
         $this->prepareModifiers();
         $this->prepareEmbedRepository();
     }
@@ -89,23 +102,39 @@ class MarkupProcessor
 
     public function process($content)
     {
-        $html5 = new HTML5();
+        $fragment = $this->html5->loadHTMLFragment($content);
 
-        $fragment = $html5->loadHTMLFragment($content);
+        $fragment = $this->processEmbeds($fragment);
+        $fragment = $this->processModifiers($fragment);
 
+        return $this->html5->saveHTML($fragment);
+    }
+
+    /**
+     * @param $fragment
+     * @return mixed
+     **/
+    protected function processModifiers($fragment)
+    {
+        foreach ($this->modifiers as $modifier) {
+            $modifier->modify($fragment);
+        }
+
+        return $fragment;
+    }
+
+    /**
+     * @param $fragment
+     * @return mixed
+     **/
+    protected function processEmbeds($fragment)
+    {
         if (!is_null($this->embedFactory)) {
             $fragment = $this->embedFactory->run($fragment, $this->embedRepository);
+
+            return $fragment;
         }
 
-        foreach ($this->modifiers as $modifier) {
-            $modifiedFragment = $modifier->modify($fragment);
-            if (!is_null($modifiedFragment)) {
-                $fragment = $modifiedFragment;
-            } else {
-                throw new LetterpressException('Failed to apply modifier '.get_class($modifier));
-            }
-        }
-
-        return $html5->saveHTML($fragment);
+        return $fragment;
     }
 }

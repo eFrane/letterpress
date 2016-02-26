@@ -18,12 +18,14 @@ abstract class RecursiveModifier extends BaseModifier
     protected function walk(DOMNode $node)
     {
         foreach ($node->childNodes as $current) {
+            /* @var $current DOMNode */
+
             if ($this->candidateCheck($current)) {
                 $node = $this->candidateModify($node, $current);
             }
 
             if ($current->hasChildNodes()) {
-                $current = $this->walk($current);
+                $this->walk($current);
             }
         }
 

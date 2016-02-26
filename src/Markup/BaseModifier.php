@@ -6,6 +6,8 @@ use DOMDocumentFragment;
 
 abstract class BaseModifier implements Modifier
 {
+    use DOMManipulation;
+
     /**
      * @var \DOMDocument
      */

@@ -11,7 +11,7 @@ use DOMNode;
  * In Markdown, blockquotes are usually written like:
  *
  * ```markdown
- * > Feelings! I have no time for them, no chance of them. 
+ * > Feelings! I have no time for them, no chance for them.
  * > I pass my whole life, miss, in turning an immense pecuniary Mangle.
  * - Charles Dickens "A Tale of Two Cities"
  * ```
@@ -23,7 +23,7 @@ use DOMNode;
  *
  * - a link containing the author's name as text and the source as link destination
  * - author and source separated by quotes as in the example above
- * - author and source separated by a colon instead of quotes 
+ * - author and source separated by a colon instead of quotes
  *   (e.g. Sherlock Holmes: A Study in Scarlet)
  *
  * By default, a Markdown parser would translate the above to:
@@ -37,7 +37,7 @@ use DOMNode;
  *   </ul>
  * </blockquote>
  * ```
- * 
+ *
  * which apparently is not exactly semantically correct.
  *
  * The above mentioned ALA article describes a semantically better fitting
@@ -63,48 +63,83 @@ use DOMNode;
  **/
 class BlockQuoteModifier extends RecursiveModifier // implements Modifier
 {
+    const CITATION_MISSING = 0;
+    const CITATION_INSIDE = 1;
+    const CITATION_AFTER = 2;
+
+    protected $citationMode = BlockQuoteModifier::CITATION_MISSING;
+
     protected function candidateCheck(DOMNode $candidate)
     {
-        $isBlockquoteWithChildNodes = strcmp($candidate->nodeName, 'blockquote') == 0
-                               && $candidate->hasChildNodes();
-
-        if ($isBlockquoteWithChildNodes) {
-            foreach ($candidate->childNodes as $child) {
-                if (strcmp($child->nodeName, 'ul') == 0) {
-                    return true;
-                }
-            }
+        if (strcmp($candidate->nodeName, 'blockquote') !== 0) {
+            return false;
         }
 
-        return false;
+        $this->citationMode = BlockQuoteModifier::CITATION_MISSING;
+
+        if ($this->hasChildNodeWithTagName($candidate, 'ul')) {
+            $this->citationMode = BlockQuoteModifier::CITATION_INSIDE;
+        }
+
+        // This will discard text nodes between quote and citation as that could be
+        // a future (different) supported citation style
+        if ($this->hasFollowingSiblingWithTagName($candidate, 'ul', false)) {
+            $this->citationMode = BlockQuoteModifier::CITATION_AFTER;
+        }
+
+        // TODO: handle different citation syntaxes, i.e. not only `blockquote + ul` or `blockquote > ul`
+
+        return true;
     }
 
     protected function candidateModify(DOMNode $parent, DOMNode $candidate)
     {
         $figure = $this->doc->createElement('figure');
 
+        switch ($this->citationMode) {
+            case BlockQuoteModifier::CITATION_INSIDE:
+                $this->modifyWithCitationInside($candidate, $figure);
+                break;
+
+            case BlockQuoteModifier::CITATION_MISSING:
+                $this->modifyWithCitationMissing($candidate, $figure);
+                break;
+
+            case BlockQuoteModifier::CITATION_AFTER:
+                $this->modifyWithCitationAfter($candidate, $figure);
+                break;
+        }
+
+        $parent->insertBefore($figure, $candidate);
+        $parent->removeChild($candidate);
+
+        return $parent;
+    }
+
+    /**
+     * @param \DOMNode $candidate
+     * @param $figure
+     **/
+    protected function modifyWithCitationInside(DOMNode $candidate, DOMNode $figure)
+    {
+        $quote = $this->doc->createElement('blockquote');
+
         $captionContent = null;
+
         foreach ($candidate->childNodes as $contentNodeCandidate) {
+            /* @var $contentNodeCandidate DOMNode */
+
             if (strcmp($contentNodeCandidate->nodeName, 'ul') !== 0) {
-                $figure->appendChild($contentNodeCandidate->cloneNode(true));
+                $quote->appendChild($contentNodeCandidate->cloneNode(true));
             } else {
                 $captionCandidate = $contentNodeCandidate->cloneNode(true);
                 $captionContent = $this->extractCaptionContent($captionCandidate);
             }
         }
 
-        if (!is_null($captionContent)) {
-            $figcaption = $this->doc->createElement('figcaption');
-            $figcaption->appendChild($captionContent);
+        $figure->appendChild($quote);
 
-            $figure->appendChild($figcaption);
-        }
-
-        $parent->insertBefore($figure, $candidate);
-
-        $parent->removeChild($candidate);
-
-        return $parent;
+        $this->insertFigCaption($figure, $captionContent);
     }
 
     protected function extractCaptionContent(DOMNode $captionCandidate)
@@ -124,6 +159,57 @@ class BlockQuoteModifier extends RecursiveModifier // implements Modifier
             }
         }
 
+        $captionCandidateParent = $captionCandidate->parentNode;
+        if (!is_null($captionCandidateParent)) {
+            $captionCandidateParent->removeChild($captionCandidate);
+        }
+
         return $captionContent;
+    }
+
+    /**
+     * @param \DOMNode $figure
+     * @param $captionContent
+     **/
+    protected function insertFigCaption(DOMNode $figure, $captionContent)
+    {
+        if (!is_null($captionContent)) {
+            $figcaption = $this->doc->createElement('figcaption');
+            $figcaption->appendChild($captionContent);
+
+            $figure->appendChild($figcaption);
+        }
+    }
+
+    protected function modifyWithCitationMissing(DOMNode $candidate, DOMNode $figure)
+    {
+        $quote = $this->doc->createElement('blockquote');
+
+        $this->extractFullBlockquote($candidate, $quote);
+
+        $figure->appendChild($quote);
+    }
+
+    /**
+     * @param \DOMNode $candidate
+     * @param $quote
+     **/
+    protected function extractFullBlockquote(DOMNode $candidate, $quote)
+    {
+        foreach ($candidate->childNodes as $child) {
+            /* @var $child DOMNode */
+            $quote->appendChild($child->cloneNode(true));
+        }
+    }
+
+    protected function modifyWithCitationAfter(DOMNode $candidate, DOMNode $figure)
+    {
+        $quote = $this->doc->createElement('blockquote');
+
+        $this->extractFullBlockquote($candidate, $quote);
+        $figure->appendChild($quote);
+
+        $captionContent = $this->extractCaptionContent($candidate->nextSibling);
+        $this->insertFigCaption($figure, $captionContent);
     }
 }
