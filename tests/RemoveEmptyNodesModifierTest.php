@@ -19,7 +19,7 @@ class RemoveEmptyNodesModifierTest extends PHPUnit_Framework_TestCase
         Config::set('letterpress.media.enabled', false);
 
         $this->processor = new MarkupProcessor();
-        $this->processor->setModifiers([new RemoveEmptyNodesModifier]);
+        $this->processor->setModifiers([new RemoveEmptyNodesModifier()]);
     }
 
     public function tearDown()
@@ -40,10 +40,10 @@ class RemoveEmptyNodesModifierTest extends PHPUnit_Framework_TestCase
 
     public function emptyNodesData()
     {
-        $bunchOfCode = "<span>Lorem ipsum</span><a href=\"#\">I lead nowhere.</a>";
+        $bunchOfCode = '<span>Lorem ipsum</span><a href="#">I lead nowhere.</a>';
 
         $voidElements = collect(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
-            'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr'])
+            'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr', ])
             ->map(function ($tagName) use ($bunchOfCode) {
                 $selfClosed = "<{$tagName} />";
                 $open = "<{$tagName}>";
@@ -55,8 +55,8 @@ class RemoveEmptyNodesModifierTest extends PHPUnit_Framework_TestCase
                     [$open, $open],
                     [$withAttributeClosed, $withAttributeOpen],
                     [$withAttributeOpen, $withAttributeOpen],
-                    [$open . $bunchOfCode, $open . $bunchOfCode],
-                    [$bunchOfCode . $open, $bunchOfCode . $open],
+                    [$open.$bunchOfCode, $open.$bunchOfCode],
+                    [$bunchOfCode.$open, $bunchOfCode.$open],
                 ];
             })->flatMap(function ($tagList) {
                 return $tagList;
@@ -68,10 +68,10 @@ class RemoveEmptyNodesModifierTest extends PHPUnit_Framework_TestCase
                 $close = "</{$tagName}>";
 
                 return [
-                    [$open . $close, ''],
-                    [$open . $bunchOfCode . $close, $open . $bunchOfCode . $close],
-                    [$open . " " . $close, ''],
-                    [$open . "\n\n" . $close, ''],
+                    [$open.$close, ''],
+                    [$open.$bunchOfCode.$close, $open.$bunchOfCode.$close],
+                    [$open.' '.$close, ''],
+                    [$open."\n\n".$close, ''],
                 ];
             })->flatMap(function ($tagList) {
                 return $tagList;

@@ -44,7 +44,7 @@ class MarkupProcessor
             $this->modifiers[] = new LanguageCodeModifier();
         }
 
-        $this->modifiers[] = new RemoveEmptyNodesModifier;
+        $this->modifiers[] = new RemoveEmptyNodesModifier();
     }
 
     protected function prepareEmbedRepository()
@@ -102,7 +102,7 @@ class MarkupProcessor
             if (!is_null($modifiedFragment)) {
                 $fragment = $modifiedFragment;
             } else {
-                throw new LetterpressException('Failed to apply modifier ' . get_class($modifier));
+                throw new LetterpressException('Failed to apply modifier '.get_class($modifier));
             }
         }
 

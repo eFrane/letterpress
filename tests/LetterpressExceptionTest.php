@@ -11,6 +11,6 @@ class LetterpressExceptionTest extends PHPUnit_Framework_TestCase
      */
     public function testExceptionIsThrowable()
     {
-        throw new LetterpressException;
+        throw new LetterpressException();
     }
 }
