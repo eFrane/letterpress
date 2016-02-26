@@ -47,16 +47,6 @@ class MarkupProcessor
         $this->modifiers[] = new RemoveEmptyNodesModifier;
     }
 
-    public function setModifiers(array $modifiers = [])
-    {
-        $this->modifiers = $modifiers;
-    }
-
-    public function resetModifiers()
-    {
-        $this->setModifiers();
-    }
-
     protected function prepareEmbedRepository()
     {
         if (Config::get('letterpress.media.enabled')) {
@@ -77,6 +67,16 @@ class MarkupProcessor
             $this->embedRepository = new EmbedRepository();
             $this->embedFactory = new EmbedFactory($embedClasses);
         }
+    }
+
+    public function resetModifiers()
+    {
+        $this->setModifiers();
+    }
+
+    public function setModifiers(array $modifiers = [])
+    {
+        $this->modifiers = $modifiers;
     }
 
     /**
@@ -102,7 +102,7 @@ class MarkupProcessor
             if (!is_null($modifiedFragment)) {
                 $fragment = $modifiedFragment;
             } else {
-                throw new LetterpressException('Failed to apply modifier '.get_class($modifier));
+                throw new LetterpressException('Failed to apply modifier ' . get_class($modifier));
             }
         }
 
