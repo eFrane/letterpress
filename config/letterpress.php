@@ -20,8 +20,8 @@ return [
     // enable markdown linebreaks (<br />) with 2 spaces at line end
     'enableLineBreaks' => true,
 
-    // parse inside markup blocks?
-    'enableParserInMarkup' => true,
+    // escape markup inside markdown?
+    'escapeMarkup' => false,
 
     // use "markdown extra" syntax instead of parsedown's defaults
     // this only works if parsedown-extra was installed

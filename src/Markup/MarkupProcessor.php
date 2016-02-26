@@ -27,7 +27,7 @@ class MarkupProcessor
         $this->prepareEmbedRepository();
     }
 
-    protected function prepareModifiers()
+    public function prepareModifiers()
     {
         $this->modifiers = [];
 
@@ -44,8 +44,17 @@ class MarkupProcessor
             $this->modifiers[] = new LanguageCodeModifier();
         }
 
-        // FIXME: The empty nodes remover removes whitelisted nodes
-        // $this->modifiers[] = new RemoveEmptyNodesModifier;
+        $this->modifiers[] = new RemoveEmptyNodesModifier;
+    }
+
+    public function setModifiers(array $modifiers = [])
+    {
+        $this->modifiers = $modifiers;
+    }
+
+    public function resetModifiers()
+    {
+        $this->setModifiers();
     }
 
     protected function prepareEmbedRepository()

@@ -25,7 +25,7 @@ class ParsedownFactory implements Factory
         $instance = new $class();
 
         $instance->setBreaksEnabled(Config::get('letterpress.markdown.enableLineBreaks'));
-        $instance->setMarkupEscaped(!Config::get('letterpress.markdown.enableParserInMarkup'));
+        $instance->setMarkupEscaped(!Config::get('letterpress.markdown.escapeMarkup'));
 
         return $instance;
     }
