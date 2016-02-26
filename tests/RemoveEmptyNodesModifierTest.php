@@ -1,35 +1,9 @@
 <?php
 
-use EFrane\Letterpress\Config;
-use EFrane\Letterpress\Markup\MarkupProcessor;
 use EFrane\Letterpress\Markup\RemoveEmptyNodesModifier;
 
-class RemoveEmptyNodesModifierTest extends PHPUnit_Framework_TestCase
+class RemoveEmptyNodesModifierTest extends MarkupModifierTest
 {
-    /**
-     * @var MarkupProcessor
-     */
-    protected $processor = null;
-
-    public function setUp()
-    {
-        parent::setUp();
-
-        Config::init();
-        Config::set('letterpress.media.enabled', false);
-
-        $this->processor = new MarkupProcessor();
-        $this->processor->setModifiers([new RemoveEmptyNodesModifier()]);
-    }
-
-    public function tearDown()
-    {
-        parent::tearDown();
-
-        Config::reset(true);
-        $this->processor = null;
-    }
-
     /**
      * @dataProvider emptyNodesData
      */
@@ -43,7 +17,7 @@ class RemoveEmptyNodesModifierTest extends PHPUnit_Framework_TestCase
         $bunchOfCode = '<span>Lorem ipsum</span><a href="#">I lead nowhere.</a>';
 
         $voidElements = collect(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
-            'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr', ])
+            'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr',])
             ->map(function ($tagName) use ($bunchOfCode) {
                 $selfClosed = "<{$tagName} />";
                 $open = "<{$tagName}>";
@@ -55,8 +29,8 @@ class RemoveEmptyNodesModifierTest extends PHPUnit_Framework_TestCase
                     [$open, $open],
                     [$withAttributeClosed, $withAttributeOpen],
                     [$withAttributeOpen, $withAttributeOpen],
-                    [$open.$bunchOfCode, $open.$bunchOfCode],
-                    [$bunchOfCode.$open, $bunchOfCode.$open],
+                    [$open . $bunchOfCode, $open . $bunchOfCode],
+                    [$bunchOfCode . $open, $bunchOfCode . $open],
                 ];
             })->flatMap(function ($tagList) {
                 return $tagList;
@@ -68,15 +42,20 @@ class RemoveEmptyNodesModifierTest extends PHPUnit_Framework_TestCase
                 $close = "</{$tagName}>";
 
                 return [
-                    [$open.$close, ''],
-                    [$open.$bunchOfCode.$close, $open.$bunchOfCode.$close],
-                    [$open.' '.$close, ''],
-                    [$open."\n\n".$close, ''],
+                    [$open . $close, ''],
+                    [$open . $bunchOfCode . $close, $open . $bunchOfCode . $close],
+                    [$open . ' ' . $close, ''],
+                    [$open . "\n\n" . $close, ''],
                 ];
             })->flatMap(function ($tagList) {
                 return $tagList;
             });
 
         return collect($voidElements)->merge($textElements);
+    }
+
+    protected function setUnitUnderTest()
+    {
+        $this->processor->setModifiers([new RemoveEmptyNodesModifier()]);
     }
 }
