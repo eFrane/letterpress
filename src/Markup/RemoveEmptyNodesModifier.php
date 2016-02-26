@@ -48,12 +48,16 @@ class RemoveEmptyNodesModifier extends RecursiveModifier
             return false;
         }
 
-        if (in_array($candidate->nodeName, $this->allowedEmptyTagNames)) return false;
+        if (in_array($candidate->nodeName, $this->allowedEmptyTagNames)) {
+            return false;
+        }
 
         if (!$candidate->hasChildNodes()) {
             return true;
         } else {
-            if (preg_match('/^\s*$/', $candidate->textContent)) return true;
+            if (preg_match('/^\s*$/', $candidate->textContent)) {
+                return true;
+            }
         }
 
         return false;
