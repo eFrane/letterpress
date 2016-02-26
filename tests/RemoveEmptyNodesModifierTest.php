@@ -2,7 +2,7 @@
 
 use EFrane\Letterpress\Markup\RemoveEmptyNodesModifier;
 
-class RemoveEmptyNodesModifierTest extends MarkupModifierTest
+class RemoveEmptyNodesModifierTest extends \MarkupModifierTest
 {
     /**
      * @dataProvider emptyNodesData

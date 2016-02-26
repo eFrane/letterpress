@@ -11,16 +11,14 @@ class HeadlineLevelModifier extends RecursiveModifier // implements Modifier
     protected $relevantHeadlineTags = [];
     protected $replaceTagName = '';
 
-    protected $doc = null;
-
     public function __construct($maxLevel)
     {
-        $this->maxLevel = ($maxLevel < 1) ? 1 : $this->maxLevel;
+        $this->maxLevel = ($maxLevel < 1) ? 1 : intval($maxLevel);
 
         $levels = range(1, $this->maxLevel);
         $this->relevantHeadlineTags = array_map(function ($el) {
-      return sprintf('h%d', $el);
-    }, $levels);
+            return sprintf('h%d', $el);
+        }, $levels);
 
         $this->replaceTagName = sprintf('h%d', $maxLevel);
     }

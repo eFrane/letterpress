@@ -6,6 +6,9 @@ use DOMDocumentFragment;
 
 abstract class BaseModifier implements Modifier
 {
+    /**
+     * @var \DOMDocument
+     */
     protected $doc = null;
 
     public function modify(DOMDocumentFragment $fragment)
