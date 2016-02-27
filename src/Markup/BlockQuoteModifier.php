@@ -67,7 +67,7 @@ class BlockQuoteModifier extends RecursiveModifier // implements Modifier
     const CITATION_INSIDE = 1;
     const CITATION_AFTER = 2;
 
-    protected $citationMode = BlockQuoteModifier::CITATION_MISSING;
+    protected $citationMode = self::CITATION_MISSING;
 
     protected function candidateCheck(DOMNode $candidate)
     {
@@ -75,16 +75,16 @@ class BlockQuoteModifier extends RecursiveModifier // implements Modifier
             return false;
         }
 
-        $this->citationMode = BlockQuoteModifier::CITATION_MISSING;
+        $this->citationMode = self::CITATION_MISSING;
 
         if ($this->hasChildNodeWithTagName($candidate, 'ul')) {
-            $this->citationMode = BlockQuoteModifier::CITATION_INSIDE;
+            $this->citationMode = self::CITATION_INSIDE;
         }
 
         // This will discard text nodes between quote and citation as that could be
         // a future (different) supported citation style
         if ($this->hasFollowingSiblingWithTagName($candidate, 'ul', false)) {
-            $this->citationMode = BlockQuoteModifier::CITATION_AFTER;
+            $this->citationMode = self::CITATION_AFTER;
         }
 
         // TODO: handle different citation syntaxes, i.e. not only `blockquote + ul` or `blockquote > ul`
@@ -97,15 +97,15 @@ class BlockQuoteModifier extends RecursiveModifier // implements Modifier
         $figure = $this->doc->createElement('figure');
 
         switch ($this->citationMode) {
-            case BlockQuoteModifier::CITATION_INSIDE:
+            case self::CITATION_INSIDE:
                 $this->modifyWithCitationInside($candidate, $figure);
                 break;
 
-            case BlockQuoteModifier::CITATION_MISSING:
+            case self::CITATION_MISSING:
                 $this->modifyWithCitationMissing($candidate, $figure);
                 break;
 
-            case BlockQuoteModifier::CITATION_AFTER:
+            case self::CITATION_AFTER:
                 $this->modifyWithCitationAfter($candidate, $figure);
                 break;
         }

@@ -5,7 +5,6 @@ namespace EFrane\Letterpress\Markup;
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\Embed\EmbedFactory;
 use EFrane\Letterpress\Embed\EmbedRepository;
-use EFrane\Letterpress\LetterpressException;
 use Masterminds\HTML5;
 
 /**
@@ -102,7 +101,9 @@ class MarkupProcessor
 
     public function process($content)
     {
-        if (strlen($content) == 0) return '';
+        if (strlen($content) == 0) {
+            return '';
+        }
 
         $fragment = $this->html5->loadHTMLFragment($content);
 
@@ -114,6 +115,7 @@ class MarkupProcessor
 
     /**
      * @param $fragment
+     *
      * @return mixed
      **/
     protected function processModifiers($fragment)
@@ -127,6 +129,7 @@ class MarkupProcessor
 
     /**
      * @param $fragment
+     *
      * @return mixed
      **/
     protected function processEmbeds($fragment)
