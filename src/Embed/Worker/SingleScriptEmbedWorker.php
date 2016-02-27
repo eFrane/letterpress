@@ -29,6 +29,6 @@ abstract class SingleScriptEmbedWorker extends BaseEmbedWorker
     protected function removeScriptTag(DOMDocumentFragment $code)
     {
         // TODO: implement removal of additional script tags
-    return $code;
+        return $code;
     }
 }

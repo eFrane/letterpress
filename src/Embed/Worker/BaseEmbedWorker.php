@@ -22,19 +22,44 @@ abstract class BaseEmbedWorker implements EmbedWorker
         return $this->importCode($this->doc, $adapter->getCode());
     }
 
-    protected function prepareURLRegex()
-    {
-        return sprintf('(?P<url>%s)', $this->urlRegex);
-    }
-
     public function getURLRegex()
     {
         return sprintf('/%s/i', $this->prepareURLRegex());
     }
 
+    protected function prepareURLRegex()
+    {
+        return sprintf('(?P<url>%s)', $this->urlRegex);
+    }
+
     public function getBBCodeRegex()
     {
         return $this->getCodeRegex('[', ']');
+    }
+
+    /**
+     * @return string
+     **/
+    protected function getCodeRegex($openingDelimiter = '<', $closingDelimiter = '>')
+    {
+        $tagName = $this->getTagName();
+        $urlRegex = $this->prepareURLRegex();
+
+        $openingDelimiter = preg_quote($openingDelimiter, '/');
+        $closingDelimiter = preg_quote($closingDelimiter, '/');
+
+        return $openingDelimiter . $tagName . $closingDelimiter . $urlRegex . $openingDelimiter . '/' . $tagName . $closingDelimiter;
+    }
+
+    /**
+     * @return string
+     **/
+    protected function getTagName()
+    {
+        $tagName = explode('\\', get_called_class());
+        $tagName = strtolower($tagName[count($tagName) - 1]);
+
+        return $tagName;
     }
 
     public function getXMLCodeRegex()
@@ -51,29 +76,4 @@ abstract class BaseEmbedWorker implements EmbedWorker
     {
         $this->doc = $document;
     }
-
-  /**
-   * @return string
-   **/
-  protected function getTagName()
-  {
-      $tagName = explode('\\', get_called_class());
-      $tagName = strtolower($tagName[count($tagName) - 1]);
-
-      return $tagName;
-  }
-
-  /**
-   * @return string
-   **/
-  protected function getCodeRegex($openingDelimiter = '<', $closingDelimiter = '>')
-  {
-      $tagName = $this->getTagName();
-      $urlRegex = $this->prepareURLRegex();
-
-      $openingDelimiter = preg_quote($openingDelimiter, '/');
-      $closingDelimiter = preg_quote($closingDelimiter, '/');
-
-      return $openingDelimiter.$tagName.$closingDelimiter.$urlRegex.$openingDelimiter.'/'.$tagName.$closingDelimiter;
-  }
 }

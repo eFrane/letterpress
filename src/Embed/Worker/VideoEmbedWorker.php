@@ -17,11 +17,19 @@ class VideoEmbedWorker extends BaseEmbedWorker
 
         $code = null;
         switch (Config::get('letterpress.media.videoEmbedMode')) {
-      case 'frame': $code = $this->embedFrame(); break;
-      case 'link':  $code = $this->embedLink(); break;
-      case 'text':  $code = $this->embedText(); break;
-      case 'image': $code = $this->embedImage(); break;
-    }
+            case 'frame':
+                $code = $this->embedFrame();
+                break;
+            case 'link':
+                $code = $this->embedLink();
+                break;
+            case 'text':
+                $code = $this->embedText();
+                break;
+            case 'image':
+                $code = $this->embedImage();
+                break;
+        }
 
         return new DurationHavingEmbed($adapter->getUrl(), $code, 0);
     }
@@ -34,16 +42,16 @@ class VideoEmbedWorker extends BaseEmbedWorker
             return $frame;
         }
 
-    // http://stackoverflow.com/questions/11122249/scale-iframe-css-width-100-like-an-image
-    $fragment = $this->importCode($this->doc, '<div class="iframe img-responsive"/>');
+        // http://stackoverflow.com/questions/11122249/scale-iframe-css-width-100-like-an-image
+        $fragment = $this->importCode($this->doc, '<div class="iframe img-responsive"/>');
         $rootNode = $fragment->firstChild;
 
         $img = $this->createTag($this->doc, 'img', null, [
-      'class'  => 'ratio',
-      'src'    => '//placehold.it/16x9&text=+',
-      'width'  => 16,
-      'height' => 9,
-    ]);
+            'class'  => 'ratio',
+            'src'    => '//placehold.it/16x9&text=+',
+            'width'  => 16,
+            'height' => 9,
+        ]);
 
         $rootNode = $rootNode->appendChild($img);
 
@@ -84,20 +92,20 @@ class VideoEmbedWorker extends BaseEmbedWorker
         return $fragment;
     }
 
-  // TODO: this seems to be not working for unexplainable reasons
-  protected function embedImage()
-  {
-      $imageFragment = $this->importCode($this->doc, '<img />');
-      $rootNode = $imageFragment->firstChild;
+    // TODO: this seems to be not working for unexplainable reasons
+    protected function embedImage()
+    {
+        $imageFragment = $this->importCode($this->doc, '<img />');
+        $rootNode = $imageFragment->firstChild;
 
-      $this->setAttributes($rootNode, [
-      'src'    => $this->adapter->image,
-      'width'  => $this->adapter->imageWidth,
-      'height' => $this->adapter->imageHeight,
-    ]);
+        $this->setAttributes($rootNode, [
+            'src'    => $this->adapter->image,
+            'width'  => $this->adapter->imageWidth,
+            'height' => $this->adapter->imageHeight,
+        ]);
 
-      ldd(HTML5::saveHTML($imageFragment));
+        ldd(HTML5::saveHTML($imageFragment));
 
-      return $this->concatenateFragments($this->doc, [$imageFragment, $this->embedText()]);
-  }
+        return $this->concatenateFragments($this->doc, [$imageFragment, $this->embedText()]);
+    }
 }
