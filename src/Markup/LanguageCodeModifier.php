@@ -36,12 +36,10 @@ class LanguageCodeModifier extends RecursiveModifier
 
         $languageCode = strtolower(substr($languageCode, 0, 2));
 
-        if (in_array($candidate->nodeName, $this->textContentElements))
-        {
+        if (in_array($candidate->nodeName, $this->textContentElements)) {
             /* @var $candidate \DOMElement*/
             $candidate->setAttribute('lang', $languageCode);
-        } else
-        {
+        } else {
             $block = $this->doc->createElement('div');
             $block->setAttribute('lang', $languageCode);
 

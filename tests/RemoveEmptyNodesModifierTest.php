@@ -17,7 +17,7 @@ class RemoveEmptyNodesModifierTest extends \MarkupModifierTest
         $bunchOfCode = '<span>Lorem ipsum</span><a href="#">I lead nowhere.</a>';
 
         $voidElements = collect(['area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input',
-            'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr',])
+            'keygen', 'link', 'meta', 'param', 'source', 'track', 'wbr', ])
             ->map(function ($tagName) use ($bunchOfCode) {
                 $selfClosed = "<{$tagName} />";
                 $open = "<{$tagName}>";
@@ -29,8 +29,8 @@ class RemoveEmptyNodesModifierTest extends \MarkupModifierTest
                     [$open, $open],
                     [$withAttributeClosed, $withAttributeOpen],
                     [$withAttributeOpen, $withAttributeOpen],
-                    [$open . $bunchOfCode, $open . $bunchOfCode],
-                    [$bunchOfCode . $open, $bunchOfCode . $open],
+                    [$open.$bunchOfCode, $open.$bunchOfCode],
+                    [$bunchOfCode.$open, $bunchOfCode.$open],
                 ];
             })->flatMap(function ($tagList) {
                 return $tagList;
@@ -42,10 +42,10 @@ class RemoveEmptyNodesModifierTest extends \MarkupModifierTest
                 $close = "</{$tagName}>";
 
                 return [
-                    [$open . $close, ''],
-                    [$open . $bunchOfCode . $close, $open . $bunchOfCode . $close],
-                    [$open . ' ' . $close, ''],
-                    [$open . "\n\n" . $close, ''],
+                    [$open.$close, ''],
+                    [$open.$bunchOfCode.$close, $open.$bunchOfCode.$close],
+                    [$open.' '.$close, ''],
+                    [$open."\n\n".$close, ''],
                 ];
             })->flatMap(function ($tagList) {
                 return $tagList;

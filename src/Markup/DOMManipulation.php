@@ -64,7 +64,9 @@ trait DOMManipulation
 
     protected function hasChildNodeWithTagName(DOMNode $node, $tagName)
     {
-        if (!$node->hasChildNodes()) return false;
+        if (!$node->hasChildNodes()) {
+            return false;
+        }
 
         foreach ($node->childNodes as $child) {
             if (strcmp($child->nodeName, $tagName) == 0) {
