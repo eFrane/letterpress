@@ -2,6 +2,8 @@
 
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\Letterpress;
+use EFrane\Letterpress\Processing\Markdown;
+use Masterminds\HTML5\Serializer\HTML5Entities;
 
 class LetterpressTest extends PHPUnit_Framework_TestCase
 {
@@ -67,15 +69,64 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $letterpress->typofix($html));
     }
 
-//    public function testMarkup()
-//    {
-//        Config::init();
-//
-//        $letterpress = new Letterpress(['markup.maxHeadlineLevel' => 3]);
-//
-//        $html = "<h1>This will be an h3 tag</h1>";
-//        $expected = "<h3>This will be an h3 tag</h3>";
-//
-//        $this->assertEquals($expected, $letterpress->markup($html));
-//    }
+    public function testMarkup()
+    {
+        Config::init();
+
+        $letterpress = new Letterpress(['letterpress.markup.maxHeadlineLevel' => 3]);
+
+        $html = "<h1>This will be an h3 tag</h1>";
+        $expected = "<h3>This will be an h3 tag</h3>";
+
+        $this->assertEquals($expected, $letterpress->markup($html));
+    }
+
+    public function testPressCallsIntoProcessorFunctions()
+    {
+        Config::init();
+
+        /* @var $lpMock Letterpress|PHPUnit_Framework_MockObject_MockObject */
+        $lpMock = $this->getMock(Letterpress::class, [
+            'markdown',
+            'typofix',
+            'markup'
+        ]);
+
+        $lpMock->expects($this->once())->method('markdown');
+        $lpMock->expects($this->once())->method('typofix');
+        $lpMock->expects($this->once())->method('markup');
+
+        $lpMock->press('Hello World');
+    }
+
+    public function testPress()
+    {
+        $actual =<<<Markdown
+# Hello World
+
+I am a simpleminded paragraph with no big aims for my life.
+Fortunately though, I was blessed with some *emphasis*.
+
+> This is how it always was and always should
+> be: Keep making excuses to quote things that don't exist
+- Mariella
+Markdown;
+
+        $expected =<<<HTML
+<h1>Hello World</h1>
+<p>I am a simple&shy;minded para&shy;graph with no big aims for my life.<br>
+Fortunately though, I was blessed with some <em>emphasis</em>.</p>
+<figure><blockquote>
+<p>This is how it always was and always should
+be: Keep making excuses to quote things that don&rsquo;t exist</p>
+
+</blockquote><figcaption>Mari&shy;ella</figcaption></figure>
+HTML;
+
+        Config::init();
+
+        $lp = new Letterpress();
+
+        $this->assertEquals($expected, $lp->press($actual));
+    }
 }
