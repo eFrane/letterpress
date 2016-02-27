@@ -33,6 +33,7 @@ class Config
     public static function reset($withoutInit = false)
     {
         self::$instance = null;
+
         if (!$withoutInit) {
             return self::init();
         }
@@ -51,9 +52,11 @@ class Config
         return static::$instance;
     }
 
-    public static function isInitialized()
+    public static function getDefaultConfigPath()
     {
-        return static::$instance instanceof self;
+        $configPath = 'config';
+
+        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $configPath;
     }
 
     public static function loadDefaultConfig($configPath)
@@ -66,6 +69,11 @@ class Config
         }
 
         return $data;
+    }
+
+    public static function isInitialized()
+    {
+        return static::$instance instanceof self;
     }
 
     public static function get($identifier = null, $default = null)
@@ -105,7 +113,7 @@ class Config
 
     /**
      * @param string $identifier
-     * @param mixed  $value      new config value for identifier
+     * @param mixed $value new config value for identifier
      *
      * @return mixed old config value for identifier
      */
@@ -122,13 +130,6 @@ class Config
     public static function instance()
     {
         return static::$instance;
-    }
-
-    public static function getDefaultConfigPath()
-    {
-        $configPath = 'config';
-
-        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.$configPath;
     }
 
     private function __clone()

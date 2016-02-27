@@ -2,9 +2,6 @@
 
 namespace EFrane\Letterpress\Markup;
 
-use DOMDocument;
-use DOMDocumentFragment;
-use DOMElement;
 use DOMNode;
 use Masterminds\HTML5;
 
