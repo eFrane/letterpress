@@ -22,11 +22,8 @@ class Letterpress
      */
     public function __construct(array $config = [])
     {
-        // check for initialized config
-        try {
-            Config::get('letterpress.locale');
-        } catch (\RuntimeException $e) {
-            throw new LetterpressException($e->getMessage());
+        if (!Config::isInitialized()) {
+            Config::init();
         }
 
         $this->setup($config);

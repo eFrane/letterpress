@@ -46,6 +46,19 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('foo', Config::get('test.value'));
     }
 
+    public function testReset()
+    {
+        Config::reset(true);
+
+        $this->assertNotInstanceOf(Config::class, Config::instance());
+        $this->assertFalse(Config::isInitialized());
+
+        Config::reset();
+
+        $this->assertInstanceOf(Config::class, Config::instance());
+        $this->assertTrue(Config::isInitialized());
+    }
+
     public function testGetExistingValue()
     {
         //$expected = ['letterpress.markdown.enabled' => 'true'];

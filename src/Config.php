@@ -51,6 +51,11 @@ class Config
         return static::$instance;
     }
 
+    public static function isInitialized()
+    {
+        return static::$instance instanceof self;
+    }
+
     public static function loadDefaultConfig($configPath)
     {
         $data = [];

@@ -25,20 +25,12 @@ trait DOMManipulation
         return false;
     }
 
-    protected function hasFollowingSiblingWithTagName(DOMNode $node, $tagName, $discardTextNodes = true)
+    protected function hasFollowingSiblingWithTagName(DOMNode $node, $tagName)
     {
         if (!is_null($node->nextSibling)) {
             $actualNode = $node->nextSibling;
         } else {
             return false;
-        }
-
-        if ($discardTextNodes) {
-            while ($actualNode->nodeType == XML_TEXT_NODE) {
-                if (!is_null($node->nextSibling)) {
-                    $actualNode = $node->nextSibling;
-                }
-            }
         }
 
         if (strcmp($actualNode->nodeName, $tagName) === 0) {

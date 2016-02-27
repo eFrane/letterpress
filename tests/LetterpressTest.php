@@ -14,21 +14,10 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
         Config::reset(true);
     }
 
-    /**
-     * @expectedException EFrane\Letterpress\LetterpressException
-     * @expectedExceptionMessage Config must be initialized before usage.
-     */
-    public function testCreateFailsWithoutConfig()
+    public function testCreate()
     {
-        new Letterpress();
-    }
-
-    public function testCreateWithInitializedConfig()
-    {
-        Config::init();
-
-        $this->assertInstanceOf(Config::class, Config::instance());
-        $this->assertInstanceOf(Letterpress::class, new Letterpress());
+        $lp = new Letterpress();
+        $this->assertInstanceOf(Letterpress::class, $lp);
     }
 
     public function testCreateWithConfigOverride()
