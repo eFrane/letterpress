@@ -35,11 +35,11 @@ class MarkupProcessor
     public function __construct()
     {
         $this->html5 = new HTML5();
-        $this->prepareModifiers();
+        $this->loadModifiersFromConfig();
         $this->prepareEmbedRepository();
     }
 
-    public function prepareModifiers()
+    public function loadModifiersFromConfig()
     {
         $this->modifiers = [];
 
@@ -86,6 +86,11 @@ class MarkupProcessor
         $this->setModifiers();
     }
 
+    public function getModifiers()
+    {
+        return $this->modifiers;
+    }
+
     public function setModifiers(array $modifiers = [])
     {
         $this->modifiers = $modifiers;
@@ -118,10 +123,12 @@ class MarkupProcessor
      *
      * @return mixed
      **/
-    protected function processModifiers($fragment)
+    protected function processEmbeds($fragment)
     {
-        foreach ($this->modifiers as $modifier) {
-            $modifier->modify($fragment);
+        if (!is_null($this->embedFactory)) {
+            $fragment = $this->embedFactory->run($fragment, $this->embedRepository);
+
+            return $fragment;
         }
 
         return $fragment;
@@ -132,12 +139,10 @@ class MarkupProcessor
      *
      * @return mixed
      **/
-    protected function processEmbeds($fragment)
+    protected function processModifiers($fragment)
     {
-        if (!is_null($this->embedFactory)) {
-            $fragment = $this->embedFactory->run($fragment, $this->embedRepository);
-
-            return $fragment;
+        foreach ($this->modifiers as $modifier) {
+            $modifier->modify($fragment);
         }
 
         return $fragment;
