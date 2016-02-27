@@ -7,8 +7,6 @@ use EFrane\Letterpress\Markup\MarkupProcessor;
 
 class Markup implements Processor
 {
-    public static $embedRepository = null;
-
     public static function run($content, $force = false)
     {
         $output = $content;
@@ -16,8 +14,6 @@ class Markup implements Processor
         if (Config::get('letterpress.markup.enabled') || $force) {
             $markup = new MarkupProcessor();
             $output = $markup->process($content);
-
-            static::$embedRepository = $markup->getEmbedRepository();
         }
 
         return $output;

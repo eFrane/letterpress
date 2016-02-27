@@ -44,19 +44,6 @@ class Letterpress
     }
 
     /**
-     * This will return the last embed repository.
-     *
-     * The embed repository is overridden whenever the markup
-     * processor runs with enabled embed processing.
-     *
-     * @return EFrane\Letterpress\Embeds\EmbedRepository
-     **/
-    public function getEmbedRepository()
-    {
-        return Markup::$embedRepository;
-    }
-
-    /**
      * @param $input
      * @param array $config
      *
@@ -75,7 +62,7 @@ class Letterpress
 
     /**
      * @param $input
-     * @param bool  $force
+     * @param bool $force
      * @param array $config
      *
      * @return mixed
@@ -89,7 +76,7 @@ class Letterpress
 
     /**
      * @param $input
-     * @param bool  $force
+     * @param bool $force
      * @param array $config
      *
      * @return mixed
@@ -103,7 +90,7 @@ class Letterpress
 
     /**
      * @param $input
-     * @param bool  $force
+     * @param bool $force
      * @param array $config
      *
      * @return mixed

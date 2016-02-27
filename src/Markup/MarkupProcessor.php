@@ -3,8 +3,6 @@
 namespace EFrane\Letterpress\Markup;
 
 use EFrane\Letterpress\Config;
-use EFrane\Letterpress\Embed\EmbedFactory;
-use EFrane\Letterpress\Embed\EmbedRepository;
 use Masterminds\HTML5;
 
 /**
@@ -15,13 +13,6 @@ use Masterminds\HTML5;
  **/
 class MarkupProcessor
 {
-    protected $embedRepository = null;
-
-    /**
-     * @var EmbedFactory
-     */
-    protected $embedFactory = null;
-
     /**
      * @var \Masterminds\HTML5
      */
@@ -36,7 +27,6 @@ class MarkupProcessor
     {
         $this->html5 = new HTML5();
         $this->loadModifiersFromConfig();
-        $this->prepareEmbedRepository();
     }
 
     public function loadModifiersFromConfig()
@@ -59,28 +49,6 @@ class MarkupProcessor
         $this->modifiers[] = new RemoveEmptyNodesModifier();
     }
 
-    protected function prepareEmbedRepository()
-    {
-        if (Config::get('letterpress.media.enabled')) {
-            // transform the enabled media services into their embed class names
-            $enabledExternalServices = Config::get('letterpress.media.services');
-            $embedClasses = [];
-
-            foreach ($enabledExternalServices as $service) {
-                $className = (!strstr($service, '\\'))
-                    ? sprintf('EFrane\Letterpress\Embeds\%s', $service)
-                    : $service;
-
-                if (class_exists($className) && is_a($className, 'EFrane\Letterpress\Embeds\EmbedWorker')) {
-                    $embedClasses[] = $className;
-                }
-            }
-
-            $this->embedRepository = new EmbedRepository();
-            $this->embedFactory = new EmbedFactory($embedClasses);
-        }
-    }
-
     public function resetModifiers()
     {
         $this->setModifiers();
@@ -96,14 +64,6 @@ class MarkupProcessor
         $this->modifiers = $modifiers;
     }
 
-    /**
-     * @return EFrane\Letterpress\Embeds\EmbedRepository
-     */
-    public function getEmbedRepository()
-    {
-        return $this->embedRepository;
-    }
-
     public function process($content)
     {
         if (strlen($content) == 0) {
@@ -112,26 +72,9 @@ class MarkupProcessor
 
         $fragment = $this->html5->loadHTMLFragment($content);
 
-        $fragment = $this->processEmbeds($fragment);
         $fragment = $this->processModifiers($fragment);
 
         return $this->html5->saveHTML($fragment);
-    }
-
-    /**
-     * @param $fragment
-     *
-     * @return mixed
-     **/
-    protected function processEmbeds($fragment)
-    {
-        if (!is_null($this->embedFactory)) {
-            $fragment = $this->embedFactory->run($fragment, $this->embedRepository);
-
-            return $fragment;
-        }
-
-        return $fragment;
     }
 
     /**
