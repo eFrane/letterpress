@@ -3,6 +3,7 @@
 namespace EFrane\Letterpress\Markup;
 
 use DOMDocument;
+use DOMDocumentFragment;
 use DOMElement;
 use DOMNode;
 use Masterminds\HTML5;
@@ -95,5 +96,19 @@ trait DOMManipulation
         }
 
         return false;
+    }
+
+    /**
+     * Wrap a node and all of it's children in another node.
+     *
+     * @return DOMNode The wrapped node.
+     **/
+    protected function wrapFragment(DOMDocumentFragment $fragment, DOMNode $wrapNode)
+    {
+        $newFragment = $this->doc->createDocumentFragment();
+        $wrapNode->appendChild($fragment->cloneNode(true));
+        $newFragment->appendChild($wrapNode);
+
+        return $newFragment;
     }
 }

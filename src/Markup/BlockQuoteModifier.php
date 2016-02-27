@@ -194,7 +194,7 @@ class BlockQuoteModifier extends RecursiveModifier // implements Modifier
      * @param \DOMNode $candidate
      * @param $quote
      **/
-    protected function extractFullBlockquote(DOMNode $candidate, $quote)
+    protected function extractFullBlockquote(DOMNode $candidate, DOMNode $quote)
     {
         foreach ($candidate->childNodes as $child) {
             /* @var $child DOMNode */

@@ -102,6 +102,8 @@ class MarkupProcessor
 
     public function process($content)
     {
+        if (strlen($content) == 0) return '';
+
         $fragment = $this->html5->loadHTMLFragment($content);
 
         $fragment = $this->processEmbeds($fragment);

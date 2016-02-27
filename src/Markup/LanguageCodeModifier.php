@@ -2,51 +2,55 @@
 
 namespace EFrane\Letterpress\Markup;
 
-use DOMDocumentFragment;
 use DOMNode;
 use EFrane\Letterpress\Config;
 use Efrane\Letterpress\LetterpressException;
 
 /**
  * Add appropriate language codes to the produced markup.
- * 
+ *
  * Even though this modifier produces valid markup, it is strongly recommended
  * to set the "lang"-attribute on the highest possible level of your
- * markup, e.g. ideally in the 
+ * markup, e.g. ideally in the
  **/
-class LanguageCodeModifier extends BaseModifier // implements Modifier
+class LanguageCodeModifier extends RecursiveModifier
 {
-    // if initialized, this always applies
-  public function modify(DOMDocumentFragment $fragment)
-  {
-      parent::modify($fragment);
+    // TODO: check the list of block elements (W3C HTML5 TR...)
+    protected $textContentElements = [
+        'div', 'span', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6',
 
-      $languageCode = Config::get('letterpress.locale');
-      if (!is_string($languageCode) || strlen($languageCode) < 2) {
-          throw new LetterpressException('Invalid locale.');
-      }
+    ];
 
-      $languageCode = strtolower(substr($languageCode, 0, 2));
+    protected function candidateCheck(DOMNode $candidate)
+    {
+        return true;
+    }
 
-      $languageNode = $this->doc->createElement('div');
-      $languageNode->setAttribute('lang', $languageCode);
+    protected function candidateModify(DOMNode $parent, DOMNode $candidate)
+    {
+        // TODO: refactor locale checking as this is also being done in the typography fixer
+        $languageCode = Config::get('letterpress.locale');
+        if (!is_string($languageCode) || strlen($languageCode) < 2) {
+            throw new LetterpressException('Invalid locale.');
+        }
 
-      $fragment = $this->wrapFragment($fragment, $languageNode);
+        $languageCode = strtolower(substr($languageCode, 0, 2));
 
-      return $fragment;
-  }
+        if (in_array($candidate->nodeName, $this->textContentElements))
+        {
+            /* @var $candidate \DOMElement*/
+            $candidate->setAttribute('lang', $languageCode);
+        } else
+        {
+            $block = $this->doc->createElement('div');
+            $block->setAttribute('lang', $languageCode);
 
-  /**
-   * Wrap a node and all of it's children in another node.
-   *
-   * @return DOMNode The wrapped node.
-   **/
-  protected function wrapFragment(DOMDocumentFragment $fragment, DOMNode $wrapNode)
-  {
-      $newFragment = $this->doc->createDocumentFragment();
-      $wrapNode->appendChild($fragment->cloneNode(true));
-      $newFragment->appendChild($wrapNode);
+            $candidateClone = $candidate->cloneNode(true);
+            $block->appendChild($candidateClone);
 
-      return $newFragment;
-  }
+            $candidate = $block;
+        }
+
+        return $candidate;
+    }
 }
