@@ -5,3 +5,4 @@ composer.lock
 todo*
 
 tests/_output/*
+.php_cs.cache

@@ -37,6 +37,8 @@ class Config
         if (!$withoutInit) {
             return self::init();
         }
+
+        return null;
     }
 
     public static function init(array $config = [])
@@ -90,11 +92,11 @@ class Config
         }
     }
 
-    public static function has($identifier = null, $value = null)
+    public static function has($identifier = null)
     {
         self::checkInitialized();
 
-        return self::$instance->repository->has($identifier, $value);
+        return self::$instance->repository->has($identifier);
     }
 
     public static function apply($additionalConfig = [])
