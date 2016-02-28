@@ -3,7 +3,6 @@
 namespace EFrane\Letterpress\Markup;
 
 use DOMNode;
-use Masterminds\HTML5;
 
 trait DOMManipulation
 {

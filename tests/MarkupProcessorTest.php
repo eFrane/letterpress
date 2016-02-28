@@ -37,6 +37,7 @@ class MarkupProcessorTest extends PHPUnit_Framework_TestCase
 
     /**
      * @param $processor
+     *
      * @return static
      **/
     protected function getModifierClassNames(MarkupProcessor $processor)
