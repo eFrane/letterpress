@@ -27,6 +27,10 @@ class GermanNumbers implements FixerInterface, LocaleAwareFixerInterface
 
     public function fix($content, StateBag $state_bag = null)
     {
+        if (substr($this->locale, 0, 2) !== 'de') {
+            return $content;
+        }
+
         if (preg_match('/[0-9,.]+/', $content)) {
             return $this->numberFormat($content);
         }

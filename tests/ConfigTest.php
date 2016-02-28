@@ -82,9 +82,6 @@ class ConfigTest extends PHPUnit_Framework_TestCase
 
         $constructor = $reflection->getConstructor();
         $this->assertFalse($constructor->isPublic());
-
-        $clone = $reflection->getMethod('__clone');
-        $this->assertTrue($clone->isPrivate());
     }
 
     /**
@@ -94,5 +91,15 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     public function testApplyNonStringKey()
     {
         Config::apply([42 => 'value']);
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionMessage Cloning Letterpress\Config is forbidden.
+     */
+    public function testClone()
+    {
+        Config::init();
+        $cfg = clone Config::instance();
     }
 }

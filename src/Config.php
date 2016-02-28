@@ -132,7 +132,8 @@ class Config
         return static::$instance;
     }
 
-    private function __clone()
+    public function __clone()
     {
+        throw new \RuntimeException("Cloning Letterpress\\Config is forbidden.");
     }
 }
