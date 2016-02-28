@@ -36,18 +36,12 @@ class GermanNumbers implements FixerInterface, LocaleAwareFixerInterface
 
     protected function numberFormat($number)
     {
-        // check for decimal point / comma
-    $dotPosition = strlen($number) - 1;
-        if (preg_match('/(,|\.)/', strrev($number), $matches) == 1) {
-            $dotPosition = strrpos($matches[1], $number);
+        preg_match('/([0-9 ]+)(\.|,)?([0-9]+)?/', $number, $parts);
+
+        if (isset($parts[3])) {
+            return number_format(floatval($number), strlen($parts[3]), ',', ' ');
+        } else {
+            return number_format(floatval($number), 0, ',', ' ');
         }
-
-        return $dotPosition;
-
-        $formattedNumber = substr($number, $dotPosition, strlen($number) - 1);
-        for ($i = $dotPosition; $i >= 0; $i--) {
-        }
-
-        return $formattedNumber;
     }
 }
