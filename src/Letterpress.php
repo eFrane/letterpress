@@ -59,7 +59,7 @@ class Letterpress
 
     /**
      * @param $input
-     * @param bool $force
+     * @param bool  $force
      * @param array $config
      *
      * @return mixed
@@ -73,7 +73,7 @@ class Letterpress
 
     /**
      * @param $input
-     * @param bool $force
+     * @param bool  $force
      * @param array $config
      *
      * @return mixed
@@ -87,7 +87,7 @@ class Letterpress
 
     /**
      * @param $input
-     * @param bool $force
+     * @param bool  $force
      * @param array $config
      *
      * @return mixed

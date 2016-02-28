@@ -3,7 +3,6 @@
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\Letterpress;
 use EFrane\Letterpress\Processing\Markdown;
-use Masterminds\HTML5\Serializer\HTML5Entities;
 
 class LetterpressTest extends PHPUnit_Framework_TestCase
 {
@@ -64,8 +63,8 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
 
         $letterpress = new Letterpress(['letterpress.markup.maxHeadlineLevel' => 3]);
 
-        $html = "<h1>This will be an h3 tag</h1>";
-        $expected = "<h3>This will be an h3 tag</h3>";
+        $html = '<h1>This will be an h3 tag</h1>';
+        $expected = '<h3>This will be an h3 tag</h3>';
 
         $this->assertEquals($expected, $letterpress->markup($html));
     }
@@ -78,7 +77,7 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
         $lpMock = $this->getMock(Letterpress::class, [
             'markdown',
             'typofix',
-            'markup'
+            'markup',
         ]);
 
         $lpMock->expects($this->once())->method('markdown');
@@ -90,7 +89,7 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
 
     public function testPress()
     {
-        $actual =<<<Markdown
+        $actual = <<<'Markdown'
 # Hello World
 
 I am a simpleminded paragraph with no big aims for my life.
@@ -101,7 +100,7 @@ Fortunately though, I was blessed with some *emphasis*.
 - Mariella
 Markdown;
 
-        $expected =<<<HTML
+        $expected = <<<'HTML'
 <h1>Hello World</h1>
 <p>I am a simple&shy;minded para&shy;graph with no big aims for my life.<br>
 Fortunately though, I was blessed with some <em>emphasis</em>.</p>
