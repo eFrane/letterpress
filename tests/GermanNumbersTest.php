@@ -21,7 +21,7 @@ class GermanNumbersTest extends PHPUnit_Framework_TestCase
             ['1234', '1 234'],
             ['123.45', '123,45'],
             ['1234.56', '1 234,56'],
-            ['I am not a number', 'I am not a number']
+            ['I am not a number', 'I am not a number'],
         ];
     }
 
