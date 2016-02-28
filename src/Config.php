@@ -37,8 +37,6 @@ class Config
         if (!$withoutInit) {
             return self::init();
         }
-
-        return null;
     }
 
     public static function init(array $config = [])
@@ -136,6 +134,6 @@ class Config
 
     public function __clone()
     {
-        throw new \RuntimeException("Cloning Letterpress\\Config is forbidden.");
+        throw new \RuntimeException('Cloning Letterpress\\Config is forbidden.');
     }
 }
