@@ -68,6 +68,7 @@ class DOMNodeTypeTest extends PHPUnit_Framework_TestCase
     public function data()
     {
         $data = array_combine($this->constantNames(), $this->humanNames());
+
         return collect($data)->map(function ($value, $key) {
            return [$key, $value];
         })->toArray();

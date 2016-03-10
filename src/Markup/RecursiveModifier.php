@@ -11,8 +11,9 @@ abstract class RecursiveModifier extends BaseModifier
 
     public function nodeType()
     {
-        if (is_null($this->domNodeType))
+        if (is_null($this->domNodeType)) {
             $this->domNodeType = new DOMNodeType();
+        }
 
         return $this->domNodeType;
     }
