@@ -44,7 +44,7 @@ class RemoveEmptyNodesModifier extends RecursiveModifier
      **/
     protected function candidateCheck(DOMNode $candidate)
     {
-        if ($candidate->nodeType !== XML_ELEMENT_NODE) {
+        if ($candidate->nodeType !== $this->nodeType()->element()) {
             return false;
         }
 

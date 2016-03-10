@@ -83,7 +83,7 @@ class BlockQuoteModifier extends RecursiveModifier // implements Modifier
 
         // This will discard text nodes between quote and citation as that could be
         // a future (different) supported citation style
-        if ($this->hasFollowingSiblingWithTagName($candidate, 'ul', false)) {
+        if ($this->hasFollowingSiblingWithTagName($candidate, 'ul')) {
             $this->citationMode = self::CITATION_AFTER;
         }
 

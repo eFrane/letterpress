@@ -7,6 +7,16 @@ use DOMNode;
 
 abstract class RecursiveModifier extends BaseModifier
 {
+    protected $domNodeType = null;
+
+    public function nodeType()
+    {
+        if (is_null($this->domNodeType))
+            $this->domNodeType = new DOMNodeType();
+
+        return $this->domNodeType;
+    }
+
     public function modify(DOMDocumentFragment $fragment)
     {
         $this->doc = $fragment->ownerDocument;
