@@ -1,4 +1,6 @@
-<?php namespace EFrane\Letterpress\Markup;
+<?php
+
+namespace EFrane\Letterpress\Markup;
 
 use DOMNode;
 
@@ -27,14 +29,17 @@ class TextModifier extends RecursiveModifier
 
     protected function candidateCheck(DOMNode $candidate)
     {
-        if ($candidate->nodeType != $this->nodeType()->text())
+        if ($candidate->nodeType != $this->nodeType()->text()) {
             return false;
+        }
 
-        if ($candidate instanceof \DOMText && $candidate->isElementContentWhitespace())
+        if ($candidate instanceof \DOMText && $candidate->isElementContentWhitespace()) {
             return false;
+        }
 
-        if (!preg_match($this->pattern, $candidate->nodeValue, $this->matches))
+        if (!preg_match($this->pattern, $candidate->nodeValue, $this->matches)) {
             return false;
+        }
 
         return true;
     }

@@ -1,10 +1,11 @@
-<?php namespace EFrane\Letterpress\Markup;
+<?php
+
+namespace EFrane\Letterpress\Markup;
 
 use Illuminate\Support\Str;
 
 /**
- * Class DOMNodeType
- * @package EFrane\Letterpress\Markup
+ * Class DOMNodeType.
  *
  * @method element
  * @method attribute
@@ -50,7 +51,7 @@ class DOMNodeType
 
     public function getConstantName($humanReadableName)
     {
-        return 'XML_' . Str::upper(Str::snake($humanReadableName)) . '_NODE';
+        return 'XML_'.Str::upper(Str::snake($humanReadableName)).'_NODE';
     }
 
     public function __get($name)
@@ -66,6 +67,7 @@ class DOMNodeType
     public static function __callStatic($name, $arguments)
     {
         $instance = new self();
+
         return $instance->$name;
     }
 }
@@ -73,11 +75,13 @@ class DOMNodeType
 if (!function_exists('dom_node_type')) {
     /**
      * @param string $name
+     *
      * @return \EFrane\Letterpress\Markup\DOMNodeType|int
      */
     function dom_node_type($name = '')
     {
         $instance = new DOMNodeType();
+
         return ($name === '') ? $instance : $instance->{$name};
     }
 }

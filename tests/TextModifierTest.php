@@ -27,14 +27,14 @@ class TextModifierTest extends MarkupModifierTest
                 '/hello/',
                 function ($input, $matches) { return "{$matches[0]} world"; },
                 'hello',
-                'hello world'
+                'hello world',
             ],
 
             [
                 '/i am not here/',
                 function ($input) { return $input; },
                 'this is some random text',
-                'this is some random text'
+                'this is some random text',
             ],
         ];
     }
