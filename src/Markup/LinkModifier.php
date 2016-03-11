@@ -19,13 +19,13 @@ class LinkModifier extends RecursiveModifier
         $this->replacer = $replacer;
     }
 
-    protected function candidateCheck(DOMNode $candidate)
+    public function candidateCheck(DOMNode $candidate)
     {
         /* @var $candidate \DOMElement */
         return $this->nodeType()->isElement($candidate) && $candidate->nodeName == 'a' && $candidate->hasAttribute('href');
     }
 
-    protected function candidateModify(DOMNode $parent, DOMNode $candidate)
+    public function candidateModify(DOMNode $parent, DOMNode $candidate)
     {
         /* @var $candidate \DOMElement */
         $replacement = call_user_func($this->replacer, $candidate->getAttribute('href'), $this->doc);

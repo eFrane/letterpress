@@ -27,7 +27,7 @@ class TextModifier extends RecursiveModifier
         $this->replacer = $replacer;
     }
 
-    protected function candidateCheck(DOMNode $candidate)
+    public function candidateCheck(DOMNode $candidate)
     {
         if (!$this->nodeType()->isText($candidate)) {
             return false;
@@ -44,7 +44,7 @@ class TextModifier extends RecursiveModifier
         return true;
     }
 
-    protected function candidateModify(DOMNode $parent, DOMNode $candidate)
+    public function candidateModify(DOMNode $parent, DOMNode $candidate)
     {
         /* @var \DOMText $candidate this will always be a text node */
         $newContent = call_user_func($this->replacer, $candidate->wholeText, $this->matches);

@@ -23,12 +23,12 @@ class HeadlineLevelModifier extends RecursiveModifier // implements Modifier
         $this->replaceTagName = sprintf('h%d', $maxLevel);
     }
 
-    protected function candidateCheck(DOMNode $candidate)
+    public function candidateCheck(DOMNode $candidate)
     {
         return in_array($candidate->nodeName, $this->relevantHeadlineTags);
     }
 
-    protected function candidateModify(DOMNode $parent, DOMNode $candidate)
+    public function candidateModify(DOMNode $parent, DOMNode $candidate)
     {
         $newNode = $this->doc->createElement($this->replaceTagName, $candidate->nodeValue);
 

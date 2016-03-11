@@ -21,12 +21,12 @@ class LanguageCodeModifier extends RecursiveModifier
 
     ];
 
-    protected function candidateCheck(DOMNode $candidate)
+    public function candidateCheck(DOMNode $candidate)
     {
         return true;
     }
 
-    protected function candidateModify(DOMNode $parent, DOMNode $candidate)
+    public function candidateModify(DOMNode $parent, DOMNode $candidate)
     {
         // TODO: refactor locale checking as this is also being done in the typography fixer
         $languageCode = Config::get('letterpress.locale');

@@ -69,7 +69,7 @@ class BlockQuoteModifier extends RecursiveModifier // implements Modifier
 
     protected $citationMode = self::CITATION_MISSING;
 
-    protected function candidateCheck(DOMNode $candidate)
+    public function candidateCheck(DOMNode $candidate)
     {
         if (strcmp($candidate->nodeName, 'blockquote') !== 0) {
             return false;
@@ -92,7 +92,7 @@ class BlockQuoteModifier extends RecursiveModifier // implements Modifier
         return true;
     }
 
-    protected function candidateModify(DOMNode $parent, DOMNode $candidate)
+    public function candidateModify(DOMNode $parent, DOMNode $candidate)
     {
         $figure = $this->doc->createElement('figure');
 

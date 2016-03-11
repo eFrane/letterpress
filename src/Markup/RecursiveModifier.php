@@ -43,7 +43,7 @@ abstract class RecursiveModifier extends BaseModifier
         return $node;
     }
 
-    abstract protected function candidateCheck(DOMNode $candidate);
+    abstract public function candidateCheck(DOMNode $candidate);
 
-    abstract protected function candidateModify(DOMNode $parent, DOMNode $candidate);
+    abstract public function candidateModify(DOMNode $parent, DOMNode $candidate);
 }

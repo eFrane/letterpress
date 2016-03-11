@@ -42,7 +42,7 @@ class RemoveEmptyNodesModifier extends RecursiveModifier
      * 2. In the complex case, a node is a text container which only contains
      *    zero-length text nodes or whitespace-text nodes.
      **/
-    protected function candidateCheck(DOMNode $candidate)
+    public function candidateCheck(DOMNode $candidate)
     {
         if ($candidate->nodeType !== $this->nodeType()->element()) {
             return false;
@@ -63,7 +63,7 @@ class RemoveEmptyNodesModifier extends RecursiveModifier
         return false;
     }
 
-    protected function candidateModify(DOMNode $parent, DOMNode $candidate)
+    public function candidateModify(DOMNode $parent, DOMNode $candidate)
     {
         $parent->removeChild($candidate);
 
