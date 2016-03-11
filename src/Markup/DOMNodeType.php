@@ -19,6 +19,18 @@ use Illuminate\Support\Str;
  * @method documentType
  * @method documentFrag
  * @method notation
+ * @method isElement(\DOMNode $node)
+ * @method isAttribute(\DOMNode $node)
+ * @method isText(\DOMNode $node)
+ * @method isCdataSection(\DOMNode $node)
+ * @method isEntityRef(\DOMNode $node)
+ * @method isEntity(\DOMNode $node)
+ * @method isPi(\DOMNode $node)
+ * @method isComment(\DOMNode $node)
+ * @method isDocument(\DOMNode $node)
+ * @method isDocumentType(\DOMNode $node)
+ * @method isDocumentFrag(\DOMNode $node)
+ * @method isNotation(\DOMNode $node)
  */
 class DOMNodeType
 {
@@ -37,6 +49,17 @@ class DOMNodeType
         'XML_NOTATION_NODE',
     ];
 
+    public static function __callStatic($name, $arguments)
+    {
+        $instance = new self();
+
+        if (count($arguments) > 0) {
+            $arguments = $arguments[0];
+        }
+
+        return $instance->$name($arguments);
+    }
+
     public function getAvailableNodeTypes()
     {
         return collect($this->nodeTypes)->map(function ($nodeType) {
@@ -49,26 +72,32 @@ class DOMNodeType
         return Str::camel(Str::lower(preg_replace('/XML_([A-Z_]+)_NODE/', '$1', $nodeType)));
     }
 
-    public function getConstantName($humanReadableName)
-    {
-        return 'XML_'.Str::upper(Str::snake($humanReadableName)).'_NODE';
-    }
-
     public function __get($name)
     {
         return constant($this->getConstantName($name));
     }
 
-    public function __call($name, $arguments)
+    public function getConstantName($humanReadableName)
     {
-        return constant($this->getConstantName($name));
+        return 'XML_' . Str::upper(Str::snake($humanReadableName)) . '_NODE';
     }
 
-    public static function __callStatic($name, $arguments)
+    public function __call($name, $arguments)
     {
-        $instance = new self();
+        if (substr($name, 0, 2) === 'is') {
+            $name = substr($name, 2);
 
-        return $instance->$name;
+            if (count($arguments) !== 1 || !is_a($arguments[0], \DOMNode::class))
+                return false;
+
+            try {
+                return constant($this->getConstantName($name)) === $arguments[0]->nodeType;
+            } catch (\Exception $e) {
+                return false;
+            }
+        }
+
+        return constant($this->getConstantName($name));
     }
 }
 

@@ -29,11 +29,11 @@ class TextModifier extends RecursiveModifier
 
     protected function candidateCheck(DOMNode $candidate)
     {
-        if ($candidate->nodeType != $this->nodeType()->text()) {
+        if (!$this->nodeType()->isText($candidate)) {
             return false;
         }
 
-        if ($candidate instanceof \DOMText && $candidate->isElementContentWhitespace()) {
+        if (method_exists($candidate, 'isElementContentWhitespace') && $candidate->isElementContentWhitespace()) {
             return false;
         }
 

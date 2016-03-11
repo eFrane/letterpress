@@ -25,6 +25,24 @@ class DOMNodeTypeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function humanNames()
+    {
+        return [
+            'element',
+            'attribute',
+            'text',
+            'cdataSection',
+            'entityRef',
+            'entity',
+            'pi',
+            'comment',
+            'document',
+            'documentType',
+            'documentFrag',
+            'notation',
+        ];
+    }
+
     /**
      * @dataProvider data
      */
@@ -65,12 +83,32 @@ class DOMNodeTypeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(constant($expected), DOMNodeType::$actual());
     }
 
+    /**
+     * @dataProvider givenNodeData
+     */
+    public function testCallWithGivenNode($name, $node, $expected)
+    {
+        $func = 'is' . ucfirst($name);
+
+        $this->assertEquals($expected, DOMNodeType::$func($node));
+        $this->assertEquals($expected, $this->instance->$func($node));
+    }
+
+    public function givenNodeData()
+    {
+        return [
+            ['element', new DOMElement('p'), true],
+            ['element', new DOMEntity(), false],
+            ['text', new DOMText(), true],
+        ];
+    }
+
     public function data()
     {
         $data = array_combine($this->constantNames(), $this->humanNames());
 
         return collect($data)->map(function ($value, $key) {
-           return [$key, $value];
+            return [$key, $value];
         })->toArray();
     }
 
@@ -89,24 +127,6 @@ class DOMNodeTypeTest extends PHPUnit_Framework_TestCase
             'XML_DOCUMENT_TYPE_NODE',
             'XML_DOCUMENT_FRAG_NODE',
             'XML_NOTATION_NODE',
-        ];
-    }
-
-    public function humanNames()
-    {
-        return [
-            'element',
-            'attribute',
-            'text',
-            'cdataSection',
-            'entityRef',
-            'entity',
-            'pi',
-            'comment',
-            'document',
-            'documentType',
-            'documentFrag',
-            'notation',
         ];
     }
 }
