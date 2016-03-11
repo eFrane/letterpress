@@ -24,12 +24,22 @@ class LinkModifierTest extends MarkupModifierTest
         return [
             [
                 '<div><a href="https://youtu.be"></a><a href="https://google.com"></a><p>Other content</p></div>',
-                function ($url, $doc) {
+                function ($url) {
                     if (str_contains($url, 'youtu.be')) {
                         return "This could be a video.";
                     } else return null;
                 },
                 '<div>This could be a video.<a href="https://google.com"></a><p>Other content</p></div>',
+            ],
+            [
+                '<div><a href="https://youtu.be"></a><a href="https://google.com"></a><p>Other content</p></div>',
+                function ($url, \DOMDocument $doc) {
+                    if (str_contains($url, 'youtu.be')) {
+                        $div = $doc->createElement('div', $url);
+                        return $div;
+                    } else return null;
+                },
+                '<div><div>https://youtu.be</div><a href="https://google.com"></a><p>Other content</p></div>',
             ]
         ];
     }
