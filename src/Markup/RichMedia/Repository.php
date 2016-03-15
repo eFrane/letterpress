@@ -14,9 +14,27 @@ class Repository
         $this->lookups = collect($lookups);
     }
 
-    public function addLookup(Lookup $lookup)
+    public function getStoredUrls($asArray = false)
     {
-        $this->lookups->put($lookup->getUrl(), $lookup);
+        $keys = $this->lookups->keys();
+
+        if ($asArray) {
+            return $keys->toArray();
+        } else {
+            return $keys;
+        }
+    }
+
+    public function refreshLookup($url, \Closure $refresh)
+    {
+        $lookup = $this->getLookup($url);
+
+        if (!is_a($lookup, LookupInterface::class)) {
+            $lookup = new Lookup($url, $refresh());
+            $this->addLookup($lookup);
+        }
+
+        return $lookup;
     }
 
     public function getLookup($url)
@@ -24,15 +42,8 @@ class Repository
         return $this->lookups->get($url);
     }
 
-    public function refreshLookup($url, \Closure $refresh)
+    public function addLookup(LookupInterface $lookup)
     {
-        $lookup = $this->getLookup($url);
-
-        if (!is_a($lookup, Lookup::class)) {
-            $lookup = new Lookup($url, $refresh());
-            $this->addLookup($lookup);
-        }
-
-        return $lookup;
+        $this->lookups->put($lookup->getUrl(), $lookup);
     }
 }

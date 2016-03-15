@@ -2,7 +2,7 @@
 
 use Embed\Adapters\AdapterInterface;
 
-class Lookup
+class Lookup implements LookupInterface
 {
     protected $url = '';
     protected $adapter = null;

@@ -10,16 +10,7 @@ class YouTube extends MediaModifier
     {
         // TODO: write some kind of embed cache/repository storing the codes, duration information, all that stuff
 
-        $lookup = $this->lookup($url);
 
-        if ($lookup instanceof Lookup) {
-            $code = $lookup->getFrameSource();
-            $fragment = (new HTML5())->loadHTMLFragment($code);
-            $imported = $doc->importNode($fragment->firstChild, true);
-            return $imported;
-        } else {
-            return null;
-        }
     }
 
     public function setLinkPattern()

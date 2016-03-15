@@ -6,6 +6,7 @@ use EFrane\Letterpress\Markup\LinkModifier;
 use EFrane\Letterpress\Markup\RecursiveModifier;
 use Embed\Adapters\AdapterInterface;
 use Embed\Embed;
+use Masterminds\HTML5;
 
 abstract class MediaModifier extends RecursiveModifier
 {
@@ -26,7 +27,7 @@ abstract class MediaModifier extends RecursiveModifier
 
     public function __construct()
     {
-        $this->linkModifier = new LinkModifier([&$this, 'enhanceMediaElement']);
+        $this->linkModifier = new LinkModifier([&$this, 'linkReplacer']);
 
         $this->setLinkPattern();
     }
@@ -70,7 +71,21 @@ abstract class MediaModifier extends RecursiveModifier
         $this->linkModifier->candidateModify($parent, $candidate);
     }
 
-    abstract public function enhanceMediaElement($url, \DOMDocument $doc);
+    public function linkReplacer($url, \DOMDocument $doc)
+    {
+        $lookup = $this->lookup($url);
+
+        if ($lookup instanceof LookupInterface) {
+            $code = $lookup->getFrameSource();
+
+            $fragment = (new HTML5())->loadHTMLFragment($code);
+            $imported = $doc->importNode($fragment->firstChild, true);
+
+            return $imported;
+        } else {
+            return null;
+        }
+    }
 
     /**
      * @param $url
@@ -100,4 +115,11 @@ abstract class MediaModifier extends RecursiveModifier
 
         return $lookup;
     }
+
+    public function bbcodeReplacer($code, $matches)
+    {
+
+    }
+
+    abstract public function enhanceMediaElement($url, \DOMDocument $doc);
 }
