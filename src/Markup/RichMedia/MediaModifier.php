@@ -120,6 +120,4 @@ abstract class MediaModifier extends RecursiveModifier
     {
 
     }
-
-    abstract public function enhanceMediaElement($url, \DOMDocument $doc);
 }
