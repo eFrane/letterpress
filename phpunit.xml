@@ -4,9 +4,7 @@
     <testsuites>
         <testsuite name="Main">
             <directory>tests/</directory>
-            <exclude>
-                <directory>tests/media</directory>
-            </exclude>
+            <exclude>tests/media/</exclude>
         </testsuite>
         <testsuite name="RichMedia">
             <directory>tests/media</directory>
