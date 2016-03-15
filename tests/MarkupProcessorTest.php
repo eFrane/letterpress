@@ -6,6 +6,7 @@ use EFrane\Letterpress\Markup\HeadlineLevelModifier;
 use EFrane\Letterpress\Markup\LanguageCodeModifier;
 use EFrane\Letterpress\Markup\MarkupProcessor;
 use EFrane\Letterpress\Markup\RemoveEmptyNodesModifier;
+use EFrane\Letterpress\Markup\RichMedia\Repository;
 
 class MarkupProcessorTest extends PHPUnit_Framework_TestCase
 {
@@ -14,6 +15,9 @@ class MarkupProcessorTest extends PHPUnit_Framework_TestCase
         parent::setUp();
 
         Config::init();
+
+        // NOTE: this explicitly does NOT test media modifiers
+        Config::set('letterpress.media.enabled', false);
     }
 
     public function tearDown()
@@ -25,7 +29,7 @@ class MarkupProcessorTest extends PHPUnit_Framework_TestCase
 
     public function testLoadsDefaultModifiers()
     {
-        $processor = new MarkupProcessor();
+        $processor = new MarkupProcessor(new Repository());
 
         $this->assertInstanceOf(MarkupProcessor::class, $processor);
 
@@ -53,22 +57,18 @@ class MarkupProcessorTest extends PHPUnit_Framework_TestCase
     {
         Config::set('letterpress.markup.maxHeadlineLevel', 2);
 
-        $processor = new MarkupProcessor();
-
-        $modifiers = $this->getModifierClassNames($processor);
+        $modifiers = $this->getModifierClassNames(new MarkupProcessor(new Repository()));
 
         $this->assertContains(BlockQuoteModifier::class, $modifiers);
-        $this->assertContains(RemoveEmptyNodesModifier::class, $modifiers);
         $this->assertContains(HeadlineLevelModifier::class, $modifiers);
+        $this->assertContains(RemoveEmptyNodesModifier::class, $modifiers);
     }
 
     public function testUnloadsBlockQuoteModifier()
     {
         Config::set('letterpress.markup.blockQuoteFix', false);
 
-        $processor = new MarkupProcessor();
-
-        $modifiers = $this->getModifierClassNames($processor);
+        $modifiers = $this->getModifierClassNames(new MarkupProcessor(new Repository()));
 
         $this->assertNotContains(BlockQuoteModifier::class, $modifiers);
         $this->assertContains(RemoveEmptyNodesModifier::class, $modifiers);
@@ -78,9 +78,7 @@ class MarkupProcessorTest extends PHPUnit_Framework_TestCase
     {
         Config::set('letterpress.markup.addLanguageInfo', true);
 
-        $processor = new MarkupProcessor();
-
-        $modifiers = $this->getModifierClassNames($processor);
+        $modifiers = $this->getModifierClassNames(new MarkupProcessor(new Repository()));
 
         $this->assertContains(BlockQuoteModifier::class, $modifiers);
         $this->assertContains(RemoveEmptyNodesModifier::class, $modifiers);

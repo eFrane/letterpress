@@ -3,7 +3,12 @@
 namespace EFrane\Letterpress\Markup;
 
 use EFrane\Letterpress\Config;
+use EFrane\Letterpress\LetterpressException;
+use EFrane\Letterpress\Markup\RichMedia\MediaModifier;
+use EFrane\Letterpress\Markup\RichMedia\Repository;
+use hanneskod\classtools\Iterator\ClassIterator;
 use Masterminds\HTML5;
+use Symfony\Component\Finder\Finder;
 
 /**
  * Post-process the generated and typo-fixed markup for additional
@@ -23,9 +28,16 @@ class MarkupProcessor
      */
     protected $modifiers = [];
 
-    public function __construct()
+    /**
+     * @var Repository
+     */
+    protected $mediaRepository = null;
+
+    public function __construct(Repository $mediaRepository = null)
     {
         $this->html5 = new HTML5();
+
+        $this->setMediaRepository($mediaRepository);
         $this->loadModifiersFromConfig();
     }
 
@@ -47,14 +59,54 @@ class MarkupProcessor
         }
 
         if (Config::get('letterpress.media.enabled')) {
-            foreach (Config::get('letterpress.media.services') as $serviceName) {
-                // find class
-                // throw exception if not found
-                // instantiate modifier
-            }
+            $this->loadMediaModifiers();
         }
 
         $this->modifiers[] = new RemoveEmptyNodesModifier();
+    }
+
+    protected function loadMediaModifiers()
+    {
+        if (!is_a($this->mediaRepository, Repository::class)) {
+            throw new LetterpressException('Media repository was not initialized.');
+        }
+
+        $iter = new ClassIterator((new Finder())->in(__DIR__ . DIRECTORY_SEPARATOR . 'RichMedia'));
+
+        $iter->enableAutoloading();
+
+        $mediaModifiers = collect();
+        foreach ($iter as $mediaModifier) {
+            /** @var $mediaModifier \ReflectionClass */
+            if ($mediaModifier->isSubclassOf(MediaModifier::class)) {
+                $mediaModifiers[$mediaModifier->getShortName()] = $mediaModifier->getName();
+            }
+        }
+
+        foreach (Config::get('letterpress.media.services') as $serviceName) {
+            if ($mediaModifiers->has($serviceName)) {
+                $class = $mediaModifiers->get($serviceName);
+                $this->modifiers[] = new $class($this->mediaRepository);
+            } else {
+                throw new LetterpressException('Rich media integration for ' . $serviceName . ' is not available.');
+            }
+        }
+    }
+
+    /**
+     * @return Repository
+     */
+    public function getMediaRepository()
+    {
+        return $this->mediaRepository;
+    }
+
+    /**
+     * @param Repository $mediaRepository
+     */
+    public function setMediaRepository($mediaRepository)
+    {
+        $this->mediaRepository = $mediaRepository;
     }
 
     public function resetModifiers()
