@@ -20,10 +20,15 @@ abstract class RecursiveModifier extends BaseModifier
 
     public function modify(DOMDocumentFragment $fragment)
     {
-        $this->doc = $fragment->ownerDocument;
+        $this->setDocument($fragment->ownerDocument);
         $fragment = $this->walk($fragment);
 
         return $fragment;
+    }
+
+    public function setDocument(\DOMDocument $doc)
+    {
+        $this->doc = $doc;
     }
 
     protected function walk(DOMNode $node)
