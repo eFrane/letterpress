@@ -49,9 +49,9 @@ class TextModifier extends RecursiveModifier
         /* @var \DOMText $candidate this will always be a text node */
         $newContent = call_user_func($this->replacer, $candidate->wholeText, $this->matches);
 
-        try {
+        if (method_exists($candidate, 'replaceWholeText'))
             $candidate->replaceWholeText($newContent);
-        } catch (\Exception $e) {
+        else {
             $newNode = $this->doc->createTextNode($newContent);
             $parent->replaceChild($newNode, $candidate);
         }
