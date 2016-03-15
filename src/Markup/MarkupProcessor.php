@@ -46,6 +46,14 @@ class MarkupProcessor
             $this->modifiers[] = new LanguageCodeModifier();
         }
 
+        if (Config::get('letterpress.media.enabled')) {
+            foreach (Config::get('letterpress.media.services') as $serviceName) {
+                // find class
+                // throw exception if not found
+                // instantiate modifier
+            }
+        }
+
         $this->modifiers[] = new RemoveEmptyNodesModifier();
     }
 

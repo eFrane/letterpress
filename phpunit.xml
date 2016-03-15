@@ -2,8 +2,14 @@
          xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/5.2/phpunit.xsd"
          bootstrap="tests/bootstrap.php">
     <testsuites>
-        <testsuite name="Default">
+        <testsuite name="Main">
             <directory>tests/</directory>
+            <exclude>
+                <directory>tests/media</directory>
+            </exclude>
+        </testsuite>
+        <testsuite name="RichMedia">
+            <directory>tests/media</directory>
         </testsuite>
     </testsuites>
     <filter>

@@ -14,11 +14,25 @@ class Repository
         $this->lookups = collect($lookups);
     }
 
-    public function addLookup(Lookup $lookup) {
+    public function addLookup(Lookup $lookup)
+    {
         $this->lookups->put($lookup->getUrl(), $lookup);
     }
 
-    public function getLookup($url) {
+    public function getLookup($url)
+    {
         return $this->lookups->get($url);
+    }
+
+    public function refreshLookup($url, \Closure $refresh)
+    {
+        $lookup = $this->getLookup($url);
+
+        if (!is_a($lookup, Lookup::class)) {
+            $lookup = new Lookup($url, $refresh());
+            $this->addLookup($lookup);
+        }
+
+        return $lookup;
     }
 }

@@ -59,7 +59,8 @@ return [
     // text is title + description + link, image is image + title (with link)
     'videoEmbedMode' => 'frame',
 
-    'services' => ['YouTube', 'Vimeo', 'Flickr'],
+    //'services' => ['YouTube', 'Vimeo', 'Flickr'],
+    'services' => ['YouTube'],
 
     // if silent fail is enabled, the embedder will just return the original input
     // when something goes wrong along the way, otherwise, a LetterpressException

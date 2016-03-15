@@ -33,4 +33,9 @@ class Lookup
     {
         return $this->adapter;
     }
+
+    public function getFrameSource()
+    {
+        return $this->adapter->getCode();
+    }
 }
