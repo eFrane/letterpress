@@ -56,7 +56,7 @@ class Config
     {
         $configPath = 'config';
 
-        return __DIR__.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.$configPath;
+        return __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . $configPath;
     }
 
     public static function loadDefaultConfig($configPath)
@@ -80,7 +80,15 @@ class Config
     {
         self::checkInitialized();
 
-        return self::$instance->repository->get($identifier, $default);
+        $value = self::$instance->repository->get($identifier, $default);
+
+        if ($identifier === 'letterpress.locale'
+            && !(is_string($value) && preg_match('/[a-z]{2,}_[A-Z]{2,}/', $value))
+        ) {
+            throw new LetterpressException('Invalid locale.');
+        }
+
+        return $value;
     }
 
     protected static function checkInitialized()
@@ -113,7 +121,7 @@ class Config
 
     /**
      * @param string $identifier
-     * @param mixed  $value      new config value for identifier
+     * @param mixed $value new config value for identifier
      *
      * @return mixed old config value for identifier
      */

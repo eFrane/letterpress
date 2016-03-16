@@ -22,7 +22,7 @@ class TypoFixerFacadeTest extends PHPUnit_Framework_TestCase
 
     /**
      * @expectedException EFrane\Letterpress\LetterpressException
-     * @expectedExceptionMessage Typography fixing requires a locale.
+     * @expectedExceptionMessage Invalid locale.
      */
     public function testInstantiateFailsWithoutLocale()
     {
@@ -42,26 +42,6 @@ class TypoFixerFacadeTest extends PHPUnit_Framework_TestCase
         Config::set('letterpress.microtypography.enableHyphenation', false);
 
         new TypoFixerFacade();
-    }
-
-    /**
-     * @dataProvider localeProvider
-     */
-    public function testValidateLocale($locale, $validity)
-    {
-        $fixer = new TypoFixerFacade();
-
-        $this->assertEquals($validity, $fixer->validateLocale($locale));
-    }
-
-    public function localeProvider()
-    {
-        return [
-            ['de_DE', true],
-            ['english', false],
-            ['en_US', true],
-            ['por_BR', true],
-        ];
     }
 
     public function testGetFacadeProperty()

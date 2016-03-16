@@ -16,6 +16,11 @@ abstract class MediaModifier extends RecursiveModifier
     protected $linkPattern = '/.*/';
 
     /**
+     * @var string regular expression for matching BBCode tags
+     */
+    protected $tagPattern = '/.*/';
+
+    /**
      * @var \EFrane\Letterpress\Markup\LinkModifier
      */
     protected $linkModifier = null;
@@ -30,14 +35,23 @@ abstract class MediaModifier extends RecursiveModifier
         $this->linkModifier = new LinkModifier([&$this, 'linkReplacer']);
 
         $this->setLinkPattern();
+        $this->setTagPattern();
     }
 
     abstract protected function setLinkPattern();
 
+    protected function setTagPattern()
+    {
+        $tagName = explode('\\', get_called_class());
+        $tagName = strtolower($tagName[count($tagName) - 1]);
+
+        $this->tagPattern = sprintf("/\[%s.*?\]%s\[\/%s\]/i", $tagName, $this->linkPattern, $tagName);
+    }
+
     // TODO: implement media modification in pure text content, i.e. BBCode syntax
 
     /**
-     * @return null
+     * @return Repository
      */
     public function getRepository()
     {
@@ -116,7 +130,7 @@ abstract class MediaModifier extends RecursiveModifier
         return $lookup;
     }
 
-    public function bbcodeReplacer($code, $matches)
+    public function bbCodeReplacer($code, $matches)
     {
 
     }

@@ -19,12 +19,7 @@ class TypoFixerFacade implements Facade
     public function __construct()
     {
         // get locale
-        $locale = Config::get('letterpress.locale');
-        if ($this->validateLocale($locale)) {
-            $this->locale = $locale;
-        } else {
-            throw new LetterpressException('Typography fixing requires a locale.');
-        }
+        $this->locale = Config::get('letterpress.locale');
 
         // defaults
         if (Config::get('letterpress.microtypography.useDefaults')) {
@@ -51,16 +46,6 @@ class TypoFixerFacade implements Facade
 
         $this->fixer = new Fixer($this->fixers);
         $this->fixer->setLocale($this->locale);
-    }
-
-    /**
-     * @param $locale
-     *
-     * @return bool
-     **/
-    public function validateLocale($locale)
-    {
-        return is_string($locale) && preg_match('/[a-z]{2,}_[A-Z]{2,}/', $locale);
     }
 
     public function __get($property)
