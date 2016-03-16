@@ -1,8 +1,5 @@
 <?php
 
-
-use EFrane\Letterpress\Markup\RichMedia\LookupInterface;
-use EFrane\Letterpress\Markup\RichMedia\Repository;
 use EFrane\Letterpress\Markup\RichMedia\Video\YouTube;
 
 class YoutubeTest extends MediaTest
