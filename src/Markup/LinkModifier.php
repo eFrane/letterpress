@@ -36,9 +36,12 @@ class LinkModifier extends RecursiveModifier
         if ($this->nodeType()->isElement($replacement)) {
             $parent->replaceChild($replacement, $candidate);
         } else {
-            // if no element was returned, place the return value into a text node
-            $wrapper = $this->doc->createTextNode($replacement);
-            $parent->replaceChild($wrapper, $candidate);
+            if (!$this->nodeType()->isText($replacement)) {
+                // if no element was returned, place the return value into a text node
+                $replacement = $this->doc->createTextNode($replacement);
+            }
+
+            $parent->replaceChild($replacement, $candidate);
         }
     }
 }
