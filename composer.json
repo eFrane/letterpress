@@ -10,8 +10,8 @@
   "license": "BSD",
   "require": {
     "php": ">=5.5.0",
-    "illuminate/config": "5.1.*|5.2.*",
-    "illuminate/support": "5.1.*|5.2.*",
+    "illuminate/config": ">=5.3.*",
+    "illuminate/support": ">=5.3.*",
     "symfony/finder": ">=2.7.1",
     "masterminds/html5": "^2.1",
     "jolicode/JoliTypo": "^0.1",
