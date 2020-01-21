@@ -15,7 +15,7 @@
     "symfony/finder": ">=2.7.1,<5",
     "masterminds/html5": "^2.1",
     "jolicode/jolitypo": "^0.1",
-    "erusev/parsedown": "1.6.*",
+    "erusev/parsedown": "1.7.*",
     "embed/embed": "1.8.*",
     "symfony/event-dispatcher": ">=2.7.1,<5",
     "hanneskod/classtools": "^1.1"
