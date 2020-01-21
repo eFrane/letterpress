@@ -12,16 +12,16 @@
     "php": ">=5.5.0",
     "illuminate/config": ">=5.3,<6.0",
     "illuminate/support": ">=5.3,<6.0",
-    "symfony/finder": ">=2.7.1,<4",
+    "symfony/finder": ">=2.7.1,<=4",
     "masterminds/html5": "^2.1",
-    "jolicode/JoliTypo": "^0.1",
+    "jolicode/jolitypo": "^0.1",
     "erusev/parsedown": "1.6.*",
     "embed/embed": "1.8.*",
-    "symfony/event-dispatcher": ">=2.7.1,<4",
+    "symfony/event-dispatcher": ">=2.7.1,<=4",
     "hanneskod/classtools": "^1.1"
   },
   "require-dev": {
-    "raulfraile/ladybug": "*",
+    "symfony/var-dumper": ">=2.7.1,<=4",
     "phpunit/phpunit": "^5.2"
   },
   "suggest": {

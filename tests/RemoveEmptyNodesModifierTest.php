@@ -51,7 +51,7 @@ class RemoveEmptyNodesModifierTest extends \MarkupModifierTest
                 return $tagList;
             });
 
-        return collect($voidElements)->merge($textElements);
+        return collect($voidElements)->merge($textElements)->toArray();
     }
 
     protected function setUnitUnderTest()

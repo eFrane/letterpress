@@ -74,11 +74,13 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
         Config::init();
 
         /* @var $lpMock Letterpress|PHPUnit_Framework_MockObject_MockObject */
-        $lpMock = $this->getMock(Letterpress::class, [
-            'markdown',
-            'typofix',
-            'markup',
-        ]);
+        $lpMock = $this->getMockBuilder(Letterpress::class)
+            ->setMethods([
+                'markdown',
+                'typofix',
+                'markup',
+            ])
+            ->getMock();
 
         $lpMock->expects($this->once())->method('markdown');
         $lpMock->expects($this->once())->method('typofix');
