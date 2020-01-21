@@ -17,7 +17,7 @@
     "jolicode/jolitypo": "^0.1",
     "erusev/parsedown": "1.6.*",
     "embed/embed": "1.8.*",
-    "symfony/event-dispatcher": ">=2.7.1,<=4",
+    "symfony/event-dispatcher": "^4.4.2",
     "hanneskod/classtools": "^1.1"
   },
   "require-dev": {
