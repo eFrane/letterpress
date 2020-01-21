@@ -9,20 +9,21 @@
   ],
   "license": "BSD-3-Clause",
   "require": {
-    "php": ">=5.5.0",
-    "illuminate/config": ">=5.3,<6.0",
-    "illuminate/support": ">=5.3,<6.0",
-    "symfony/finder": ">=2.7.1,<=4",
+    "php": ">=7.2.0",
+    "illuminate/config": ">=5.5,<7.0",
+    "illuminate/support": ">=5.5,<7.0",
+    "symfony/finder": ">=2.7.1,<5",
     "masterminds/html5": "^2.1",
     "jolicode/jolitypo": "^0.1",
     "erusev/parsedown": "1.6.*",
     "embed/embed": "1.8.*",
-    "symfony/event-dispatcher": ">=2.7.1,<=4",
+    "symfony/event-dispatcher": ">=2.7.1,<5",
     "hanneskod/classtools": "^1.1"
   },
   "require-dev": {
-    "symfony/var-dumper": ">=2.7.1,<=4",
-    "phpunit/phpunit": "^5.2"
+    "symfony/var-dumper": ">=2.7.1,<5",
+    "phpunit/phpunit": "^5.2",
+    "ext-dom": "*"
   },
   "suggest": {
     "erusev/parsedown-extra": "Install this to use the markdown extra syntax."

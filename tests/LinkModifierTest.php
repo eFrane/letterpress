@@ -1,6 +1,5 @@
 <?php
 
-
 use EFrane\Letterpress\Markup\LinkModifier;
 
 class LinkModifierTest extends MarkupModifierTest
@@ -25,7 +24,7 @@ class LinkModifierTest extends MarkupModifierTest
             [
                 '<div><a href="https://youtu.be"></a><a href="https://google.com"></a><p>Other content</p></div>',
                 function ($url) {
-                    if (str_contains($url, 'youtu.be')) {
+                    if (0 <= strpos($url, 'youtu.be')) {
                         return "This could be a video.";
                     } else return null;
                 },
@@ -33,8 +32,8 @@ class LinkModifierTest extends MarkupModifierTest
             ],
             [
                 '<div><a href="https://youtu.be"></a><a href="https://google.com"></a><p>Other content</p></div>',
-                function ($url, \DOMDocument $doc) {
-                    if (str_contains($url, 'youtu.be')) {
+                function ($url, DOMDocument $doc) {
+                    if (0 <= strpos($url, 'youtu.be')) {
                         $div = $doc->createElement('div', $url);
                         return $div;
                     } else return null;
