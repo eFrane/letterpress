@@ -14,7 +14,7 @@
     "illuminate/support": ">=5.5,<7.0",
     "symfony/finder": ">=2.7.1,<5",
     "masterminds/html5": "^2.1",
-    "jolicode/jolitypo": "^0.1",
+    "jolicode/jolitypo": "^1.1",
     "erusev/parsedown": "1.7.*",
     "embed/embed": "1.8.*",
     "symfony/event-dispatcher": ">=2.7.1,<5",
