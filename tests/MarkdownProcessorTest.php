@@ -3,16 +3,16 @@
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\Processing\Markdown;
 
-class MarkdownProcessorTest extends \PHPUnit_Framework_TestCase
+class MarkdownProcessorTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         Config::init();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

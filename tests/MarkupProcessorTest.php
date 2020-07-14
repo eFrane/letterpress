@@ -8,9 +8,9 @@ use EFrane\Letterpress\Markup\MarkupProcessor;
 use EFrane\Letterpress\Markup\RemoveEmptyNodesModifier;
 use EFrane\Letterpress\Markup\RichMedia\Repository;
 
-class MarkupProcessorTest extends PHPUnit_Framework_TestCase
+class MarkupProcessorTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -20,7 +20,7 @@ class MarkupProcessorTest extends PHPUnit_Framework_TestCase
         Config::set('letterpress.media.enabled', false);
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 

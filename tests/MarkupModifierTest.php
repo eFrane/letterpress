@@ -3,14 +3,14 @@
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\Markup\MarkupProcessor;
 
-abstract class MarkupModifierTest extends PHPUnit_Framework_TestCase
+abstract class MarkupModifierTest extends TestCase
 {
     /**
      * @var MarkupProcessor
      */
     protected $processor = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -21,7 +21,7 @@ abstract class MarkupModifierTest extends PHPUnit_Framework_TestCase
         $this->setUnitUnderTest();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
