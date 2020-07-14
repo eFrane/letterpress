@@ -3,29 +3,29 @@
 
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\Integrations\ParsedownFactory;
+use EFrane\Letterpress\LetterpressException;
 
-class ParsedownFactoryTest extends PHPUnit_Framework_TestCase
+class ParsedownFactoryTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         Config::init();
     }
 
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
         Config::reset(true);
     }
 
-    /**
-     * @expectedException EFrane\Letterpress\LetterpressException
-     * @expectedExceptionMessage Enabling MarkdownExtra requires ParsedownExtra to be installed.
-     */
     public function testUseMarkdownExtraDefault()
     {
+        $this->expectException(LetterpressException::class);
+        $this->expectExceptionMessage('Enabling MarkdownExtra requires ParsedownExtra to be installed.');
+
         Config::set('letterpress.markdown.useMarkdownExtra', true);
 
         ParsedownFactory::create();

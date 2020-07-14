@@ -2,14 +2,14 @@
 
 use EFrane\Letterpress\Markup\DOMNodeType;
 
-class DOMNodeTypeTest extends PHPUnit_Framework_TestCase
+class DOMNodeTypeTest extends TestCase
 {
     /**
      * @var DOMNodeType
      */
     protected $instance = null;
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 

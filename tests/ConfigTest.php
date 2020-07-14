@@ -2,16 +2,16 @@
 
 use EFrane\Letterpress\Config;
 
-class ConfigTest extends PHPUnit_Framework_TestCase
+class ConfigTest extends TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
         Config::reset(true);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -66,11 +66,13 @@ class ConfigTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException EFrane\Letterpress\LetterpressException
-     * @expectedExceptionMessage Config must be initialized before usage.
+     * @expectedExceptionMessage
      */
     public function testGetNotInitialized()
     {
+        $this->expectException(EFrane\Letterpress\LetterpressException::class);
+        $this->expectExceptionMessage('Config must be initialized before usage.');
+
         Config::reset(true);
 
         Config::get('letterpress.locale');
@@ -84,21 +86,19 @@ class ConfigTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($constructor->isPublic());
     }
 
-    /**
-     * @expectedException LogicException
-     * @expectedExceptionMessage Identifier must be string.
-     */
     public function testApplyNonStringKey()
     {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessage('Identifier must be string');
+
         Config::apply([42 => 'value']);
     }
 
-    /**
-     * @expectedException RuntimeException
-     * @expectedExceptionMessage Cloning Letterpress\Config is forbidden.
-     */
     public function testClone()
     {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Cloning Letterpress\Config is forbidden.');
+
         Config::init();
         $cfg = clone Config::instance();
     }

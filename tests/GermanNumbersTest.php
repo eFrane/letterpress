@@ -2,7 +2,7 @@
 
 use EFrane\Letterpress\Microtypography\GermanNumbers;
 
-class GermanNumbersTest extends PHPUnit_Framework_TestCase
+class GermanNumbersTest extends TestCase
 {
     /**
      * @dataProvider numbersData

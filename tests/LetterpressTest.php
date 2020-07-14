@@ -3,10 +3,11 @@
 use EFrane\Letterpress\Config;
 use EFrane\Letterpress\Letterpress;
 use EFrane\Letterpress\Processing\Markdown;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class LetterpressTest extends PHPUnit_Framework_TestCase
+class LetterpressTest extends TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
@@ -73,7 +74,7 @@ class LetterpressTest extends PHPUnit_Framework_TestCase
     {
         Config::init();
 
-        /* @var $lpMock Letterpress|PHPUnit_Framework_MockObject_MockObject */
+        /* @var $lpMock Letterpress|MockObject */
         $lpMock = $this->getMockBuilder(Letterpress::class)
             ->setMethods([
                 'markdown',

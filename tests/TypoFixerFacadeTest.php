@@ -4,39 +4,37 @@ use EFrane\Letterpress\Config;
 use EFrane\Letterpress\Integrations\TypoFixerFacade;
 use JoliTypo\Fixer;
 
-class TypoFixerFacadeTest extends PHPUnit_Framework_TestCase
+class TypoFixerFacadeTest extends TestCase
 {
-    public function tearDown()
+    public function tearDown(): void
     {
         parent::tearDown();
 
         Config::reset(true);
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
         Config::init();
     }
 
-    /**
-     * @expectedException EFrane\Letterpress\LetterpressException
-     * @expectedExceptionMessage Invalid locale.
-     */
     public function testInstantiateFailsWithoutLocale()
     {
+        $this->expectException(\EFrane\Letterpress\LetterpressException::class);
+        $this->expectExceptionMessage('Invalid locale.');
+
         Config::set('letterpress.locale', '');
 
         new TypoFixerFacade();
     }
 
-    /**
-     * @expectedException EFrane\Letterpress\LetterpressException
-     * @expectedExceptionMessage Typography fixing requires setting up fixers.
-     */
     public function testInstantiateFailsWithoutFixers()
     {
+        $this->expectException(\EFrane\Letterpress\LetterpressException::class);
+        $this->expectExceptionMessage('Typography fixing requires setting up fixers.');
+
         Config::set('jolitypo.defaults', []);
         Config::set('jolitypo.en_GB', []);
         Config::set('letterpress.microtypography.enableHyphenation', false);
@@ -58,22 +56,20 @@ class TypoFixerFacadeTest extends PHPUnit_Framework_TestCase
         $this->assertEquals([], $fixer->facade_fixers);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessageRegExp /.+ can not be accessed/
-     */
     public function testGetFixerProperty()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/.+ can not be accessed/');
+
         $fixer = new TypoFixerFacade();
         $fixer->property;
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     * @expectedExceptionMessageRegExp /.+ can not be modified/
-     */
     public function testSetFixerProperty()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessageMatches('/.+ can not be modified/');
+
         $fixer = new TypoFixerFacade();
         $fixer->property = 'value';
     }

@@ -3,14 +3,12 @@
 
 use EFrane\Letterpress\LetterpressException;
 
-class LetterpressExceptionTest extends PHPUnit_Framework_TestCase
+class LetterpressExceptionTest extends TestCase
 {
-    /**
-     * @expectedException EFrane\Letterpress\LetterpressException
-     * @expectedExceptionMessage
-     */
     public function testExceptionIsThrowable()
     {
+        $this->expectException(LetterpressException::class);
+
         throw new LetterpressException();
     }
 }
