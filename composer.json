@@ -16,7 +16,7 @@
     "masterminds/html5": "^2.1",
     "jolicode/jolitypo": "^1.1",
     "erusev/parsedown": "1.7.*",
-    "embed/embed": "3.4.*",
+    "embed/embed": "4.3.*",
     "symfony/event-dispatcher": ">=2.7.1,<5",
     "hanneskod/classtools": "^1.1"
   },
