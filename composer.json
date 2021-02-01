@@ -12,7 +12,7 @@
     "php": ">=7.2.0",
     "illuminate/config": ">=5.5,<7.0",
     "illuminate/support": ">=5.5,<7.0",
-    "symfony/finder": ">=2.7.1,<5",
+    "symfony/finder": "^5.2.2",
     "masterminds/html5": "^2.1",
     "jolicode/jolitypo": "^1.1",
     "erusev/parsedown": "1.7.*",
