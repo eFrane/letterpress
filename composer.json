@@ -22,7 +22,7 @@
   },
   "require-dev": {
     "symfony/var-dumper": "^5.2.2",
-    "phpunit/phpunit": "^8.5",
+    "phpunit/phpunit": "^9.5",
     "ext-dom": "*"
   },
   "suggest": {
