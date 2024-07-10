@@ -10,7 +10,7 @@
   "license": "BSD-3-Clause",
   "require": {
     "php": ">=7.2.0",
-    "illuminate/config": ">=5.5,<7.0",
+    "illuminate/config": "^11.15.0",
     "illuminate/support": ">=5.5,<7.0",
     "symfony/finder": "^5.2.2",
     "masterminds/html5": "^2.1",
